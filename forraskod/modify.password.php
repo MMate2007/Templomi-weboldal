@@ -91,7 +91,7 @@ if ($pass1 != $pass2)
 	</script>
 	<?php
 }else{
-$mysql = mysqli_connect("localhost", "filia", $sqlpass, "filia");
+$mysql = mysqli_connect("localhost", "mysqlfelhasznalo", $sqlpass, "adatbazisnev");
 mysqli_query($mysql, "SET NAMES utf8");
 $sql = "UPDATE `author` SET `password`= '".$pass1."' WHERE `id` = '".$_SESSION["userId"]."'";
 $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
