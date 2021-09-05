@@ -3,12 +3,10 @@
 <meta charset="utf-8">
 <meta name="title" content="Hasznosságok - Példa plébánia">
 <title>Hasznosságok - Példa plébánia</title>
-<meta name="description" content="Ezen az oldalon más egyéb hasznos dolgokat, linkeket találhat meg.">
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/pnp" href="icon.png">
-<meta name="keywords" content="linkek, katolikus linkek, katolikus, keresztény linkek, katolikus oldalak, katolikus weboldalak, borszörcsök, Példa plébánia, borszörcsök fília, borszörcsöki templom, borszörcsök templom">
 <!--<meta name="theme-color" content="#ffea00">-->
 
 <style>
@@ -73,24 +71,7 @@ echo $content;
 mysqli_close($mysql);*/
 ?>
 <h2>Linkek, weboldalak</h2>
-<p><a target="_blank" href="https://www.mariaradio.hu/"><img src="https://www.mariaradio.hu/dokumentum/2905/logo_fekvobanner.jpg"></a></p>
-<p><a target="_blank" href="https://www.veszpremiersekseg.hu/">Veszprémi Érsekség weboldala</a></p>
-<p><a target="_blank" href="https://plebaniaajka.wordpress.com/">Ajkai plébánia weboldala</a></p>
-<p><a target="_blank" href="https://katolikus.hu/">katolikus.hu</a></p>
-<p><a target="_blank" href="https://igenaptar.katolikus.hu/">Igenaptár</a></p>
-<p><a target="_blank" href="https://katolikus.hu/igenaptar">Napi evangélium</a></p>
-<p><a target="_blank" href="https://www.katolikusradio.hu/">Magyar Katolikus Rádió</a></p>
-<p><a target="_blank" href="http://lexikon.katolikus.hu/">Katolikus lexikon</a></p>
-<p><a target="_blank" href="https://www.evangelium365.hu/">Evangélium365</a></p>
-<p><a target="_blank" href="https://miserend.hu/">Miserend</a></p>
-<p><a target="_blank" href="http://www.medjugorje.hr/hu/">Medjugorje</a></p>
-<p><a target="_blank" href="https://plebania.net/">Virtuális plébánia</a></p>
-<p><a target="_blank" href="https://www.magyarkurir.hu/">Magyar Kurír - katolikus hírportál</a></p>
-<p><a target="_blank" href="https://szentiras.hu/">Online szentírás</a></p>
-<p><a target="_blank" href="https://sites.google.com/site/tamasvaday/liturgikusnaptar">Katolikus naptár</a></p>
-<h2>Rádiófrekvenciák</h2>
-<p>Ajkai Mária Rádió: FM 93.2 MHz.</p>
-<p>Magyar Katolikus Rádió Tapolca: FM 101.8 MHz.</p>
+<h2>Katolikus rádiók</h2>
 </div>
 </div>
 <div class="sidebar">
