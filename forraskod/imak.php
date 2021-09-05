@@ -3,15 +3,12 @@
 <meta charset="utf-8">
 <meta name="title" content="Imádságok - Példa plébánia">
 <title>Imádságok - Példa plébánia</title>
-<meta name="description" content="Ezen az oldalon imádságokat találhat meg.">
 <meta name="language" content="hu-HU">
-<meta name="keywords" content="imádságok, Imádságok, katolikus imádságok, imák, katolikus imák, borszörcsök imádságok, borszörcsök templom, Borszrcsök templom, Borszörcsök fília, borszörcsök fília, borszörcsök fílía imák, imák">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/pnp" href="icon.png">
 <!--<meta name="keywords" content="">-->
 <!--<meta name="theme-color" content="#ffea00">-->
-
 <style>
 header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
 @media only screen and (max-width: 800px) {
@@ -77,12 +74,6 @@ mysqli_close($mysql);*/
 <h2>Feltöltés alatt!</h2>
 <p>Ez az oldal feltöltés alatt áll! Szíves türelmét kérjük!</p>
 <p>Köszönjük!</p>
-<h2>Egetnyitó fohász</h2>
-<p>Jézus Szíve, te tudsz mindent.</p>
-<p>Jézus Szíve, te megtehetsz mindent.</p>
-<p>Jézus Szíve, te látsz mindent.</p>
-<p>Jézus Szíve, te gondot viselsz reánk.</p>
-<p>Jézus Szíve, te meghallgatod imánkat. Ámen.</p>
 </div>
 </div>
 <div class="sidebar">
