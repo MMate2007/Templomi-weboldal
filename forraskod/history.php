@@ -3,14 +3,12 @@
 <meta charset="utf-8">
 <meta name="title" content="Templomunkról - Példa plébánia">
 <title>Templomunkról - Példa plébánia</title>
-<meta name="description" content="A Szent Anna és Szent Joachim tiszteletére felszentelt templomról olvashat itt.">
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/pnp" href="icon.png">
 <!--<meta name="keywords" content="">-->
 <!--<meta name="theme-color" content="#ffea00">-->
-
 <style>
 header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
 @media only screen and (max-width: 800px) {
@@ -88,15 +86,15 @@ mysqli_close($mysql);*/
 <table class="infok">
 <tbody><tr>
 <th>Plébános:</th>
-<td>Németh József atya</td>
+<td></td>
 </tr>
 <tr>
 <th>Védőszent:</th>
-<td>Szent Anna és Szent Joachim</td>
+<td></td>
 </tr>
 <tr>
 <th>Búcsú:</th>
-<td>július 26. utáni vasárnap</td>
+<td></td>
 </tr>
 </tbody></table>
 </div>
