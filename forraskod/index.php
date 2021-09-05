@@ -3,14 +3,11 @@
 <meta charset="utf-8">
 <meta name="title" content="Főoldal - Példa plébánia">
 <title>Példa plébánia</title>
-<meta name="description" content="Ezen az oldalon többet tudhat meg a borszörcsöki fíliáról. Ez a fília a somlóvásárhelyi plébániához tartozik. Plébánosa: Németh József atya.">
 <meta name="language" content="hu-HU">
-<meta name="keywords" content="Borszörcsök, Példa plébánia, borszörcsök, Példa plébánia, Borszörcsök templom, templom, borszörcsök templom, borszörcsök kápolna, kápolna, Borszörcsök kápolna, Borszörcsöki kápolna, borszörcsöki kápolna, borszörcsöki templom, Borszörcsöki templom">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/pnp" href="icon.png">
 <!--<meta name="theme-color" content="#ffea00">-->
-
 <style>
 header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
 @media only screen and (max-width: 800px) {
@@ -74,7 +71,7 @@ echo $content;*/
 <h1>Dicsértessék a Jézus Krisztus!</h1>
 <h2>Üdvözlöm a Példa plébánia honlapján!</h2>
 <p>Ezen az oldalon megtalálhatja, hogy <a href="miserend.php">mikor tartanak szentmisét</a>, megismerheti <a href="history.php">templomunkat</a> és sok más hasznos információt találhat <a href="usefull.php">itt</a>.</p>
-<p>Ha bármilyen kérdése, kérése van, kérem írjon e-mailt az <a href="mailto:bszfilia@fabianistva.nhely.hu">bszfilia@fabianistva.nhely.hu</a> e-mail címre. Észrevételeit, ötleteit, véleményét is szívesen várjuk!</p>
+<p>Ha bármilyen kérdése, kérése van, kérem írjon e-mailt az <a href="mailto:info@peldaplebania.hu">info@peldaplebania.hu</a> e-mail címre. Észrevételeit, ötleteit, véleményét is szívesen várjuk!</p>
 </div>
 <div id="szentmise">
 <?php
@@ -88,7 +85,7 @@ while ($row = mysqli_fetch_array($eredmeny))
 echo $content;*/
 ?>
 <h2>Rendszeres szentmisék</h2>
-<p>Rendszeresen vannak szentmisék a Szent Anna és Szent Joachim templomban <b>vasárnap reggel 8 órakor</b>, valamint <b>csütörtök este 6 órakor</b>.</p>
+<p>Rendszeresen vannak szentmisék a plébániai templomban <b>vasárnap reggel 8 órakor</b>, valamint <b>csütörtök este 6 órakor</b>.</p>
 <p>Az aktuális listát a szertartásokról <a href="miserend.php">itt</a> érheti el.</p>
 </div>
 <div id="gyonas">
