@@ -3,9 +3,7 @@
 <meta charset="utf-8">
 <meta name="title" content="Kápolnánkról - Példa plébánia">
 <title>Kápolnánkról - Példa plébánia</title>
-<meta name="description" content="Ismerje meg a Jézus Szíve és a Szűz Mária Szíve kápolnát!">
 <meta name="language" content="hu-HU">
-<meta name="keywords" content="Példa plébánia kápolna, borszörcsöki kápolna, borszörcsök kápolna, Borszörcsök kápolna, Borszörcsök fília kápolna, borszörcsök fília kápolna, Példa plébánia kápolna">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/pnp" href="icon.png">
