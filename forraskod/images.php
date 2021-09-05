@@ -3,14 +3,12 @@
 <meta charset="utf-8">
 <meta name="title" content="Képgaléria - Példa plébánia">
 <title>Képgaléria - Példa plébánia</title>
-<meta name="description" content="Ezen az oldalon képeket tekinthet meg a templomunkról és a kápolnánkról. Amennyiben Önnek is van egy jó képe küldje el a bszfilia@fabianistva.nhely.hu email címre!">
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/pnp" href="icon.png">
 <!--<meta name="keywords" content="">-->
 <!--<meta name="theme-color" content="#ffea00">-->
-
 <style>
 header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
 @media only screen and (max-width: 800px) {
