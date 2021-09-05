@@ -3,14 +3,12 @@
 <title>Blog - Példa plébánia</title>
 <meta charset="utf-8">
 <meta name="title" content="Blog - Példa plébánia">
-<meta name="description" content="A Példa plébánia blogján követheti, hogy mi történik a fília életében.">
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/pnp" href="icon.png">
 <!--<meta name="keywords" content="">-->
 <!--<meta name="theme-color" content="#ffea00">-->
-
 <style>
 header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
 @media only screen and (max-width: 600px) {
