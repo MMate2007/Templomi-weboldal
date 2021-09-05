@@ -26,24 +26,24 @@ if (!isset($_SESSION["userId"]))
 <div id="mobile">
 <nav id="mobilenav">
     <ul>
-        <li><a id="elso" href="http://www.fabianistva.nhely.hu/index.php">Főoldal</a></li>
-        <li><a href="http://www.fabianistva.nhely.hu/miserend.php">Liturgiák rendje</a></li>
-        <li><a href="http://www.fabianistva.nhely.hu/history.php">Templomunkról</a></li>
-        <li><a href="http://www.fabianistva.nhely.hu/kapolna.php">Kápolnánkról</a></li>
-        <li><a href="http://www.fabianistva.nhely.hu/images.php">Képek</a></li>
-        <li><a href="http://www.fabianistva.nhely.hu/blog.php">A fília blogja</a></li>
-        <li><a href="http://www.fabianistva.nhely.hu/usefull.php">Hasznosságok</a></li>
+        <li><a id="elso" href="http://www.peldaplebania.hu/index.php">Főoldal</a></li>
+        <li><a href="http://www.peldaplebania.hu/miserend.php">Liturgiák rendje</a></li>
+        <li><a href="http://www.peldaplebania.hu/history.php">Templomunkról</a></li>
+        <li><a href="http://www.peldaplebania.hu/kapolna.php">Kápolnánkról</a></li>
+        <li><a href="http://www.peldaplebania.hu/images.php">Képek</a></li>
+        <li><a href="http://www.peldaplebania.hu/blog.php">A fília blogja</a></li>
+        <li><a href="http://www.peldaplebania.hu/usefull.php">Hasznosságok</a></li>
         <?php
         session_start();
         if (!isset($_SESSION["userId"]))
         {
             ?>
-            <li><a href="http://www.fabianistva.nhely.hu/imak.php">Imádságok</a></li>
-            <li><a href="http://www.fabianistva.nhely.hu/index.php#info">Közérdekű információk</a></li>
+            <li><a href="http://www.peldaplebania.hu/imak.php">Imádságok</a></li>
+            <li><a href="http://www.peldaplebania.hu/index.php#info">Közérdekű információk</a></li>
             <?php
         }
         ?>
-        <li><a href="http://www.fabianistva.nhely.hu/login.form.php" id="right-elso" class="right">Bejelentkezés</a></li>
+        <li><a href="http://www.peldaplebania.hu/login.form.php" id="right-elso" class="right">Bejelentkezés</a></li>
     </ul>
 </nav>
 </div>
