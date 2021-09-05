@@ -3,14 +3,11 @@
 <title>Liturgiák rendje - Példa plébánia</title>
 <meta charset="utf-8">
 <meta name="title" content="Liturgiák rendje - Példa plébánia">
-<meta name="description" content="Ezen az oldalon megtalálhatja, hogy mikor tartanak szentmiséket borszörcsöki Szent Anna és Szent Joachim templomban és a Jézus Szíve és Szűz Mária Szíve kápolnában.">
 <meta name="language" content="hu-HU">
-<meta name="keywords" content="borszörcsöki templom mise, mise, szentmise, borszörcsöki templom szentmise, Borszörcsök mise, borszörcsök mise, Példa plébánia, Példa plébánia, Példa plébánia mise, Példa plébánia szentmise">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/pnp" href="icon.png">
 <!--<meta name="theme-color" content="#ffea00">-->
-
 <style>
 	header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
 @media only screen and (min-width: 1349px) {
