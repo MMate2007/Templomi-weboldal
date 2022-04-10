@@ -92,7 +92,8 @@ CREATE TABLE `szertartasok` (
   `id` int(11) NOT NULL,
   `date` datetime NOT NULL,
   `name` text NOT NULL,
-  `place` text DEFAULT NULL
+  `place` text NOT NULL,
+  `style` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 COMMIT;
 
