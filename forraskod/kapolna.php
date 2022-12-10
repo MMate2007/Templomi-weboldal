@@ -32,6 +32,7 @@ header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchar
 <div class="content">
 <div class="tartalom">
 <?php
+//TODO oldalak megoldása úgy, hogy egy táblázatban tároljuk az adatokat, és .htaccessel meg átirányítjuk így: localhost/kapolnarol => localhost/page.php?codename=kapolnarol
 /*
 $sql = "SELECT `content` FROM `contents` WHERE `name` = 'kapolna.tartalom'";
 $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
