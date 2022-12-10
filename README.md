@@ -12,10 +12,7 @@ Ha számítógépünkön telepítve van a Docker, akkor érdemes azzal telepíte
 3. Készítsünk másolatot a *default.config.php* fájlról, a másolat neve legyen *config.php*! Töltsük igényeink szerint a fájlban a változókat! **A `$mysqlhost` nevű változó értéke *mindig* `db` legyen!**
 4. - Linux/MacOS esetén:
       1. A terminálban nyissuk meg ezen projektnek a mappáját!
-      2. Futtassuk a következőt. Ezzel létrehozzuk a szükséges mappákat, bemásolunk egy fájlt és elindítjuk a konténereket.
-            ```bash
-            sh dockersetup.sh
-            ```
+      2. Futtassuk a következőt: `sh dockersetup.sh`. Ezzel létrehozzuk a szükséges mappákat, bemásolunk egy fájlt és elindítjuk a konténereket.
        3. Készen is vagyunk!
    - Windowson:
      1. Hozzunk létre ebben a mappában két mappát, nevük legyen *db* és *dbdump*!
