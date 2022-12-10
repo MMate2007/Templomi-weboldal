@@ -1,3 +1,4 @@
+<?php ob_start(); ?>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -69,6 +70,7 @@ if (isset($_POST["username"]) && isset($_POST["pass"]))
             $_SESSION["szint"] = $admin;
             $_SESSION["egyhszint"] = $egyhsz;
             header("Location: admin.php");
+            exit();
         }else{
             ?>
             <p class="warning">Helytelen jelszó!</p>

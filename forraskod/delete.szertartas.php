@@ -1,3 +1,4 @@
+<?php ob_start(); ?>
 <html>
 <head>
 <title>Szertartás törlése - Példa plébánia</title>

@@ -1,3 +1,4 @@
+<?php ob_start(); ?>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -6,7 +7,6 @@
 </head>
 <body>
 <?php
-
 session_destroy();
 header("Location: login.php");
 ?>
