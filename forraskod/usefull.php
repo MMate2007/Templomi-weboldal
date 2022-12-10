@@ -1,39 +1,15 @@
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="title" content="Hasznosságok - Példa plébánia">
-<title>Hasznosságok - Példa plébánia</title>
+<?php include("head.php"); ?>
+<meta name="title" content="Hasznosságok - <?php echo $sitename; ?>">
+<title>Hasznosságok - <?php echo $sitename; ?></title>
+<meta name="description" content="Ezen az oldalon más egyéb hasznos dolgokat, linkeket találhat meg.">
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/pnp" href="icon.png">
-<!--<meta name="theme-color" content="#ffea00">-->
-
+<meta name="keywords" content="linkek, katolikus linkek, katolikus, keresztény linkek, katolikus oldalak, katolikus weboldalak, borszörcsök, <?php echo $sitename; ?>, borszörcsök fília, borszörcsöki templom, borszörcsök templom">
 <style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
-@media only screen and (max-width: 800px) {
-div.head-text {
-	position: absolute;
-	top: 7px;
-	left: 0px;
-}
-div.head-text h1 {font-size: 20pt;}
-}
-@media only screen and (min-width: 600px) {
-div.head-text {
-	position: absolute;
-	top: 0px;
-	left: 5px;
-}
-div.head-text h1 {font-size: 50pt;}
-}
-@media only screen and (min-width: 1349px) {
-div.head-text {
-	position: absolute;
-	top: 25px;
-	left: 80px;
-}
-}
+header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
+
 div.fejlecparallax {
     background-image: url("halak.jpg");
 }
@@ -46,7 +22,7 @@ div.fejlecparallax {
 <!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
 <div class="fejlecparallax">
 <div class="head-text">
-<h1>Példa plébánia honlapja - Hasznosságok</h1>
+<h1><?php echo $sitename; ?> honlapja - Hasznosságok</h1>
 </div>
 </div>
 </div>
@@ -59,8 +35,7 @@ div.fejlecparallax {
 <div class="content">
 <div class="tartalom">
 <?php
-/*$mysql = mysqli_connect("localhost", "mysqlfelhasznalo", "mysqljelszo", "adatbazisnev") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_query($mysql, "SET NAMES utf8");
+/*
 $sql = "SELECT `content` FROM `contents` WHERE `name` = 'useful.tartalom'";
 $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 while ($row = mysqli_fetch_array($eredmeny))
@@ -68,10 +43,27 @@ while ($row = mysqli_fetch_array($eredmeny))
 	$content = $row["content"];
 }
 echo $content;
-mysqli_close($mysql);*/
+*/
 ?>
 <h2>Linkek, weboldalak</h2>
-<h2>Katolikus rádiók</h2>
+<p><a target="_blank" href="https://www.mariaradio.hu/"><img src="https://www.mariaradio.hu/dokumentum/2905/logo_fekvobanner.jpg"></a></p>
+<p><a target="_blank" href="https://www.veszpremiersekseg.hu/">Veszprémi Érsekség weboldala</a></p>
+<p><a target="_blank" href="https://plebaniaajka.wordpress.com/">Ajkai plébánia weboldala</a></p>
+<p><a target="_blank" href="https://katolikus.hu/">katolikus.hu</a></p>
+<p><a target="_blank" href="https://igenaptar.katolikus.hu/">Igenaptár</a></p>
+<p><a target="_blank" href="https://katolikus.hu/igenaptar">Napi evangélium</a></p>
+<p><a target="_blank" href="https://www.katolikusradio.hu/">Magyar Katolikus Rádió</a></p>
+<p><a target="_blank" href="http://lexikon.katolikus.hu/">Katolikus lexikon</a></p>
+<p><a target="_blank" href="https://www.evangelium365.hu/">Evangélium365</a></p>
+<p><a target="_blank" href="https://miserend.hu/">Miserend</a></p>
+<p><a target="_blank" href="http://www.medjugorje.hr/hu/">Medjugorje</a></p>
+<p><a target="_blank" href="https://plebania.net/">Virtuális plébánia</a></p>
+<p><a target="_blank" href="https://www.magyarkurir.hu/">Magyar Kurír - katolikus hírportál</a></p>
+<p><a target="_blank" href="https://szentiras.hu/">Online szentírás</a></p>
+<p><a target="_blank" href="https://sites.google.com/site/tamasvaday/liturgikusnaptar">Katolikus naptár</a></p>
+<h2>Rádiófrekvenciák</h2>
+<p>Ajkai Mária Rádió: FM 93.2 MHz.</p>
+<p>Magyar Katolikus Rádió Tapolca: FM 101.8 MHz.</p>
 </div>
 </div>
 <div class="sidebar">

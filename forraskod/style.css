@@ -1,13 +1,38 @@
+.warning {
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-left-color: red;
+    background-color: rgba(255, 0, 0, 0.199);
+    padding: 5px 5px 5px 5px;
+}
+
+.notice {
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-left-color: rgb(255, 187, 0);
+    background-color: rgba(255, 187, 0, 0.199);
+    padding: 5px 5px 5px 5px;
+}
+
+.succes {
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-left-color: rgb(41, 207, 0);
+    background-color: rgba(41, 207, 0, 0.199);
+    padding: 5px 5px 5px 5px;
+}
+
 ::selection {
     color: #c48a03;
     background-color: black;
 }
 
-
-/*
-::-webkit-scrollbar {width: 10px;}
-::-webkit-scrollbar-button {background-color: #c48a03;}
-::-webkit-scrollbar-thumb {background-color: #c48a03;}*/
+div.head-text {
+    text-align: center;
+    position: relative;
+    margin-top: 0px;
+    width: 100%;
+}
 
 a {
     color: #c48a03;
@@ -68,24 +93,12 @@ table.kepek tr td {
     vertical-align: top;
 }
 
-
-/*@media only screen and (max-width: 999px) {
-    div.head-text {
-        position: absolute;
-        top: 0px;
-        left: 70px;
-    }
-    div.head-text h1 {
-        font-size: 40pt;
-    }
-}*/
-
 @media only screen and (min-width: 1000px) {
-    div.head-text {
+    /*div.head-text {
         position: absolute;
         top: 160px;
         left: 90px;
-    }
+    }*/
     #szentmise,
     #gyonas,
     #welcome {
@@ -105,11 +118,11 @@ table.kepek tr td {
 }
 
 @media only screen and (min-width: 1349px) {
-    div.head-text {
-        position: absolute;
-        top: 180px;
-        left: 150px;
-    }
+    /*div.head-text {
+            position: absolute;
+            top: 180px;
+            left: 150px;
+        }*/
     #szentmise,
     #gyonas,
     #welcome {
@@ -138,12 +151,6 @@ div.miserend table tr td {
     padding-left: 10px;
 }
 
-
-/*div.content {
-	float: left;
-	width: 70%;
-}*/
-
 div.head-text h1 {
     text-align: center;
 }
@@ -156,15 +163,8 @@ table.infok tr td {
     text-align: left;
 }
 
-nav {
-    position: sticky;
-    position: -webkit-sticky;
-    top: 0;
-    z-index: 1;
-}
-
 div.fejlecparallax {
-    background-image: url("egesztemplom.jpg");
+    background-image: url("defaultparallax.jpg");
     height: 70%;
     width: 100%;
     /*background-attachment: fixed;*/
@@ -203,7 +203,27 @@ header#mobilenav.visible {
     display: block;
 }
 
-.container {
+div#cookie form input#decline {
+    color: red;
+}
+
+div#cookie form input#accept {
+    color: green;
+}
+
+div#cookie {
+    border-color: black;
+    border-width: 2px;
+    border-style: dashed;
+}
+
+div#cookie,
+form {
+    display: inline-block;
+}
+
+
+/*.container {
     display: inline-block;
     cursor: pointer;
 }
@@ -259,15 +279,24 @@ header#mobilenav.visible {
 .change .bar3 {
     -webkit-transform: rotate(45deg) translate(-8px, -8px);
     transform: rotate(45deg) translate(-8px, -8px);
+}
+
+*/
+
+#menubutton {
+    cursor: pointer;
 }
 
 @media only screen and (min-width: 801px) {
     header #mobile {
         display: none;
     }
-    .container {
+    #menubutton {
         display: none;
     }
+    /*.container {
+        display: none;
+    }*/
 }
 
 header nav#mobilenav a {
@@ -297,6 +326,97 @@ nav#mobilenav a {
     z-index: 2;
     cursor: pointer;
 }
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: black;
+    opacity: 0.7;
+    padding-top: 5px;
+    padding-bottom: 7px;
+}
+
+nav#desktop.sticky a {
+    color: white;
+}
+
+div.fejlecparallax div.head-text h1 {
+    margin-top: 0px;
+}
+
+div.szentmise table tr {
+    border-bottom-style: solid;
+    border-bottom-color: black;
+    border-bottom-width: 1px;
+}
+
+div.szentmise table tr#last {
+    border-bottom-style: none;
+}
+
+div.welcome-admin,
+div.szertartasaim {
+    display: inline-block;
+}
+
+div.welcome-admin {
+    float: left;
+    width: 18%;
+}
+
+div.szertartasaim table {
+    border-collapse: collapse;
+}
+
+div.szertartasaim tr,
+div.szertartasaim td,
+div.szertartasaim th {
+    border-bottom: black solid 2px;
+    border-right: black solid 2px;
+    padding: 5px 5px 5px 5px;
+}
+
+th#utolso,
+td#utolso {
+    border: black solid 0px;
+}
+
+div.szertartasaim tr:hover {
+    cursor: pointer;
+    background-color: #ffe1002d;
+}
+
+div#szentmise tr:hover {
+    cursor: pointer;
+    background-color: #ffe1002d;
+}
+
+div.head-text h1 {
+    font-size: 8vw;
+}
+
+
+/*table tr th, td {
+    border-right-color: black;
+    border-right-style: solid;
+    border-right-width: 1px;
+}
+table tr {
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+table tr th#utolso, td#utolso {
+    border-right-style: none; 
+}*/
+
+
+/*nav#desktop h1 {
+    display: inline-block;
+    text-shadow: 3px 2px black;
+    color: #fbb001;
+}*/
 
 
 /*egesztemplo.jpg fejlechez*/

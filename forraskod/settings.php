@@ -1,7 +1,7 @@
 <html>
 <head>
 <?php include("head.php"); ?>
-<title>Létrehozás...</title>
+<title>Mentés...</title>
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -16,7 +16,7 @@
 <!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
 <div class="fejlecparallax">
 <div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Felhasználó létrehozása...</h1>
+<h1><?php echo $sitename; ?> honlapja - Beállítások mentése...</h1>
 </div>
 </div>
 </div>
@@ -26,10 +26,6 @@
 <?php
 
 include("headforadmin.php");
-if ($_SESSION["szint"] != 10)
-{
-	header("Location: admin.php");
-}
 
 ?>
 
@@ -37,28 +33,30 @@ if ($_SESSION["szint"] != 10)
 <hr>
 </header>
 <?php
-
-$sql = "SELECT `id` FROM `author`";
-$id = 0;
+//FIXME settings hibajavítás
+$settingnumber = -1;
+$settingname;
+$setting["main.name"] = null;
+$sql = "SELECT `name` FROM `settings`";
 $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 while ($row = mysqli_fetch_array($eredmeny))
 {
-	$_id = $row['id'];
-	$id = $_id + 1;
+	$setting[$row["name"]] = $_POST[$row["name"]];
+    $settingnumber++;
+    $settingname[$settingnumber] = $row[["name"]];
+}
+while ($settingnumber > -1)
+{
+    if ($setting[$settingname[$settingnumber]] != "null")
+    {
+        $sql = "UPDATE `settings` SET `value`='".$setting[$settingname[$settingnumber]]."' WHERE `name` = '".$settingname[$settingnumber]."'";
+    } else {
+        $sql = "UPDATE `settings` SET `value`=NULL WHERE `name` = '".$settingname[$settingnumber]."'";
+    }
+$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+$settingnumber--;
 }
 
-if ($_POST["password"] == $_POST["password2"])
-{
-	//TODO űrlapon feltüntetni, hogy a felhasználónév milyen karakterekből állhat
-	//TODO űrlapok összevonása az action lapokkal, tehát egy fájl legyen a most 2 fájl
-$sql = "INSERT INTO `author`(`id`, `name`, `password`, `username`, `szint`, `egyhaziszint`) VALUES ('".$id."','".correct($_POST["name"])."','".sha1(md5($_POST["password"]))."','".correct($_POST["username"])."','".correct($_POST["szint"])."','".correct($_POST["egyhaziszint"])."')";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-} else {
-	$eredmeny = false;
-	?>
-	<p>A két jelszó nem egyezik!</p>
-	<?php
-}
 ?>
 <div class="content">
 <div class="tartalom">
@@ -66,15 +64,11 @@ $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő
 if ($eredmeny == true)
 {
 	?>
-	<p class="succes">Sikeres létrehozás!</p>
-	<script>
-	alert("Sikeres létrehozás!");
-	</script>
+	<p class="succes">Sikeres mentés!</p>
 	<?php
 }else{
 	?>
 	<p class="warning">Valami hiba történt!</p>
-	<p>Kérem, próbálja újra!</p>
 	<?php
 }
 ?>

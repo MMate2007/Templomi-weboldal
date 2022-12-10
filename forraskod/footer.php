@@ -1,7 +1,10 @@
 <div class="footer">
 <hr>
 <footer>
-<p>Példa plébánia honlapja</p>
-<p><a href="mailto:info@peldaplebania.hu">info@peldaplebania.hu</a></p>
+<p><?php echo $sitename; ?> honlapja</p>
+<p><a href="mailto:<?php echo getsetting($mysql, 'main.email'); ?>"><?php echo getsetting($mysql, 'main.email'); ?></a></p>
 </footer>
 </div>
+<?php
+mysqli_close($mysql);
+?>

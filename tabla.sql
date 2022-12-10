@@ -18,7 +18,6 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Adatbázis: `github`
 --
 
 -- --------------------------------------------------------
@@ -27,7 +26,7 @@ SET time_zone = "+00:00";
 -- Tábla szerkezet ehhez a táblához `author`
 --
 
-CREATE TABLE `author` (
+CREATE TABLE IF NOT EXISTS `author` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
   `password` text NOT NULL,
@@ -48,7 +47,7 @@ INSERT INTO `author` (`id`, `name`, `password`, `username`, `admin`) VALUES
 -- Tábla szerkezet ehhez a táblához `blog`
 --
 
-CREATE TABLE `blog` (
+CREATE TABLE IF NOT EXISTS `blog` (
   `id` int(11) NOT NULL,
   `title` text NOT NULL,
   `content` text NOT NULL,
@@ -63,7 +62,7 @@ CREATE TABLE `blog` (
 -- Tábla szerkezet ehhez a táblához `hirdetesek`
 --
 
-CREATE TABLE `hirdetesek` (
+CREATE TABLE IF NOT EXISTS `hirdetesek` (
   `ID` int(11) NOT NULL,
   `title` text NOT NULL,
   `content` text DEFAULT NULL,
@@ -77,7 +76,7 @@ CREATE TABLE `hirdetesek` (
 -- Tábla szerkezet ehhez a táblához `kepek`
 --
 
-CREATE TABLE `kepek` (
+CREATE TABLE IF NOT EXISTS `kepek` (
   `src` text NOT NULL,
   `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -88,7 +87,7 @@ CREATE TABLE `kepek` (
 -- Tábla szerkezet ehhez a táblához `szertartasok`
 --
 
-CREATE TABLE `szertartasok` (
+CREATE TABLE IF NOT EXISTS `szertartasok` (
   `id` int(11) NOT NULL,
   `date` datetime NOT NULL,
   `name` text NOT NULL,

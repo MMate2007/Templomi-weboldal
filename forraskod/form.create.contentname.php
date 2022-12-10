@@ -9,30 +9,7 @@
 <!--<meta name="theme-color" content="#ffea00">-->
 
 <style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
-@media only screen and (max-width: 800px) {
-div.head-text {
-	position: absolute;
-	top: 10px;
-	left: 30px;
-}
-div.head-text h1 {font-size: 20pt;}
-}
-@media only screen and (min-width: 600px) {
-div.head-text {
-	position: absolute;
-	top: 100px;
-	left: 50px;
-}
-div.head-text h1 {font-size: 72pt;}
-}
-@media only screen and (min-width: 1349px) {
-div.head-text {
-	position: absolute;
-	top: 25px;
-	left: 100px;
-}
-}
+header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
 </style>
 </head>
 <body>
@@ -53,7 +30,7 @@ div.head-text {
 session_start();
 if (!isset($_SESSION["userId"]))
 {
-	header("Location: hozzaferes.php");
+	header("Location: login.php?messagetype=warning&message=Hozzáférés megtagadva! A tartalom megtekintéséhez be kell jelentkezni.");
 }
 $mysql = mysqli_connect("localhost", "mysqlfelhasznalo", "mysqljelszo", "adatbazisnev") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 mysqli_query($mysql, "SET NAMES utf8");
@@ -65,7 +42,7 @@ while ($row = mysqli_fetch_array($eredmeny))
 	if ($name != $_SESSION["name"])
 	{
 		mysqli_close($mysql);
-		header("Location: hozzaferes.php");
+		header("Location: login.php?messagetype=warning&message=Hozzáférés megtagadva! A tartalom megtekintéséhez be kell jelentkezni.");
 	}
 }
 if ($_SESSION["userId"] != "0")
@@ -80,7 +57,7 @@ if ($_SESSION["userId"] != "0")
 mysqli_close($mysql);
 ?>
 <a href="logout.php" class="right">Kijelentkezés</a>
-<a href="form.create.hirdetes.php" class="right">Hirdetés létrehozása</a>
+<a href="create.hirdetes.php" class="right">Hirdetés létrehozása</a>
 <a href="form.create.szertartas.php" class="right">Liturgia hozzáadása</a>
 <a href="admin.php" class="right" id="right-elso">Adminisztráció</a>
 </nav>

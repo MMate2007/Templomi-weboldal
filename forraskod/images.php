@@ -1,41 +1,17 @@
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="title" content="Képgaléria - Példa plébánia">
-<title>Képgaléria - Példa plébánia</title>
+<?php include("head.php"); ?>
+<meta name="title" content="Képgaléria - <?php echo $sitename; ?>">
+<title>Képgaléria - <?php echo $sitename; ?></title>
+<meta name="description" content="Ezen az oldalon képeket tekinthet meg a templomunkról és a kápolnánkról. Amennyiben Önnek is van egy jó képe küldje el a <?php echo getsetting($mysql, 'main.email'); ?> email címre!">
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/pnp" href="icon.png">
-<!--<meta name="keywords" content="">-->
-<!--<meta name="theme-color" content="#ffea00">-->
+
 <style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
-@media only screen and (max-width: 800px) {
-div.head-text {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-}
-div.head-text h1 {font-size: 25pt;}
-}
-@media only screen and (min-width: 600px) {
-div.head-text {
-	position: absolute;
-	top: 10px;
-	left: 40px;
-}
-div.head-text h1 {font-size: 50pt;}
-}
-@media only screen and (min-width: 1349px) {
-div.head-text {
-	position: absolute;
-	top: 50px;
-	left: 100px;
-}
-}
+header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
+
 div.fejlecparallax {
-    background-image: url("keresztbarany.jpg");
+    background-image: url("ablakuveg.jpg");
 }
 </style>
 </head>
@@ -46,7 +22,7 @@ div.fejlecparallax {
 <!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
 <div class="fejlecparallax">
 <div class="head-text">
-<h1>Példa plébánia honlapja - Képgaléria</h1>
+<h1><?php echo $sitename; ?> honlapja - Képgaléria</h1>
 </div>
 </div>
 </div>
@@ -64,8 +40,7 @@ div.fejlecparallax {
 <table class="kepek">
 <tr>
 <?php
-$mysql = mysqli_connect("localhost", "mysqlfelhasznalo", "mysqljelszo", "adatbazisnev") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_query($mysql, "SET NAMES utf8");
+
 $sql = "SELECT * FROM `kepek`";
 $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 $oszlop = 1;
@@ -91,7 +66,7 @@ while ($row = mysqli_fetch_array($eredmeny))
 	}
 	$oszlop++;
 }
-mysqli_close($mysql);
+
 ?>
 
 </table>

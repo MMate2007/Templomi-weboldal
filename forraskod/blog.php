@@ -1,39 +1,14 @@
 <html>
 <head>
-<title>Blog - Példa plébánia</title>
-<meta charset="utf-8">
-<meta name="title" content="Blog - Példa plébánia">
+<?php include("head.php"); ?>
+<title>Blog - <?php echo $sitename; ?></title>
+<meta name="title" content="Blog - <?php echo $sitename; ?>">
+<meta name="description" content="A <?php echo $sitename; ?> blogján követheti, hogy mi történik a fília életében.">
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/pnp" href="icon.png">
-<!--<meta name="keywords" content="">-->
-<!--<meta name="theme-color" content="#ffea00">-->
+
 <style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
-@media only screen and (max-width: 600px) {
-div.head-text {
-	position: absolute;
-	top: 5px;
-	left: 0px;
-}
-div.head-text h1 {font-size: 20pt;}
-}
-@media only screen and (min-width: 600px) {
-div.head-text {
-	position: absolute;
-	top: 0px;
-	left: 10px;
-}
-div.head-text h1 {font-size: 49pt;}
-}
-@media only screen and (min-width: 1349px) {
-div.head-text {
-	position: absolute;
-	top: 20px;
-	left: 100px;
-}
-}
+header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
 div.content div.tartalom div.blog img {max-width: 70%; margin-left: 15%;}
 div.fejlecparallax {
     background-image: url("DSC_0080.JPG");
@@ -47,7 +22,7 @@ div.fejlecparallax {
 <!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
 <div class="fejlecparallax">
 <div class="head-text">
-<h1>Példa plébánia honlapja - Blog</h1>
+<h1><?php echo $sitename; ?> honlapja - Blog</h1>
 </div>
 </div>
 </div>
@@ -60,7 +35,8 @@ div.fejlecparallax {
 <div class="tartalom">
 <div class="blog">
 <?php
-	$mysql = mysqli_connect("localhost", "mysqlfelhasznalo", "mysqljelszo", "adatbazisnev") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+	//FIXME mysql hiba
+	$mysql = mysqli_connect("localhost", "filia", "borszorcsokfilia8479", "filia") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 	mysqli_query($mysql, "SET NAMES utf8");
 	$sql = "SELECT * FROM `blog` ORDER BY id DESC;";
 	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
@@ -103,7 +79,7 @@ div.fejlecparallax {
 		</div>
 		<?php
 	}
-	mysqli_close($mysql);
+	
 	?>
 </div>
 </div>
