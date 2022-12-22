@@ -7,6 +7,23 @@
 }
 ?>
 <nav id="desktop">
+  <?php
+  //TODO új rendszer
+  $sql = "SELECT `url`, `name`, `tooltip` FROM `nav` WHERE `navid` = 'desktop' ORDER BY `sorszam`";
+  $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+  $elso = true;
+  while ($row = mysqli_fetch_array($eredmeny))
+	{
+    $url = $row["url"];
+    $name = $row["name"];
+    $tp = $row["tooltip"];
+    ?>
+    <a href="<?php echo $url; ?>" title="<?php echo $tp; ?>" <?php if ($elso != false) { echo "id='elso'"; $elso = false; } ?>><?php echo $rootdir; echo $name; ?></a>
+    <?php
+  }
+  ?>
+</nav>
+<nav id="desktop">
 <!--<h1><?php echo $sitename; ?> honlapja</h1>-->
 <a id="elso" href="<?php echo $rootdir; ?>index.php">Főoldal</a>
 <a href="<?php echo $rootdir; ?>miserend.php">Liturgiák rendje</a>
