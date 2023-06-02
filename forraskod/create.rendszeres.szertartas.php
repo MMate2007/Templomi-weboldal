@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 	<?php include("head.php"); ?>
@@ -11,27 +12,14 @@
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Litrugia hozzáadása...</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
-<?php
-
+	<?php
+	displayhead("Liturgiák hozzáadása");
 include("headforadmin.php");
-
+if (!checkpermission("addliturgia")) {
+	displaymessage("danger", "Nincs jogosultsága új liturgia hozzáadásához!");
+	exit;
+}
 ?>
-</nav>
-<hr>
-</header>
 <?php
 $sztipus = null;
 $telepules = null;
@@ -124,7 +112,7 @@ while ($row = mysqli_fetch_array($eredmeny))
 		?>
 		<script>
 			alert("A választott templom nem a megadott településen van!");
-			window.location.replace("form.create.szertartas.php");
+			window.location.replace("create.szertartas.php");
 		</script>
 		<?php
 	}

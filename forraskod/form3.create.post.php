@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -12,32 +13,18 @@
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Blogbejegyzés létrehozása</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
 <?php
-
+displayhead("Blogbejegyzés létrehozása");
 include("headforadmin.php");
-
+if (!checkpermission("addpost")) {
+	displaymessage("danger", "Nincs jogosultsága bejegyzés létrehozásához!");
+	exit;
+}
 $title = $_POST["title"];
 $content = $_POST["content"];
 $userid = $_POST["userid"];
 $image = $_POST["imagesrc"];
 ?>
-
-</nav>
-<hr>
-</header>
 <div class="content">
 <div class="tartalom">
 <form name="create-post" action="form2.create.post.php" method="post">

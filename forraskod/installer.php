@@ -10,6 +10,7 @@
     <h1>Telepítés</h1>
     <!-- TODO meg kell adni a maximum értéket! -->
     <progress value="<?php if (isset($_POST["stage"])) { echo $_POST["stage"]; } else { echo "0"; } ?>" max="10"></progress>
+    <p>*: kötelezően kitöltendő</p>
     <?php
     $regex = ["mysql" => "^[a-zA-Z0-9 .\-]+$", "name" => "^[a-zA-Z .-]+$"];
     if (!isset($_POST["stage"]))
@@ -21,23 +22,52 @@
         <form name="database" action="#" method="POST">
         <table>
             <tr>
-                <td><label>MySQL adatbázis helye: </label></td>
+                <td><label>MySQL adatbázis helye:* </label></td>
                 <td><input type="text" name="mysqlhost" value="localhost" required autofocus pattern="<?php echo $regex["mysql"]; ?>"></td>
                 <td>Ez általában localhost, ritkábban más.</td>
             </tr>
             <tr>
-                <td><label>MySQL felhasználó: </label></td>
+                <td><label>MySQL felhasználó:* </label></td>
                 <td><input type="text" name="mysqlusername" required pattern="<?php echo $regex["mysql"]; ?>"></td>
                 <td></td>
             </tr>
             <tr>
-                <td><label>MySQL jelszó: </label></td>
+                <td><label>MySQL jelszó:* </label></td>
                 <td><input type="password" name="mysqlpassword" required></td>
                 <td></td>
             </tr>
             <tr>
-                <td><label>MySQL adatbázis neve: </label></td>
+                <td><label>MySQL adatbázis neve:* </label></td>
                 <td><input type="text" name="mysqldb" required pattern="<?php echo $regex["mysql"]; ?>"></td>
+                <td>Ennek az adatbázisnak már léteznie kell!</td>
+            </tr>
+        </table>
+        <h3>Egyéb belsős adminisztrációs adatbázis</h3>
+        <p>Ez egy olyan MySQL adatbázis, amelyben a honlapon nem megjelenő tárolhatunk pl. az egyes szentmiséken befolyt perselyadományok. Ha nem szeretnénk ezzel a funkcióval élni, akkor hagyjuk ne töltsük ki az alábbi mezőket.</p>
+        <p>Ez az adatbázis lehet ugyanazon a gépen, mint az előző, lehet egy teljesen más gépen is, vagy akár az előzőleg megadott adatbázisban is tárolhatjuk a szükséges táblákat.</p>
+        <div class="form-check">
+            <input type="checkbox" name="penzugyidbcheck" id="penzugyidbcheck" class="form-check-input" onclick="document.querySelector('#penzugyidbtable').style.display = 'block';">
+            <label for="penzugyidbcheck" class="form-check-label">Másodlagos adatbázis engedélyezése</label>
+        </div>
+        <table id="penzugyidbtable" style="display: none;">
+            <tr>
+                <td><label>MySQL adatbázis helye:* </label></td>
+                <td><input type="text" name="penzugyidbhost" value="localhost" required autofocus pattern="<?php echo $regex["mysql"]; ?>"></td>
+                <td>Ez általában localhost, ritkábban más.</td>
+            </tr>
+            <tr>
+                <td><label>MySQL felhasználó:* </label></td>
+                <td><input type="text" name="penzugyidbusername" required pattern="<?php echo $regex["mysql"]; ?>"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label>MySQL jelszó:* </label></td>
+                <td><input type="password" name="penzugyidbpassword" required></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label>MySQL adatbázis neve:* </label></td>
+                <td><input type="text" name="penzugyidbdb" required pattern="<?php echo $regex["mysql"]; ?>"></td>
                 <td>Ennek az adatbázisnak már léteznie kell!</td>
             </tr>
         </table>
@@ -78,29 +108,79 @@
                 $sql = file_get_contents("tabla.sql");
                 $eredmeny = mysqli_multi_query($mysqlconn, $sql);
                 if ($eredmeny == true)
-                {
-                    ?>
-                    <p class="success">Táblák sikeresen létrehozva.</p>
-                    <form action="#" method="post">
-                        <input type="hidden" name="stage" value="2">
-                        <input type="submit" value="Tovább a következő lépésre">
-                    </form>
-                    <?php
-                } else {
-                    echo mysqli_error($mysqlconn);
-                    ?>
-                    <p class="warning">Nem sikerült létrehozni a táblákat! Kérem, hogy a tabla.sql-t futtassa a PHPMyAdminban, vagy a terminálban!</p>
-                    <?php
-                }
-            } else {
-                ?>
+                { ?>
+                    <p class="success">Táblák sikeresen létrehozva.</p> <?php
+                    mysqli_close($mysqlconn);
+                    $host = htmlspecialchars(stripslashes(trim($_POST["penzugyidbhost"])));
+                    $uname = htmlspecialchars(stripslashes(trim($_POST["penzugyidbusername"])));
+                    $pwd = $_POST["penzugyidbpassword"];
+                    $db = htmlspecialchars(stripslashes(trim($_POST["penzugyidbdb"])));
+                    $mysqlconn = mysqli_connect($host, $uname, $pwd, $db);
+                    if ($mysqlconn == true)
+                    {
+                        ?>
+                        <p class="succes">Sikeres kapcsolódás a másodlagos adatbázishoz!</p>
+                        <?php
+                        $configfile = fopen("config.php", "w");
+                        $towrite = "<?php\n\$penzugyidbhost = '";
+                        $towrite .= $host;
+                        $towrite .= "';\n\$penzugyidbu = '";
+                        $towrite .= $uname;
+                        $towrite .= "';\n\$penzugyidbp = '";
+                        $towrite .= $pwd;
+                        $towrite .= "';\n\$penzugyidbd = '";
+                        $towrite .= $db;
+                        $towrite .= "';\n?>";
+                        fwrite($configfile, $towrite);
+                        $defconf = file_get_contents("default.config.php");
+                        fwrite($configfile, $defconf);
+                        fclose($configfile);
+                        $sql = file_get_contents("penzugyitabla.sql");
+                        $eredmeny = mysqli_multi_query($mysqlconn, $sql);
+                        if ($eredmeny == true)
+                        {
+                            mysqli_close($mysqlconn);
+                            ?>
+                            <p class="success">Másodlagos adatbázis táblái sikeresen létrehozva.</p>
+                            <form action="#" method="post">
+                                <input type="hidden" name="stage" value="2">
+                                <input type="submit" value="Tovább a következő lépésre">
+                            </form>
+                            <?php
+                        } else {
+                            echo mysqli_error($mysqlconn);
+                            mysqli_close($mysqlconn);
+                            ?>
+                            <p class="warning">Nem sikerült létrehozni a másodlagos adatbázis tábláit! Kérem, ellenőrizze, hogy van-e megfelelő jogosultsága a megadott felhasználónak!</p>
+                            <form action="#" method="post">
+                    <input type="submit" value="Újrapróbálás">
+                </form>
+                            <?php
+                        }
+                    } else {
+                        mysqli_close($mysqlconn);
+                        ?>
                 <p class="warning">Sikertelen kapcsolódás az adatbázishoz!</p>
                 <form action="#" method="post">
                     <input type="submit" value="Újrapróbálás">
+                </form> <?php
+                    }
+                } else {
+                    mysqli_close($mysqlconn);
+                    ?>
+                    <p class="warning">Nem sikerült létrehozni a táblákat! Kérem, ellenőrizze, hogy van-e megfelelő jogosultsága a megadott felhasználónak!</p>
+                    <form action="#" method="post">
+                    <input type="submit" value="Újrapróbálás">
                 </form>
-                <?php
-            }
+                    <?php
+                }
             mysqli_close($mysqlconn);
+            } else { ?>
+                <p class="warning">Sikertelen kapcsolódás az adatbázishoz!</p>
+                <form action="#" method="post">
+                    <input type="submit" value="Újrapróbálás">
+                </form> <?php
+            }
         }
         if ($_POST["stage"] == 2) {
             ?>
@@ -156,10 +236,10 @@
                 $mysql = mysqli_connect($mysqlhost, $mysqlu, $mysqlp, $mysqld) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
                 mysqli_query($mysql, "SET NAMES utf8");
                 //! FIXME új jelszó titkosítási módszer kitalálása
-                $sql = "INSERT INTO `author`(`id`, `name`, `password`, `username`, `egyhaziszint`) VALUES ('0','$fullname','".sha1(md5($pass))."','$uname','$egyhazi')";
+                $sql = "INSERT INTO `author`(`id`, `name`, `password`, `username`, `egyhaziszint`) VALUES ('0','$fullname','".password_hash($pass, $pwdhashalgo)."','$uname','$egyhazi')";
                 if (mysqli_query($mysql, $sql))
                 {
-                    $sqla = "INSERT INTO `engedelyek`(`userId`, `bejelentkezes`, `addliturgia`, `removeliturgia`, `editliturgia`, `addszandek`, `removeszandek`, `editszandek`, `addpost`, `removepost`, `editpost`, `addhirdetes`, `removehirdetes`, `edithirdetes`, `adduser`, `removeuser`, `addtemplom`, `removetemplom`, `addtelepules`, `removetelepules`, `addpage`, `editpage`, `deletepage`, `editjogosultsagok`, `editnavbar`) VALUES ('0','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1')";
+                    $sqla = "INSERT INTO `engedelyek` VALUES ('0','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1')";
                     if (mysqli_query($mysql, $sql))
                     {
                         ?>

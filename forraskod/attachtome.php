@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -10,27 +11,15 @@
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Litrugia szerkesztése...</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
 <?php
-
+displayhead("Liturgia hozzámrendelése");
 include("headforadmin.php");
-
+if (!checkpermission("editliturgia"))
+{
+	displaymessage("danger", "Nincs joga szerkeszteni a bejegyzett litrugiákat!");
+	exit;
+}
 ?>
-</nav>
-<hr>
-</header>
 <?php
 if ($_POST["userid"] == $_SESSION["userId"])
 {

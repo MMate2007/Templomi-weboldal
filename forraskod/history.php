@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -14,19 +15,7 @@ header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchar
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<img class="head" src="templom.jpg" style="width: 100%;">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Templomunkról</h1>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
-</nav>
-<hr>
-</header>
+<?php displayhead("Templomunkról"); ?>
 <div class="content">
 <div class="tartalom">
 <?php

@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -11,29 +12,12 @@
 
 <style>
 header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
-
-div.fejlecparallax {
-    background-image: url("misekonyv.jpg");
-}
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Imádságok</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
-</nav>
-<hr>
-</header>
+<?php
+displayhead("Imádságok");
+?>
 <div class="content">
 <div class="tartalom">
 <?php

@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -10,25 +11,14 @@ header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchar
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Blogbejegyzés létrehozása</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
 <?php
+displayhead("Blogbejegyzés létrehozása");
 include("headforadmin.php");
+if (!checkpermission("addpost")) {
+	displaymessage("danger", "Nincs jogosultsága bejegyzés létrehozásához!");
+	exit;
+}
 ?>
-</nav>
-<hr>
-</header>
 <div class="content">
 <div class="tartalom">
 <?php
@@ -52,7 +42,7 @@ if (!isset($_POST["stage"]))
 		<td><label>Ha nem szeretne a bejegyzés végére képet illeszteni hagyja üresen!</label></td>
 	</tr>
 	<?php
-	//FIXME admin fióknál nem jelenik meg ez a lehetőség
+	//TODO átállás az új jogosultságrendszerre
 	if ($_SESSION["admin"] == 1)
 	{
 		?>

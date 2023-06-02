@@ -14,5 +14,6 @@ $hashtransition = false;
 $authoregyhazirend = array("Liturgiában nem létfontosságú résztvevő (ministráns, sekrestyés, irodai alkalmazott, egyéb)", "Kántor", "Pap/Püspök");
 $authorszint = array("1. ", "Rendszeradminisztrátor");
 $szertartasoktypeid = array("csendes", "orgonás", "ünnepi");
+$pwdhashalgo = PASSWORD_DEFAULT;
 //--------------------------
 ?>

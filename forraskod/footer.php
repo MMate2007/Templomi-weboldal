@@ -1,10 +1,34 @@
-<div class="footer">
-<hr>
-<footer>
-<p><?php echo $sitename; ?> honlapja</p>
-<p><a href="mailto:<?php echo getsetting($mysql, 'main.email'); ?>"><?php echo getsetting($mysql, 'main.email'); ?></a></p>
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top bg-black text-white" style="margin-bottom: 0px;">
+    <div>
+        <!-- TODO jól megcsinálni a láblécet -->
+        <?php
+        $copyright = getcontent("copyright");
+        if ($copyright != null) {
+            ?>
+            <p><?php echo $copyright; ?></p>
+            <?php
+        }
+        $address = getcontent("address");
+        if ($address != null) {
+            ?>
+            Levélcím: <address><?php echo $address; ?></address>
+            <?php
+        }
+        $email = getsetting("main.email");
+        if ($email != null) {
+            ?>
+            <a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a>
+            <?php
+        }
+        ?>
+    </div>
+    <div>
+        <!-- TODO ide jön a fő navigáció -->
+    </div>
 </footer>
-</div>
 <?php
 mysqli_close($mysql);
+if ($penzugyidb != null) {
+    mysqli_close($penzugyidb);
+}
 ?>

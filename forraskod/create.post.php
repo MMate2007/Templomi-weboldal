@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -13,28 +14,14 @@
 <!--<meta name="author" content="Menyhárt Máté">-->
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Blogbejegyzés közzététele...</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
 <?php
-
+displayhead("Bejegyzés közzététele");
 include("headforadmin.php");
-
+if (!checkpermission("addpost")) {
+	displaymessage("danger", "Nincs jogosultsága bejegyzés létrehozásához!");
+	exit;
+}
 ?>
-
-</nav>
-<hr>
-</header>
 <?php
 $title = $_POST["title"];
 $content = $_POST["content"];

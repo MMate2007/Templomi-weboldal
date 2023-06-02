@@ -3,30 +3,43 @@
 <html>
 <head>
 <?php include("head.php"); ?>
-<title>Hirdetés létrehozása - <?php echo $sitename; ?></title>
+<title>Hirdetés módosítása - <?php echo $sitename; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <?php
-displayhead("Hirdetés létrehozása");
+displayhead("Hirdetés módosítása");
 include("headforadmin.php");
-if (!checkpermission("addhirdetes")) {
+if (!checkpermission("edithirdetes")) {
     displaymessage("danger", "Nincs jogosultsága hirdetés létrehozásához!");
     exit;
 }
+$hirdetes = null;
 ?>
 <main class="content container d-flex justify-content-center">
 <div>
     <?php
     if (!isset($_POST["stage"])) {
+        $id = correct($_POST["id"]);
+if (check($id, "number") || $id == 0) {
+    $sql = "SELECT `title`, `content`, `starttime`, `endtime`, `templomID` FROM `hirdetesek` WHERE `ID` = '$id'";
+    $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+    $hirdetes = mysqli_fetch_array($eredmeny);
+}
+if (isset($_POST["title"])) {
+    $hirdetes["title"] = correct($_POST["title"]);
+    $hirdetes["content"] = correct($_POST["content"]);
+    $hirdetes["starttime"] = correct($_POST["starttime"]);
+    $hirdetes["endtime"] = correct($_POST["endtime"]);
+    $hirdetes["templom"] = correct($_POST["templom"]);
+}
     ?>
-    <form name="create-hirdetes" action="#" method="post">
-    <p><span style="color: red;">* kötelezően kitöltendő mező.</span></p>
+    <form name="edit-hirdetes" action="#" method="post">
         <div class="row my-3">
-        <label for="templom" class="col-sm-2 required">Templom:</label>
+        <label for="templom" class="col-sm-2">Templom:</label>
         <select class="col-sm form-select" name="templom" id="templom" required>
             <option value="">--Kérem válasszon!--</option>
-            <option value="null" <?php if (isset($_POST["templom"])) { if ($_POST["templom"] == "null") { echo "selected"; } } ?>>Minden templom</option>
+            <option value="null" <?php if ($hirdetes["templomID"] == null) { echo "selected"; }  ?>>Minden templom</option>
             <?php
             $sql = "SELECT `id`, `telepulesID`, `name` FROM `templomok`";
             $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
@@ -35,7 +48,7 @@ if (!checkpermission("addhirdetes")) {
                 $eredmenya = mysqli_query($mysql, $sqla) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
                 $rowa = mysqli_fetch_array($eredmenya);
                 ?>
-                <option value="<?php echo $row["id"]; ?>" <?php if (isset($_POST["templom"])) { if ($_POST["templom"] == $row["id"]) { echo "selected"; } } ?>><?php echo $rowa["name"]; ?> - <?php echo $row["name"]; ?></option>
+                <option value="<?php echo $row["id"]; ?>" <?php if (isset($hirdetes["templom"])) { if ($hirdetes["templom"] == $row["id"]) { echo "selected"; } } else if ($hirdetes["templomID"] == $row["id"]) { echo "selected"; } ?>><?php echo $rowa["name"]; ?> - <?php echo $row["name"]; ?></option>
                 <?php
             }
             ?>
@@ -43,30 +56,29 @@ if (!checkpermission("addhirdetes")) {
         <label class="col-sm form-text">Adjuk meg, hogy mely templomra vonatkozik a hirdetés! Ha a hirdetés minden templomra vonatkozik, válasszuk a "Minden templom" lehetőséget!</label>
         </div>
     <div class="row my-3">
-        <label for="title" class="col-sm-2 required">Cím:</label>
-        <input type="text" class="col-sm form-control" name="title" id="title" <?php autofill("title"); ?> required autofocus>
+        <label for="title" class="col-sm-2">Cím:</label>
+        <input type="text" class="col-sm form-control" name="title" id="title" value="<?php echo $hirdetes["title"]; ?>" required>
         <label class="col-sm form-text">Pl.: Megváltozik a csütörtöki szentmisék időpontja!</label>
     </div>
     <div class="row my-3">
         <label for="content" class="col-sm-2">Tartalom: </label>
-        <textarea class="col-sm form-control" name="content" id="content"><?php
-            if (isset($_POST["content"])) {
-                echo correct($_POST["content"]);
-            } ?></textarea>
-        <label class="col-sm form-text">Hosszú vagy rövid leírás, felhívás. Formázni a Markdown segítségével lehet. <a href="https://thegige.wordpress.com/2014/11/19/markdown-utmutato/">Itt</a> egy nagyszerű magyar útmutató, ami segítséget nyújthat.</label>
+        <textarea class="col-sm form-control" name="content" id="content" required><?php
+            echo $hirdetes["content"]; ?></textarea>
+        <label class="col-sm form-text">Hosszú vagy rövid leírás, felhívás.</label>
     </div>
     <div class="row my-3">
         <label for="starttime" class="col-sm-2">Megjelenés időpontja:</label>
-        <input type="datetime-local" id="starttime" class="col-sm form-control" name="starttime" value="<?php if (isset($_POST["starttime"])) {echo $_POST["starttime"];} else {echo date("Y-m-d H:i");}?>">
+        <input type="datetime-local" id="starttime" class="col-sm form-control" name="starttime" value="<?php echo $hirdetes["starttime"];?>">
         <label class="col-sm form-text">Az az időpont, mikortól a hirdetés láthatóvá válik.</label>
     </div>
     <div class="row my-3">
         <label for="endtime" class="col-sm-2">Eltűnés időpontja:</label>
         <?php
         ?>
-        <input type="datetime-local" id="endtime" class="col-sm form-control" name="endtime" <?php autofill("endtime"); ?>>
+        <input type="datetime-local" id="endtime" class="col-sm form-control" name="endtime" value="<?php echo $hirdetes["endtime"]; ?>">
         <label class="col-sm form-text">Az az időpont, mikortól a hirdetés "eltűnik", láthatatlanná válik.</label>
     </div>
+    <input type="hidden" name="id" value="<?php echo $id; ?>">
     <button type="submit" class="btn btn-primary text-white"><i class="bi bi-arrow-right"></i> Tovább</button>
     <input type="hidden" name="stage" value="2">
     </form>
@@ -119,6 +131,7 @@ if (!checkpermission("addhirdetes")) {
             <form name="create-hirdetes-elonezet" action="#" method="post">
             <table class="form">
             <input type="hidden" name="title" value="<?php echo $title; ?>">
+            <input type="hidden" name="id" value="<?php echo correct($_POST["id"]); ?>">
             <input type="hidden" name="content" value="<?php echo $content; ?>">
             <input type="hidden" name="starttime" value="<?php echo date_format($s, "Y-m-d H:i:s"); ?>">
             <input type="hidden" name="endtime" value="<?php if ($e != null) { echo date_format($e, "Y-m-d H:i:s"); } ?>">
@@ -137,12 +150,19 @@ if (!checkpermission("addhirdetes")) {
             } 
             if ($mehet == true) {
                 ?>
-            <button type="submit" class="btn btn-primary text-white" style="display: inline;"><i class="bi bi-arrow-bar-up"></i> Közzététel</button>
+            <button type="submit" class="btn btn-primary text-white"><i class="bi bi-arrow-bar-up"></i> Közzététel</button>
                 <?php
             }
             ?>
-            </form><form action="#" method="post"><input type="hidden" name="templom" value="<?php echo $templom; ?>"><input type="hidden" name="title" value="<?php echo $title; ?>">
-            <input type="hidden" name="content" value="<?php echo $content; ?>"><input type="hidden" name="starttime" value="<?php echo date_format($s, "Y-m-d H:i"); ?>"><input type="hidden" name="endtime" value="<?php if ($e != null) { echo date_format($e, "Y-m-d H:i"); } ?>"><button type="submit" class="btn btn-info text-white" style="display: inline;"><i class="bi bi-arrow-left"></i> Vissza</button></form></td>
+            </form>
+            <form action="#" method="post">
+                <input type="hidden" name="templom" value="<?php echo $templom; ?>">
+                <input type="hidden" name="title" value="<?php echo $title; ?>">
+                <input type="hidden" name="content" value="<?php echo $content; ?>">
+                <input type="hidden" name="starttime" value="<?php echo date_format($s, "Y-m-d H:i"); ?>">
+                <input type="hidden" name="endtime" value="<?php if ($e != null) { echo date_format($e, "Y-m-d H:i"); } ?>">
+                <input type="hidden" name="id" value="<?php echo correct($_POST["id"]); ?>">
+                <button type="submit" class="btn btn-info text-white"><i class="bi bi-arrow-left"></i> Vissza</button></form></td>
             <td><label></label></td>
             </tr>
             </table>
@@ -156,34 +176,30 @@ if (!checkpermission("addhirdetes")) {
             $starttime = $_POST["starttime"];
             $endtime = $_POST["endtime"];
             $templom = $_POST["templom"];
+            $id = correct($_POST["id"]);
+            if (!check($id, "number") && $id != 0) {
+                displaymessage("danger", "A POST['id']-nak számnak kell lennie!");
+                echo $id;
+            } else {
             if ($templom == "null") {
                 $templom = null;
             }
-            $sql = "SELECT `ID` FROM `hirdetesek`";
-            $id = 0;
-            $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-            while ($row = mysqli_fetch_array($eredmeny))
-            {
-                $_id = $row['ID'];
-                $id = $_id + 1;
-            }
-            $sql = "INSERT INTO `hirdetesek`(`ID`, `title`, `content`, `authorid`, `starttime`, `endtime`, `templomID`) VALUES ('$id','$title','$content','".$_SESSION["userId"]."','$starttime',";
+            $sql = "UPDATE `hirdetesek` SET `title` = '$title', `content` = '$content', `starttime` = '$starttime', ";
             if ($endtime == null) {
-                $sql .= "NULL,";
+                $sql .= "`endtime` = NULL, ";
             } else {
-                $sql .= "'$endtime',";
+                $sql .= "`endtime` = '$endtime', ";
             }
             if ($templom == null) {
-                $sql .= "NULL)";
+                $sql .= "`templomID` = NULL";
             } else {
-                $sql .= "'$templom')";
+                $sql .= "`templomID` = '$templom'";
             }
+            $sql .= " WHERE `ID` = '$id'";
             $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-            ?>
-            <?php
             if ($eredmeny == true)
             {
-                displaymessage("success", "Sikeres publikáció!");
+                header("Location: hirdetesek.php");
             }else{
                 ?>
                 <p class="warning">Valami hiba történt!</p>
@@ -196,7 +212,7 @@ if (!checkpermission("addhirdetes")) {
                 <input type="submit" value="Újrapróbálkozás">
                 </form>
                 <?php
-            }
+            } }
         }
     }
     ?>

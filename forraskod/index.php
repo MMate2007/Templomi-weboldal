@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -7,277 +8,56 @@
 <meta name="description" content="A szentmise vasárnap általában rggel 8 órakor van. Ez a fília a somlóvásárhelyi plébániához tartozik. Plébánosa: Németh József atya.">
 <meta name="language" content="hu-HU">
 <!--TODO meta:keywords, meta:description mezők frissítése-->
-<meta name="keywords" content="Borszörcsök, <?php echo $sitename; ?>, borszörcsök, <?php echo $sitename; ?>, Borszörcsök templom, templom, borszörcsök templom, borszörcsök kápolna, kápolna, Borszörcsök kápolna, Borszörcsöki kápolna, borszörcsöki kápolna, borszörcsöki templom, Borszörcsöki templom, borszörcsök mise, borszörcsök, borszörcsök templom miserend">
+<!--TODO új jogosultságrendszer kezelése-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars(htmlspecialchars($_SERVER['PHP_SELF']));?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
 div.fejlecparallax {
-	height: 93%;
-	background-image: url("<?php getheadimage(); ?>");
+	background-image: url("<?php echo getheadimage(); ?>");
 	/*TODO getheadimage() function beépítése a többi oldalra*/
-}
-@media only screen and (max-width: 800px) {
-    div.fejlecparallax#oltar, div.fejlecparallax#ministransarany {
-        display: none;
-    }
 }
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
-</nav>
-<hr>
-</header>
-<div class="content">
-<div id="welcome">
+<header class="h-100">
+<div class="head h-100">
+<div class="fejlecparallax text-center bg-image h-100">
 <?php
-//TODO html frissítése: readonly, required, pattern, placeholder, autofocus attribútumok használata
-/*
-$sql = "SELECT `content` FROM `contents` WHERE `name` = 'index.welcome'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$content = $row["content"];
-}
-echo $content;*/
+include("navbar.php");
 ?>
-<h1>Dicsértessék a Jézus Krisztus!</h1>
-<h2>Üdvözlöm a <?php echo $sitename; ?> honlapján!</h2>
-<p>Ezen az oldalon megtalálhatja, hogy <a href="miserend.php">mikor tartanak szentmisét</a>, megismerheti <a href="history.php">templomunkat</a> és sok más hasznos információt találhat <a href="usefull.php">itt</a>.</p>
-<p>Ha bármilyen kérdése, kérése van, kérem írjon e-mailt az <a href="mailto:<?php echo getsetting($mysql, 'main.email'); ?>"><?php echo getsetting($mysql, 'main.email'); ?></a> e-mail címre. Észrevételeit, ötleteit, véleményét is szívesen várjuk!</p>
-</div>
-<div id="szentmise">
-	<h2>Legközelebbi liturgiák</h2>
-	<p>Részletekért kattintson az adott sorra!</p>
-	<table>
-		<tr>
-			<th>Időpont</th>
-			<th>Megnevezés</th>
-			<th>Hely</th>
-		</tr>
+<div class="head-text d-flex justify-content-center align-items-center h-100 mask">
+<div class="text-white" id="introdiv">
+	<div>
+		<h1 class="text-center text-white" style="font-variant: small-caps; padding-bottom: 10px;">Dicsértessék a Jézus Krisztus!</h1>
+		<h1 class="text-center text-white" style="padding-bottom: 10px;">Üdvözöljük <?php echo $sitename; ?> weboldalán!</h1>
+		<a class="btn btn-outline-light btn-lg m-2" id="miserendgombindex" href="miserend.php" title="Ide kattintva megtudhatja, hogy mikor tartanak szentmiséket, szentségimádásokat, stb.">Miserend</a>
+		<a class="btn btn-outline-light btn-lg m-2" id="hirdetesgombindex" href="hirdetesek.php" title="Ide kattintva megtekintheti a hirdetéseket.">Hirdetések</a>
 		<?php
-			$counter = 0;
-			$sql = "SELECT `id`, `szandek` FROM `szertartasok` WHERE `date` < '".date("Y-m-d H:i:s")."'";
-			$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-			while ($row = mysqli_fetch_array($eredmeny))
-			{
-				$sql = "DELETE FROM `szandekok` WHERE `id` = '".$row["szandek"]."'";
-				$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-				$sql = "DELETE FROM `szertartasok` WHERE `ID` = '".$row["id"]."'";
-				$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-			}
-			$sql = "SELECT `id`, `date`, `nameID`, `telepulesID`, `style`, `publikus` FROM `szertartasok` ORDER BY `date`";
-			$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-			while ($row = mysqli_fetch_array($eredmeny))
-			{
-				$id = $row["id"];
-				$date = $row["date"];
-				$da = substr($date, 0, 16);
-				$d = str_replace("-", ". ", $da);
-				$sznevid = $row["nameID"];
-				$sznev = null;
-				$sqla = "SELECT `name` FROM `sznev` WHERE `id` = '".$sznevid."'";
-				$eredmenya = mysqli_query($mysql, $sqla) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-				while ($rowa = mysqli_fetch_array($eredmenya))
-				{
-					$sznev = $rowa["name"];
-				}
-				$telid = $row["telepulesID"];
-				$tel = null;
-				$sqla = "SELECT `name` FROM `telepulesek` WHERE `id` = '".$telid."'";
-				$eredmenya = mysqli_query($mysql, $sqla) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-				while ($rowa = mysqli_fetch_array($eredmenya))
-				{
-					$tel = $rowa["name"];
-				}
-				$pub = $row["publikus"];
-				$style = $row["style"];
-				$regex = "/^[^\<\>\{\}\']*$/";
-				if (!preg_match($regex, $style))
-				{
-				$style = null;
-				}
-				if ($pub == 1) {
-				$counter++;
-				if ($counter > 3)
-				{
-					break;
-				}
-				?>
-				<tr onclick="window.location.replace('miserend.php#<?php echo $id; ?>');"<?php if ($counter == 3) { ?>id="last"<?php } ?><?php if ($style != null) { ?> style="<?php echo $style; ?>" <?php } ?>>
-				<td><?php echo $d;?></td>
-				<td><?php echo $sznev;?></td>
-				<td><?php echo $tel;?></td>
-				</tr>
-				<?php
-				}
-			}
-			include("createrss.php");
+	$fb = getsetting("facebook.username");
+	if ($fb != null) {
 		?>
-	</table>
-<?php
-/*
-$sql = "SELECT `content` FROM `contents` WHERE `name` = 'index.szentmise'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$content = $row["content"];
-}
-echo $content;*/
-?>
-<!--<h2>Rendszeres szentmisék</h2>
-<p>Rendszeresen vannak szentmisék a Szent Anna és Szent Joachim templomban <b>vasárnap reggel 8 órakor</b>, valamint <b>csütörtökön 16:30-kor</b>.</p>
-<p>Az aktuális listát a szertartásokról <a href="miserend.php">itt</a> érheti el.</p>-->
-</div>
-<div id="gyonas">
-<?php /*
-mysqli_query($mysql, "SET NAMES utf8");
-$sql = "SELECT `content` FROM `contents` WHERE `name` = 'index.gyonas'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$content = $row["content"];
-}
-echo $content;*/
-?>
-<h2>Gyónási lehetőség</h2>
-<p>Gyónni bármikor lehet a sekrestyében amikor a miséző pap ráér. Érdemes szentmise előtt 15 perccel a sekrestyében, a sekrestye bejáratánál várakozni. A gyónás a sekrestyében történik!</p>
-</div>
-<!--<div class="fejlecparallax" id="oltar"></div>-->
-<div class="tartalom">
-<hr>
-<div class="hirdetotabla">
-<h2>Hirdetőtábla</h2>
-<marquee>
-<?php
-/*mysqli_query($mysql, "SET NAMES utf8");
-$sql = "SELECT `content` FROM `contents` WHERE `name` = 'index.hirdetotabla.leiras'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$content = $row["content"];
-}
-echo $content;*/
-?>
-Itt, a hirdetőtáblán a közelgő eseményekről, esedékes információkról olvashat.
-</marquee>
-<?php
-$hrvan = false;
-
-//$sql = "DELETE FROM `szertartasok` WHERE `stoptime` < '".date("Y-m-d H:i:s")."'";
-//$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-$sql = "SELECT `ID`, `title`, `content` FROM `hirdetesek` WHERE `starttime` < '".date("Y-m-d H:i:s")."'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$id = $row["ID"];
-	$title = $row["title"];
-	$content = $row["content"];
-	if ($hrvan == true)
-	{
-	?>
-	<hr class="hirdetotabla">
-	<?php
+		<a id="facebooklinkinhead" href="https://facebook.com/<?php echo $fb; ?>" target="_blank" title="Az egyházközség Facebook-oldala." style="padding-top: 10px;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-facebook" viewBox="0 0 16 16">
+				<path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+			</svg>
+			<?php echo $fb; ?>
+		</a>
+		<?php
 	}
 	?>
-	<div class="hirdetotabla" id = "<?php echo $id; ?>">
-	<h3 class="hirdetotabla"><?php echo $title; ?></h3>
-	<p class="hirdetotabla"><?php echo $content; ?></p>
 	</div>
-	<?php
-	if ($hrvan == false)
-	{
-		$hrvan = true;
-	}
-}
-?>
-</div>
-<hr>
-<div id="legkozelebbi">
-<h2>
-<?php /*
-mysqli_query($mysql, "SET NAMES utf8");
-$sql = "SELECT `content` FROM `contents` WHERE `name` = 'index.legkozelebbi.title'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$content = $row["content"];
-}
-echo $content;*/
-?>
-Legközelebbi szertartás
-</h2>
-<?php
-mysqli_query($mysql, "SET NAMES utf8");
-$sql = "DELETE FROM `szertartasok` WHERE `date` < '".date("Y-m-d H:i:s")."'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-$sql = "SELECT `date`, `name`, `place` FROM `szertartasok` ORDER BY `date`";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$date = $row["date"];
-	$d = substr($date, 0, 16);
-	$name = $row["name"];
-	$place = $row["place"];
-	?>
-	<table>
-	<tr>
-	<td><label>Időpont: </label></td>
-	<td><?php echo $d;?></td>
-	</tr>
-	<tr>
-	<td><label>Megnevezés: </label></td>
-	<td><?php echo $name;?></td>
-	</tr>
-	<tr>
-	<td><label>Hely: </label></td>
-	<td><?php echo $place;?></td>
-	</tr>
-	</table>
-	<?php
-	break;
-}
-?>
-</div>
-<!--<div class="fejlecparallax" id="ministransarany"></div>-->
-<hr>
-<div id="info" class="info">
-	<h2>Közérdekű információk</h2>
-	<?php
-/*mysqli_query($mysql, "SET NAMES utf8");
-$sql = "SELECT `content` FROM `contents` WHERE `name` = 'index.kozerdekuinfok'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$content = $row["content"];
-}
-echo $content;
-*/
-?>
-<div id="plebania" class="info">
-		<h3>Plébánia adatai</h3>
-		<table>
-			<tbody><tr>
-				<th>Levélcím</th>
-				<td></td>
-			</tr>
-		</tbody></table>
-	</div>
+	<a href="#content" id="nyilacska">
+		<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16" style="position: absolute; bottom: 5%; left: 48.8%;">
+			<path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+		</svg>
+	</a>
 </div>
 </div>
 </div>
+</div>
+</header>
+<main class="content" id="content" style="margin-right: 0px;">
+<!-- TODO egy ötlet: lehetne 3-as felosztásban megjeleníteni a közelgő szentmiséket (csak azokat), a hirdetéseket és a legfrissebb bejegyzéseket -->
+</main>
 <?php include("footer.php"); ?>
 </body>
 </html>

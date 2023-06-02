@@ -1,11 +1,13 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
-<title>Szertartás törlése - Példa plébánia</title>
+<title>Szertartás törlése - <?php echo $sitename; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/pnp" href="icon.png">
 <?php
+//FIXME nem minden oldalon írjuk ki a $sitename változót, s ez baj
 //FIXME head átnézése, mert még a régi rendszer szerint van
 //FIXME MySQL hiba kijavítása
 include("condig.php");
@@ -16,23 +18,14 @@ header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchar
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<div class="fejlecparallax">
-<div class="head-text">
-<h1>Példa plébánia honlapja - Szertartás törlése</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php");
+<?php
+displayhead("Szertartás törlése");
 include("headforadmin.php");
+if (!checkpermission("removeliturgia")) {
+	displaymessage("danger", "Nincs jogosultsága liturgia törléséhez!");
+	exit;
+}
 ?>
-<!--TODO headforadmin.php beillesztése-->
-</nav>
-<hr>
-</header>
 <div class="content">
 <div class="tartalom">
 <?php
@@ -48,7 +41,6 @@ if (!isset($_POST["stage"])) {
 	<select name="szertartas-id" required>
 	<option value="N/A">---Kérem válasszon!---</option>
 	<?php
-	//FIXME új szertartás rendszer feldolgozása
 	$sql = "SELECT `id`, `date`, `name` FROM `szertartasok`";
 	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 	while ($row = mysqli_fetch_array($eredmeny))

@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -13,21 +14,9 @@ div.bejegyzes img {max-width: 70%; margin-left: 15%;}
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Blogbejegyzés létrehozása - Előnézet</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
 <?php
-
+//TODO új jogosultságrendszer feldolgozása
+displayhead("Blogbejegyzés létrehozása - Előnézet");
 include("headforadmin.php");
 if ($_SESSION["userId"] == 0)
 {

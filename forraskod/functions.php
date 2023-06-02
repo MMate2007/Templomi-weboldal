@@ -1,10 +1,64 @@
 <?php
-function autofill($name) {
-    if (isset($_POST[$name])) {
-        echo "value='".$_POST[$name]."'";
+// TODO deletehirdetesek funkció elkészítése a már nem érvényes hirdetések törlésére
+function redirectback() {
+    global $_POST;
+    if (isset($_POST["urlfrom"])) {
+    header("Location: ".$_POST["urlfrom"]); }
+}
+$penzugyidb = null;
+function connectpenzugyidb() {
+    global $penzugyidb;
+    global $penzugyidbhost;
+    global $penzugyidbu;
+    global $penzugyidbp;
+    global $penzugyidbd;
+
+    if (isset($penzugyidbhost) && isset($penzugyidbu) && isset($penzugyidbp) && isset($penzugyidbd)) {
+        $penzugyidb = mysqli_connect($penzugyidbhost, $penzugyidbu, $penzugyidbp, $penzugyidbd) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($penzugyidb)."</p>");
+        mysqli_query($penzugyidb, "SET NAMES utf8");
     }
 }
-function checkpremission($premission) {
+/**
+ * Kitölti az szövegbeviteli mezőket a $POST-ból
+ *
+ * Kiírja a value argumentumot és megtölti értékkel
+ * @param string $name A kitöltendő HTML elem name értéke
+ * @return void
+ */
+function autofill(string $name) {
+    if (isset($_POST[$name])) {
+        echo "value='".correct($_POST[$name])."'";
+    }
+}
+/**
+ * Kitölti a HTML legördülő lista típusú űrlapelemeket a $POST-ból
+ *
+ * Ha az adott POST érték megegyezik a $value változó tartalmával, akkor kiírja, hogy selected
+ * @param string $post HTML elem name értéke
+ * @param mixed $value Az érték, amit ha felvesz a HTML elem, akkor kiírjuk, hogy selected
+ * @return void
+ */
+function autofillselect(string $post, $value) {
+    if (isset($_POST[$post])) { if ($_POST[$post] == $value) { echo "selected"; } }
+}
+/**
+ * Kitölti a HTML checkbox típusú űrlapelemeket a $POST-ból
+ *
+ * Ha az adott POST érték megegyezik a $value változó tartalmával, akkor kiírja, hogy checked
+ * @param string $post HTML elem name értéke
+ * @param mixed $value Az érték, amit ha felvesz a HTML elem, akkor kiírjuk, hogy checked
+ * @return void
+ */
+function autofillcheck(string $post, $value) {
+    if (isset($_POST[$post])) { if ($_POST[$post] == $value) { echo "checked"; } }
+}
+/**
+ * Visszadja, hogy a **bejelentkezett** felhasználónak van-e jogosultsága a $premission-ban leírt jogra
+ *
+ * @param string $premission Jogosultság neve
+ * @return void
+ */
+function checkpermission(string $premission) {
     global $mysql;
     $sqlp = "SELECT `$premission` FROM `engedelyek` WHERE `userId` = '".$_SESSION["userId"]."'";
     $eredmenyp = mysqli_query($mysql, $sqlp) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
@@ -12,7 +66,7 @@ function checkpremission($premission) {
         return $rowp[$premission];
     }
 }
-function getsetting ($settingname) {
+function getsetting (string $settingname) {
     global $mysql;
     $greturn = null;
     $gsql = "SELECT `value` FROM `settings` WHERE `name` = '".$settingname."'";
@@ -23,7 +77,18 @@ function getsetting ($settingname) {
 	}
     return $greturn;
 }
-function displaymessage($type, $msg) {
+function getcontent (string $contentname) {
+    global $mysql;
+    $greturn = null;
+    $gsql = "SELECT `value` FROM `content` WHERE `name` = '".$contentname."'";
+    $geredmeny = mysqli_query($mysql, $gsql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+	while ($grow = mysqli_fetch_array($geredmeny))
+	{
+		$greturn = $grow["value"];
+	}
+    return $greturn;
+}
+function displaymessage(string $type, string $msg) {
     echo "<div class='container'><p class='alert alert-$type'>$msg</p></div>";
 }
 function getheadimage() {
@@ -42,20 +107,20 @@ function getheadimage() {
 		return $image;
 	}
 }
-function formvalidation($formelement, $valid, $msg = null) {
-    // FIXME mivel több hiba is előfordulhat, ezért olyankor újradeklaráljuk a div változót, ez nem jó
+function formvalidation(string $formelement, bool $valid, $msg = null) {
     ?>
     <script defer>
        document.querySelector('<?php echo $formelement; ?>').classList.add('<?php echo ($valid == true) ? "is-valid" : "is-invalid"; ?>');
        <?php
        if ($msg != null) {
         ?>
-        let div = document.createElement("div");
+        msgdivek.push(document.createElement("div"));
         <?php if ($valid == false) { ?>
-        div.classList.add("invalid-feedback");
-        <?php } else { ?>div.classList.add("valid-feedback");<?php } ?>
-        div.innerHTML = "<?php echo $msg; ?>";
-        document.querySelector("<?php echo $formelement; ?>").parentNode.insertBefore(div, document.querySelector("<?php echo $formelement; ?>").nextSibling);
+        msgdivek[msgdivek.length-1].classList.add("invalid-feedback");
+        msgdivek[msgdivek.length-1].classList.add("col-sm");
+        <?php } else { ?>msgdivek[msgdivek.length-1].classList.add("valid-feedback"); msgdivek[msgdivek.length-1].classList.add("col-sm");<?php } ?>
+        msgdivek[msgdivek.length-1].innerHTML = "<?php echo $msg; ?>";
+        document.querySelector("<?php echo $formelement; ?>").parentNode.insertBefore(msgdivek[msgdivek.length-1], document.querySelector("<?php echo $formelement; ?>").nextSibling);
         <?php
        }
        ?>
@@ -94,7 +159,10 @@ function displayhead($title = null, $bgimg = null, $height = '35%', $tartalom = 
 }
 function deletepastszertartas() {
     global $mysql;
-    $datetorlendo = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+    $ido = getsetting("mise.autodelete");
+    if ($ido > 0) {
+        $ido += 30;
+    $datetorlendo = date("Y-m-d H:i:s", strtotime("+".$ido." minutes"));
     $sql = "DELETE FROM `szertartasok` WHERE `date` < '$datetorlendo'";
     $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
     // TODO szándékok megőrzésének lehetővé tétele
@@ -107,15 +175,15 @@ function deletepastszertartas() {
             $sql = "DELETE FROM `szandekok` WHERE `id` = '".$row["id"]."'";
             $eredmenyb = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
         }
-    }
-
+    } }
 }
 function correct($txt) {
+    // TODO a strip_tags funkció hozzáadása, ha HTML formázást szeretnénk alkamazni
     return htmlspecialchars(stripslashes(trim($txt)));
 }
 $htmlregexlist = ["name" => "^([a-zA-Z .-]|[öüóőúéáűí]|[ÖÜÓŐÚÉÁŰÍ])+$", "dateinput" => "^[0-9 T:-]{11,}$", "dateoutput" => "^[0-9 \.:-]{12,}$", "colorhex" => "^#[0-9A-F]{3,6}$", "styleexpression" => "^[a-z :;-]*$", "email" => "^[a-z0-9._+-]+[@][a-z.]+$"];
 //TODO check függvény befejezése, ennek azt kell csinálnia, hogy a $txt az ellenőrizendő szöveg, a $tipus pedig, hogy milyen szöveg (pl. név, email) és a switch-csel a megfelelő preg_match() vagy filter_var() függvényt hajtja végre és annak alapján visszatér egy igaz/hamis értékkel
-function check($txt, $tipus) {
+function check($txt, string $tipus) {
     $regexkelle = false;
     $filterkelle = false;
     $filterid = 0;

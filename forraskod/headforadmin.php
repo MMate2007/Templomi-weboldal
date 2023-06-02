@@ -11,8 +11,11 @@ while ($row = mysqli_fetch_array($eredmeny))
 	$name = $row["name"];
 	if ($name != $_SESSION["name"])
 	{
-		
 		header("Location: login.php?messagetype=warning&message=Hozzáférés megtagadva! A tartalom megtekintéséhez be kell jelentkezni.");
 	}
+}
+if (!checkpermission("bejelentkezes")) {
+	$_SESSION["userId"] = null;
+	header("Location: login.php?messagetype=warning&message=Hozzáférés megtagadva! Az Ön fiókját ideiglenesen letiltották.");
 }
 ?>

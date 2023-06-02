@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -60,7 +61,7 @@ mysqli_close($mysql);
 ?>
 <a href="logout.php" class="right">Kijelentkezés</a>
 <a href="create.hirdetes.php" class="right">Hirdetés létrehozása</a>
-<a href="form.create.szertartas.php" class="right">Liturgia hozzáadása</a>
+<a href="create.szertartas.php" class="right">Liturgia hozzáadása</a>
 <a href="admin.php" class="right" id="right-elso">Adminisztráció</a>
 </nav>
 <hr>
