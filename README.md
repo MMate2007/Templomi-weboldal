@@ -9,6 +9,7 @@ Jelenleg még nincs telepíthető változat, ha majd lesz, akkor azt a *Release*
 Egy új verzió folyamatban van, szíves türelmét kérem!
 ## Telepítés fejlesztéshez
 Ha számítógépünkön telepítve van a Docker, akkor érdemes azzal telepíteni.
+*Megjegyzés: a projekt Bootstrap 5-öt használ, de nem CDN-ről, ezért a /forraskod/css/ mappában található a customise.min.css fájlt használja. Ha testre szeretnénk szabni a Bootstrap-et, akkor telepítsük, s a scss fájlokat a /forraskod/css mappába fordítsuk! A fő fájl neve customise.min.css legyen, ezt fogja majd behúzni az egész program a fejlécbe! A JavaScript részét CDN-ről húzzuk! **Ahhoz, hogy működjön a rendszer nem kell npm-mel letölteni a Bootstrap-et, elég a customise.min.css és a customise.min.css.map fájl a forraskod/css mappában!***
 ### Telepítés fejlesztéshez Dockerrel
 1. Klónozzuk ezt a repository-t!
 2. Indítsuk el a Docker Desktopot!
