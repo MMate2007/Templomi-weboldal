@@ -9,10 +9,9 @@
 /db/
 /dbdump/
 .DS_Store
-/forraskod/package.json
-/forraskod/package-lock.json
-/forraskod/node_modules
+/forraskod/vendor
 /forraskod/css/colortest.html
 /.vscode/
 /forraskod/img
 /forraskod/indextest.php
+todo.txt
