@@ -1,0 +1,7 @@
+{
+    "require": {
+        "twbs/bootstrap": "^5.2",
+        "erusev/parsedown": "^1.7",
+        "tecnickcom/tcpdf": "^6.6"
+    }
+}
