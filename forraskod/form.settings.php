@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -12,32 +13,14 @@
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Beállítások módosítása</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
 <?php
-
+displayhead("Beállítások módosítása");
 include("headforadmin.php");
-if ($_SESSION["szint"] != 10)
-{
-	header("Location: admin.php");
+if (!checkpermission("editsettings")) {
+	displaymessage("danger", "Nincs jogosultsága módosítani a beállításokat!");
+	exit;
 }
-
 ?>
-
-</nav>
-<hr>
-</header>
 <div class="content">
 <div class="tartalom">
 <form name="settings" action="settings.php" method="post">
