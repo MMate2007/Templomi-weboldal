@@ -1,4 +1,5 @@
 <?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
 <?php include("head.php"); ?>
@@ -11,28 +12,15 @@
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1><?php echo $sitename; ?> honlapja - Beállítások mentése...</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
 <?php
-
+//TODO ki/be lehessen kapcsolni a funkciókat
+displayhead("Beállítások mentése");
 include("headforadmin.php");
-
+if (!checkpermission("editsettings")) {
+    displaymessage("danger", "Nincs jogosultsága beállítások módosításához!");
+    exit;
+}
 ?>
-
-</nav>
-<hr>
-</header>
 <?php
 //FIXME settings hibajavítás
 $settingnumber = -1;
