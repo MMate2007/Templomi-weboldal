@@ -35,12 +35,6 @@ div.container {
         <?php
         include("navbar.php");
         ?>
-        <!-- <div class="head-text d-flex justify-content-center align-items-center h-100">
-        <div>
-            <h1 class="text-center text-white">Bejelentkezés</h1>
-            <div class="text-white">
-            </div>
-        </div> -->
         </div>
         </div>
         </div>
@@ -50,7 +44,7 @@ div.container {
         <div class="container glass" style="width: max-content; padding: 2.5%;">
             <h1 class="text-white text-center">Bejelentkezés</h1>
         <!-- <p class="text-center">Ha szeretné szerkeszteni a weboldal tartalmát kérem jelentkezzen be az alábbi űrlap segítségével!</p> -->
-        <form name="login" action="#" method="post">
+        <form name="login" action="#" method="post" id="loginform">
             <div class="row justify-content-center">
                 <div class="col">
                     <div class="input-group">
@@ -86,6 +80,7 @@ div.container {
                 $id = $row["id"];
                 $name = $row["name"];
                 $egyhsz = $row["egyhaziszint"];
+                $twofa = $row["2fasecret"];
                 if (password_verify($pass, $pass2))
                 {
                     if ($hashtransition == true && password_needs_rehash($pass2, $pwdhashalgo)) {
@@ -93,6 +88,7 @@ div.container {
                         $sqlb = "UPDATE `author` SET `password`='$newpass' WHERE `id` = '$id'";
                         $eredmenyb = mysqli_query($mysql, $sqlb) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
                     }
+                    if ($twofa == null) {
                     $sqla = "SELECT `bejelentkezes` FROM `engedelyek` WHERE `userId` = '$id'";
                     $eredmenya = mysqli_query($mysql, $sqla) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
                     while ($row = mysqli_fetch_array($eredmenya))
@@ -108,6 +104,9 @@ div.container {
                         } else {
                             displaymessage("warning", "Ön nem jelentkezhet be, mert fiókját ideiglenesen letiltották!");
                         }
+                    } } else {
+                        $_SESSION["uid"] = $id;
+                        header("Location: 2fa.php");
                     }
                 } else if ($hashtransition == true && sha1(md5($pass)) == $pass2) {
                     $newpass = password_hash($pass, $pwdhashalgo);
