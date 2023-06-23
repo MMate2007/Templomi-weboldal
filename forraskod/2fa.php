@@ -32,6 +32,7 @@ div.container {
     <?php
             $height = "35%";
             $bgimg = getheadimage();
+            $cookiename = "remember2fa".sha1($_SESSION["uid"]);
         ?>
         <header style="height: <?php echo $height; ?>;" class="mask">
         <div class="head h-100">
@@ -56,6 +57,10 @@ div.container {
                         <span class="input-group-text"><i class="bi bi-123"></i></span>
                         <input type="text" name="2fa" id="twofa" class="form-control" required placeholder="123456">
                     </div>
+                    <div class="form-check justify-content-center">
+                        <input type="checkbox" name="rememberme" id="rememberme" class="form-check-input" value="yes">
+                        <label for="rememberme" class="form-check-label text-white">Ne kérje ezt újra ezen a számítógépen 30 napig.</label>
+                    </div>
                     <div class="input-group justify-content-center"><button type="submit" class="btn btn-primary text-white btn-block"><i class="bi bi-box-arrow-in-right"></i> Tovább</button></div>
                 </div>
             </div>
@@ -71,7 +76,6 @@ div.container {
             if (isset($_POST["message"])) {
                 displaymessage("danger", $_POST["message"]);
             }
-            echo "stage1";
             $sql = "SELECT * FROM `author` WHERE `id` = '".$_SESSION["uid"]."'";
             $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
             while ($row = mysqli_fetch_array($eredmeny))
@@ -79,14 +83,21 @@ div.container {
                 $twofa = $row["2fasecret"];
                 $name = $row["name"];
                 $egyhsz = $row["egyhaziszint"];
-                echo "2fasecret";
-                if ($fa->verifyKey($twofa, $_POST["2fa"])) {
-                    echo "Sikerült!";
+                $verify = false;
+                $verify = $fa->verifyKey($twofa, $_POST["2fa"]);
+                if (isset($_COOKIE[$cookiename])) {
+                    if ($_COOKIE[$cookiename] == "yes") {
+                        $verify = true;
+                    }
+                }
+                if ($_POST["rememberme"] == "yes") {
+                    setcookie($cookiename, "yes", time()+60*60*24*30);
+                }
+                if ($verify) {
                     $sqla = "SELECT `bejelentkezes` FROM `engedelyek` WHERE `userId` = '".$_SESSION["uid"]."'";
                     $eredmenya = mysqli_query($mysql, $sqla) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
                     while ($row = mysqli_fetch_array($eredmenya))
                     {
-                        echo "While";
                         if ($row["bejelentkezes"] == 1)
                         { echo "bejelentkezes1";
                             $_SESSION["userId"] = $_SESSION["uid"];
@@ -99,7 +110,6 @@ div.container {
                         }
                     } 
                 } else {
-                    echo "Nem jó";
                     formvalidation("#twofa", false, "Helytelen kód.");
                 }
             }
@@ -109,6 +119,16 @@ div.container {
         {
             header("Location: admin.php");
         }
+        if (!isset($_POST["stage"])) {
+            if (isset($_COOKIE[$cookiename])) {
+                if ($_COOKIE[$cookiename] == "yes") {
+                    ?>
+                    <script>
+                        document.querySelector("#login2fa").submit();
+                    </script>
+                    <?php
+                }
+            } }
         ?>
     </div>
 <!-- <?php //include("footer.php"); ?> -->
