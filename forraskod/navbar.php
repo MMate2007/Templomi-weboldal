@@ -186,8 +186,23 @@
 
 
 <?php if(!isset($_COOKIE['enablecookie'])) { ?>
+    <script>
+      function declinecookies() {
+        document.getElementById('cookie').style.display = 'none';
+      }
+    </script>
     <div id="cookie" class="fixed-bottom" style="background-color: rgba(255,255,255,0.7); padding: 20px;">
-      <p>Ez a webhely sütiket (HTTP Cookies) használ bizonyos funkciókhoz. Ha elutasítja a sütiket, hibaüzenetek jelenhetnek meg (de nem létfontosságú funkciók válnak használhatatlanná ezáltal; <b>A bejelentkezés sütik nélkül nem működik!</b></p><form action="cookie.php" method="post"><input type="button" class="btn btn-danger" value="Elutasítás" id="decline" stlye="margin-right: 5px;" onclick="document.getElementById('cookie').style.display = 'none';"><input type="hidden" name="filename" value="index.php"><input type="submit" id="accept" class="btn btn-success" value="Engedélyezés"></form>
+      <p>Ez a webhely sütiket (HTTP Cookies) használ bizonyos funkciókhoz. Ha többet szeretne megtudni, hogy mit tárolnak az adott sütik mutasson rá (helyezze fölé a kurzort) a csoportra. Ha elutasítja a sütiket, akkor bizonyos funkciók nem fognak működni.</p>
+      <form action="cookie.php" method="get" id="cookieform">
+        <input type="checkbox" name="mandatorycookies" id="mandatorycookies" value="1" class="form-check-input" checked disabled>
+        <label for="mandatorycookies" class="form-check-label text-black" title="Ezek a sütik kellenek például ahhoz, hogy működjön a bejelentkezés, emlékezzen a program, hogy mely sütiket engedélyeztük.">Szükséges sütik</label>
+        <input type="checkbox" name="conventionalcookies" id="conventionalcookies" value="1" class="form-check-input">
+        <label for="conventionalcookies" class="form-check-label text-black" title="Ezek a sütik kellenek ahhoz, hogy működjenek az olyan funckiók, amelyek automatikusan kitöltenek űrlapmezőket. Például, hogy kétlépcsős azonosításnál ne kérje újra az adott számítógépen a kódot.">Kényelmi sütik</label>
+        <br>
+        <input type="button" class="btn btn-danger" value="Összes elutasítása" id="decline" stlye="margin-right: 5px;" onclick="declinecookies();">
+        <input type="hidden" name="filename" value="index.php">
+        <input type="submit" id="accept" class="btn btn-success" value="Kiválasztottak engedélyezés">
+      </form>
     </div>
     <?php
   }
