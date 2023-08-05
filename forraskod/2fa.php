@@ -57,10 +57,15 @@ div.container {
                         <span class="input-group-text"><i class="bi bi-123"></i></span>
                         <input type="text" name="2fa" id="twofa" class="form-control" required placeholder="123456">
                     </div>
+                    <?php
+                    if (isset($_COOKIE["enableconventionalcookie"])) {
+                        ?>
                     <div class="form-check justify-content-center">
                         <input type="checkbox" name="rememberme" id="rememberme" class="form-check-input" value="yes">
                         <label for="rememberme" class="form-check-label text-white">Ne kérje ezt újra ezen a számítógépen 30 napig.</label>
                     </div>
+                    <?php }
+                    ?>
                     <div class="input-group justify-content-center"><button type="submit" class="btn btn-primary text-white btn-block"><i class="bi bi-box-arrow-in-right"></i> Tovább</button></div>
                 </div>
             </div>
