@@ -28,6 +28,13 @@ div.container {
     <?php
             $height = "35%";
             $bgimg = getheadimage();
+            if (!isset($_COOKIE["enablecookie"])) {
+                ?>
+                <script>
+                    alert("Most olyan oldalt készül megtekinteni, amelynek használatához szükség van a szükséges sütik engedélyezéséhez. Úgy tűnik, hogy Ön ezt nem engedélyezte, ezért az oldal működésében hiba léphet fel, előfordulhat, hogy egyes funkciók nem működhetnek és az oldal nem várt módon viselkedhet.");
+                </script>
+                <?php
+            }
         ?>
         <header style="height: <?php echo $height; ?>;" class="mask">
         <div class="head h-100">
