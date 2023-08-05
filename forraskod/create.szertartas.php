@@ -215,7 +215,7 @@ if (!checkpermission("addliturgia"))
 	<div class="row my-3">
 		<label class="col-sm-2">Stílus:</label>
 		<div class="col-sm">
-			<input type="color" name="color" <?php autofill("color"); ?> class="form-control" style="display: inline; max-width: 25%;">
+			<input type="color" name="color" <?php autofill("color"); ?> class="form-control" style="display: inline; max-width: 23%;">
 			<div style="display: inline;">
 				<div class="form-check form-check-inline">
 					<input type="checkbox" name="bold" value="font-weight: bold;" id="bold" class="form-check-input" <?php autofillcheck("bold", "font-weight: bold;"); ?>>
