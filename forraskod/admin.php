@@ -33,6 +33,7 @@ if (!isset($_SESSION["userId"]))
 // TODO be lehessen állítani templomoknak színeket
 ?>
 <script>
+	<?php if ($_SESSION["egyhszint"] > 0) { ?>
 	var calendar = null;
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('hetemcalendar');
@@ -78,7 +79,7 @@ if (!isset($_SESSION["userId"]))
 		}
 		?>
         calendar.render();
-      });
+      }); <?php } ?>
 	  function showmise(id) {
 		if (document.querySelector(".highlighted") != null) {
 		document.querySelector(".highlighted").classList.remove("highlighted"); }
@@ -97,7 +98,6 @@ if (!isset($_SESSION["userId"]))
 	// 	}
 	//   }
     </script>
-
 </head>
 <body>
 <?php displayhead("Adminisztráció", null, null, "<h3 style='padding-top: 30px; font-variant: small-caps;'>Dicsértessék a Jézus Krisztus!</h3><h4>Üdvözlöm Önt, ".$_SESSION["name"].", itt az adminisztrációs felületen!</h4>");
