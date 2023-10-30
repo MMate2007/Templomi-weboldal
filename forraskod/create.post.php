@@ -23,12 +23,12 @@ if (!isset($_POST["stage"]))
 	?>
 	<form name="create-post" action="#" method="post">
 	<div class="row my-3">
-		<label class="form-label col-sm-2">Bejegyzés címe: </label>
-		<input type="text" name="title" <?php autofill("title"); ?> required class="form-control col-sm">
+		<label class="form-label col-sm-2" for="title">Bejegyzés címe: </label>
+		<input type="text" name="title" <?php autofill("title"); ?> required class="form-control col-sm" id="title">
 	</div>
 	<div class="row my-3">
-		<label class="form-label col-sm-2">Bejegyzés tartalma: </label>
-		<textarea name="content" required class="form-control col-sm"><?php if (isset($_POST["content"])): echo $_POST["content"]; endif ?></textarea>
+		<label class="form-label col-sm-2" for="content">Bejegyzés tartalma: </label>
+		<textarea name="content" required class="form-control col-sm" id="content"><?php if (isset($_POST["content"])): echo $_POST["content"]; endif ?></textarea>
 	</div>
 	<button type="submit" class="btn btn-primary text-white"><i class="bi bi-arrow-right"></i> Tovább</button>
 	<input type="hidden" name="stage" value="2">
