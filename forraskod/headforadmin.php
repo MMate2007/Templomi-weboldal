@@ -18,4 +18,20 @@ if (!checkpermission("bejelentkezes")) {
 	$_SESSION["userId"] = null;
 	header("Location: login.php?messagetype=warning&message=Hozzáférés megtagadva! Az Ön fiókját ideiglenesen letiltották.");
 }
+$session = new Session();
+try {
+	if (!$session->checksession()) {
+		$session->destroy();
+		session_destroy();
+		unset($session);
+		header("Location: login.php");
+		exit();
+	}
+}
+catch (sessionException $e) {
+	if ($e->getCode() == 101) {
+		session_regenerate_id();
+		$session->regenerate();
+	}
+}
 ?>

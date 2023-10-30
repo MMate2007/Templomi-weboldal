@@ -90,28 +90,34 @@ div.container {
                 $twofa = $row["2fasecret"];
                 if (password_verify($pass, $pass2))
                 {
+                    session_regenerate_id();
                     if ($hashtransition == true && password_needs_rehash($pass2, $pwdhashalgo)) {
                         $newpass = password_hash($pass, $pwdhashalgo);
                         $sqlb = "UPDATE `author` SET `password`='$newpass' WHERE `id` = '$id'";
                         $eredmenyb = mysqli_query($mysql, $sqlb) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
                     }
                     if ($twofa == null) {
-                    $sqla = "SELECT `bejelentkezes` FROM `engedelyek` WHERE `userId` = '$id'";
-                    $eredmenya = mysqli_query($mysql, $sqla) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-                    while ($row = mysqli_fetch_array($eredmenya))
+                    if (checkpermission("bejelentkezes", $id))
                     {
-                        if ($row["bejelentkezes"] == 1)
-                        {
-                            $_SESSION["userId"] = $id;
-                            $_SESSION["name"] = $name;
-                            $_SESSION["szint"] = $admin;
-                            $_SESSION["egyhszint"] = $egyhsz;
-                            header("Location: admin.php");
-                            exit();
+
+                            $_SESSION["uid"] = $id;
+                            $session = new Session();
+                            if ($session->validonlogin()) {
+                                $_SESSION["userId"] = $id;
+                                $_SESSION["name"] = $name;
+                                // $_SESSION["szint"] = $admin;
+                                $_SESSION["egyhszint"] = $egyhsz;
+                                $session->login();
+                                header("Location: admin.php");
+                                exit();
+                            } else {
+                                unset($session);
+                                displaymessage("danger", "Hiba bejelentkezés közben. Kérem próbálja újra!");
+                            }
                         } else {
                             displaymessage("warning", "Ön nem jelentkezhet be, mert fiókját ideiglenesen letiltották!");
                         }
-                    } } else {
+                    } else {
                         $_SESSION["uid"] = $id;
                         header("Location: 2fa.php");
                     }

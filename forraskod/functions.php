@@ -1,5 +1,226 @@
 <?php
 // TODO deletehirdetesek funkció elkészítése a már nem érvényes hirdetések törlésére
+class Session {
+    private $sessionid;
+    private $userid;
+    function __construct($sessid = 0, int|null $primaryid = null)
+    {
+        // TODO prímariid alapú kezelés is
+        global $mysql;
+        $users = 0;
+        if ($sessid === 0) {
+            $this->sessionid = session_id();
+            if (isset($_SESSION["userId"])) {
+                $this->userid = $_SESSION["userId"];
+            } else if (isset($_SESSION["uid"])) {
+                $this->userid = $_SESSION["uid"];
+            }
+            else {
+                throw new Exception("Nincs megadva userId.");
+            }
+        } else {
+            $this->sessionid = $this->sessionid;
+            $sql = "SELECT `userid` FROM `sessions` WHERE `id` = '$this->sessionid'";
+            $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+            while ($row = mysqli_fetch_array($eredmeny)) {
+                $this->userid = $row["userid"];
+                $users++;
+            }
+        }
+        // if (!$this->exists()) {
+        //     $sql = "INSERT INTO `sessions`(`id`, `userid`) VALUES ('$this->sessionid','$this->userid')";
+        //     $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+        // }
+        if ($users > 1) {
+            throw new sessionException("Ugyanazon munkamenet-azonosítóhoz több felhasználó is tartozik.", 102);
+        }
+    }
+    function __destruct()
+    {
+        $this->sessionid = null;
+        $this->userid = null;
+    }
+    function login() {
+        global $mysql;
+        $sql = "INSERT INTO `sessions`(`id`, `userid`) VALUES ('$this->sessionid','$this->userid')";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+    }
+    function getsessionid() {
+        return $this->sessionid;
+    }
+    function getuserid() {
+        return $this->userid;
+    }
+    function destroy() {
+        global $mysql;
+        $sql = "DELETE FROM `sessions` WHERE `id` = '$this->sessionid'";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+    }
+    function log_activity() {
+        global $mysql;
+        $sql = "UPDATE `sessions` SET `lastactivity`='".time()."' WHERE `id` = '$this->sessionid'";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+    }
+    function regenerate() {
+        global $mysql;
+        $sql = "SELECT `started` FROM `sessions` WHERE `id` = '$this->sessionid'";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+        $row = mysqli_fetch_row($eredmeny);
+        $sql = "DELETE FROM `sessions` WHERE `id` = '$this->sessionid'";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");        
+        $this->sessionid = session_id();
+        $sql = "INSERT INTO `sessions`(`id`, `userid`, `started`) VALUES ('$this->sessionid','$this->userid','".$row["started"]."')";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");        
+    }
+    function exists(): bool {
+        global $mysql;
+        $sql = "SELECT `userid` FROM `sessions` WHERE `id` = '$this->sessionid'";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");        
+        if (mysqli_num_rows($eredmeny) == 1) {
+            return true;
+        } else if (mysqli_num_rows($eredmeny) == 0) {
+            return false;
+        } else if (mysqli_num_rows($eredmeny) > 1) {
+            throw new sessionException("Egynél több munkamenet létezik ugyanazzal az azonosítóval.", 102);
+        }
+    }
+    function checkcreatetime(): bool {
+        global $mysql;
+        if (getsetting("session.lifelenght") === null) {
+            return true;
+        }
+        $sql = "SELECT `created` FROM `sessions` WHERE `id` = '$this->sessionid'";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");        
+        $row = mysqli_fetch_array($eredmeny);
+        if (time() - $row["created"] >= getsetting("session.lifelenght")) {
+            return false;
+        } else if (time() - $row["created"] < getsetting("session.lifelenght")) {
+            return true;
+        }
+    }
+    function checkstarttime(): bool {
+        global $mysql;
+        if (getsetting("session.logintime") === null) {
+            return true;
+        }
+        $sql = "SELECT `started` FROM `sessions` WHERE `id` = '$this->sessionid'";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+        $row = mysqli_fetch_array($eredmeny);
+        if (time() - $row["started"] >= getsetting("session.logintime")) {
+            return false;
+        } else if (time() - $row["started"] < getsetting("session.logintime")) {
+            return true;
+        }
+    }
+    function checklastactivity(): bool {
+        global $mysql;
+        if (getsetting("session.lastactivitylimit") === null) {
+            return true;
+        }
+        $sql = "SELECT `lastactivity` FROM `sessions` WHERE `id` = '$this->sessionid'";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");        
+        $row = mysqli_fetch_array($eredmeny);
+        if (time() - $row["lastactivity"] >= getsetting("session.lastactivitylimit")) {
+            return false;
+        } else if (time() - $row["lastactivity"] < getsetting("session.lastactivitylimit")) {
+            return true;
+        }
+    }
+    function validonlogin(): bool {
+        global $mysql;
+        try {
+        if ($this->exists()) {
+            return false;
+        } }
+        catch (sessionException $e) {
+            Session::logoutuser($this->userid);
+            return false;
+        }
+        if (!getsetting("session.multiplelogins")) {
+            $sessions = Session::getusersessions($this->userid);
+            if (count($sessions) > 0) {
+            if (getsetting(("session.multiplelogins.logout"))) {
+                Session::logoutuser($this->userid);
+            } else {
+                $this->destroy();
+                return false;
+            } }
+        }
+        return true;
+    }
+    function checksession() {
+        // FIXME valamiért mindig hamis, ha minden session. beállítás 0
+        global $mysql;
+        try {
+        if (!$this->exists()) {
+            return false;
+        } }
+        catch (sessionException $e) {
+            Session::logoutuser($this->userid);
+            return false;
+        }
+        if (!getsetting("session.multiplelogins")) {
+            $sessions = Session::getusersessions($this->userid);
+            if (count($sessions) > 1) {
+                if (getsetting("session.multiplelogins.logout")) {
+                    Session::logoutuser($this->userid);
+                    $sql = "INSERT INTO `sessions`(`id`, `userid`) VALUES ('$this->sessionid','".$this->userid."')";
+                    $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+                } else {
+                    return false;
+                }
+            }
+        }
+        if (!$this->checkcreatetime()) {
+            if (!getsetting("session.deleteifoutdated")) {
+                throw new sessionException("A munkamenet azonosítóját újra kell generálni", 101);
+            } else {
+            return false;
+            }
+        }
+        if (!$this->checklastactivity()) {
+            return false;
+        }
+        if (!$this->checkstarttime()) {
+            return false;
+        }
+        return true;
+    }
+    static function getusersessions(int $userid): array {
+        global $mysql;
+        $sql = "SELECT `id` FROM `sessions` WHERE `userid` = '$userid' ORDER BY `created`";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");        
+        $sessionids = array();
+        while ($row = mysqli_fetch_array($eredmeny)) {
+            array_push($sessionids, $row["id"]);
+        }
+        return $sessionids;
+    }
+    static function logoutuser(int $userid) {
+        global $mysql;
+        $sql = "DELETE FROM `sessions` WHERE `userid` = '$userid'";
+        $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+    }
+}
+class loginException extends Exception {
+    public function showError() {
+        displaymessage("error", "Nem sikerült a bejelentkezés a következő miatt: ".$this->getMessage());
+    }
+    // Hibakódok:
+    // 1: már létezik ez a munkamenet
+    // 2: több munkamenet létezik azonos azonosítóval
+    // 3: már be van jelentkezve másutt
+    // 40: lejárt a munkamenet
+    // 41: tétlenség miatt lejárt munkamenet
+}
+class sessionException extends Exception {
+    public function showError() {
+        displaymessage("error", "Munkamenet hiba: ".$this->getMessage());
+    }
+    // Hibaüzenetek:
+    // 101: újra kell generálni a munkamenet azonosítót
+    // 102: duplikált munkamenet azonosító
+}
 function redirectback() {
     global $_POST;
     if (isset($_POST["urlfrom"])) {
@@ -58,12 +279,18 @@ function autofillcheck(string $post, $value) {
  * @param string $premission Jogosultság neve
  * @return void
  */
-function checkpermission(string $premission) {
+function checkpermission(string $permission, $userid = null) {
     global $mysql;
-    $sqlp = "SELECT `$premission` FROM `engedelyek` WHERE `userId` = '".$_SESSION["userId"]."'";
+    $sqlp = "SELECT `$permission` FROM `engedelyek` WHERE `userId` = '";
+    if ($userid === null) {
+        $sqlp .= $_SESSION["userId"];
+    } else {
+        $sqlp .= $userid;
+    }
+    $sqlp .= "'";
     $eredmenyp = mysqli_query($mysql, $sqlp) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
     while ($rowp = mysqli_fetch_array($eredmenyp)) {
-        return $rowp[$premission];
+        return $rowp[$permission];
     }
 }
 function getsetting (string $settingname) {
@@ -89,7 +316,7 @@ function getcontent (string $contentname) {
     return $greturn;
 }
 function displaymessage(string $type, string $msg) {
-    echo "<div class='container'><p class='alert alert-$type'>$msg</p></div>";
+    echo "<div class='alert alert-$type'>$msg</div>";
 }
 function getheadimage() {
     global $mysql;

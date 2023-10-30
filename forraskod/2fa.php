@@ -95,25 +95,31 @@ div.container {
                         $verify = true;
                     }
                 }
+                if (isset($_POST["rememberme"])) {
                 if ($_POST["rememberme"] == "yes") {
                     setcookie($cookiename, "yes", time()+60*60*24*30);
-                }
+                } }
                 if ($verify) {
-                    $sqla = "SELECT `bejelentkezes` FROM `engedelyek` WHERE `userId` = '".$_SESSION["uid"]."'";
-                    $eredmenya = mysqli_query($mysql, $sqla) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-                    while ($row = mysqli_fetch_array($eredmenya))
+                    if (checkpermission("bejelentkezes", $_SESSION["uid"]))
                     {
-                        if ($row["bejelentkezes"] == 1)
-                        { echo "bejelentkezes1";
-                            $_SESSION["userId"] = $_SESSION["uid"];
-                            $_SESSION["name"] = $name;
-                            $_SESSION["egyhszint"] = $egyhsz;
-                            header("Location: admin.php");
-                            exit();
+                            $session = new Session();
+                            if ($session->validonlogin() === true) {
+                                $_SESSION["userId"] = $_SESSION["uid"];
+                                $_SESSION["name"] = $name;
+                                $_SESSION["egyhszint"] = $egyhsz;
+                                $session->login();
+                                header("Location: admin.php");
+                                exit(); 
+                            } else {
+                                    unset($session);
+                                    displaymessage("danger", "Hiba bejelentkezés közben. Kérem próbálja újra!");
+                                    if (!getsetting("session.multiplelogins")) {
+                                    displaymessage("info", "Hiba előfordulhat azért, mert a rendszergazda lehet, hogy egy felhasználótól egyszerre egy bejelentkezést enged. Ez esetben először jelentkezzen ki."); }
+                            }
                         } else {
                             displaymessage("warning", "Ön nem jelentkezhet be, mert fiókját ideiglenesen letiltották!");
                         }
-                    } 
+                     
                 } else {
                     formvalidation("#twofa", false, "Helytelen kód.");
                 }
@@ -122,7 +128,7 @@ div.container {
         }
         if (isset($_SESSION["userId"]))
         {
-            header("Location: admin.php");
+           header("Location: admin.php");
         }
         if (!isset($_POST["stage"])) {
             if (isset($_COOKIE[$cookiename])) {
