@@ -473,8 +473,6 @@ if ($user == true) {
 		{
 			$user = false;
 		}else if (isset($_SESSION["userId"])) {
-		//$mysql = mysqli_connect("localhost", "filia", "borszorcsokfilia8479", "filia") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-		//mysqli_query($mysql, "SET NAMES utf8");
 		$sql = "SELECT `name` FROM `author` WHERE `id` = '".$_SESSION["userId"]."'";
 		$eredmenyegy = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 		while ($rowegy = mysqli_fetch_array($eredmenyegy))

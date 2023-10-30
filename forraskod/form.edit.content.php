@@ -44,8 +44,6 @@ include("headforadmin.php");
             <td>
                 <select name="idname">
                     <?php
-                    $mysql = mysqli_connect("localhost", "filia", "borszorcsokfilia8479", "filia") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-                    mysqli_query($mysql, "SET NAMES utf8");
                     $sql = "SELECT `name` FROM `contents`";
                     $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
                     while ($row = mysqli_fetch_array($eredmeny))

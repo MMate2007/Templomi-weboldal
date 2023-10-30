@@ -24,8 +24,6 @@ div.fejlecparallax {
 <div class="blog">
 <?php
 	//FIXME mysql hiba
-	$mysql = mysqli_connect("localhost", "filia", "borszorcsokfilia8479", "filia") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-	mysqli_query($mysql, "SET NAMES utf8");
 	$sql = "SELECT * FROM `blog` ORDER BY id DESC;";
 	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 	while ($row = mysqli_fetch_array($eredmeny))

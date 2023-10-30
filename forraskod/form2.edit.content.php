@@ -42,8 +42,6 @@ include("headforadmin.php");
             <td><label>Szerkesztendő tartalom: </label></td>
             <td>
                 <?php
-                    $mysql = mysqli_connect("localhost", "filia", "borszorcsokfilia8479", "filia") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-                    mysqli_query($mysql, "SET NAMES utf8");
                     $sql = "SELECT `name` FROM `contentsname` WHERE `idname` = '".$_POST["idname"]."'";
                     $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
                     while ($row = mysqli_fetch_array($eredmeny))
