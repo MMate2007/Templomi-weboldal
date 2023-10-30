@@ -45,7 +45,7 @@ if (!checkpermission("adduser")) {
 			$sql = "SELECT `id`, `name` FROM `permissions`";
 			$eredmeny = mysqli_query($mysql, $sql);
 			while ($row = mysqli_fetch_array($eredmeny)) {
-				if ($row["name"] != "bejelentkezes") {
+				if ($row["name"] != "Bejelentkezés") {
 				?>
 				<tr>
 					<th><?php echo $row["name"]; ?></th>
