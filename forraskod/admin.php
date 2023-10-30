@@ -116,7 +116,7 @@ include("headforadmin.php");
 <?php if (checkpermission("addhirdetes")) {echo '<li><a href="create.hirdetes.php">Hirdetés létrehozása</a></li>'; } ?>
 <?php if (checkpermission("removehirdetes")) {echo '<li><a href="delete.hirdetes.php">Hirdetés törlése</a></li>'; } ?>
 <!--<li><a href="form.edit.content.php">Állandó tartalom módosítása</a></li>-->
-<li><a href="create.sznev.php">Liturgia típus létrehozása</a></li>
+<?php if (checkpermission("addsznev")) { echo '<li><a href="create.sznev.php">Liturgia típus létrehozása</a></li>'; } ?>
 <?php if (checkpermission("addtelepules")) {echo'<li><a href="create.telepules.php">Település létrehozása</a></li>';}?>
 <?php if (checkpermission("addtemplom")) {echo'<li><a href="create.templom.php">Templom létrehozása</a></li>';}?>
 <?php if(checkpermission("adduser")) {echo'<li><a href="create.user.php">Felhasználó létrehozása</a></li>';}?>
