@@ -110,7 +110,7 @@ include("headforadmin.php");
 <nav>
 <ul>
 <li><a href="admin.php">Adminisztráció</a></li>
-<?php if (checkpermission("addpost")) {echo "<li><a href='form.create.post.php'>Blogbejegyzés létrehozása</a></li>";} ?>
+<?php if (checkpermission("addpost")) {echo "<li><a href='create.post.php'>Blogbejegyzés létrehozása</a></li>";} ?>
 <?php if (checkpermission("addliturgia")) {echo '<li><a href="create.szertartas.php">Liturgia hozzáadása</a></li>';} ?>
 <?php if (checkpermission("removeliturgia")) {echo '<li><a href="miserend.php">Liturgia törlése</a></li>'; } ?>
 <?php if (checkpermission("addhirdetes")) {echo '<li><a href="create.hirdetes.php">Hirdetés létrehozása</a></li>'; } ?>
