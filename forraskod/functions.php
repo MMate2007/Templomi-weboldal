@@ -281,16 +281,18 @@ function autofillcheck(string $post, $value) {
  */
 function checkpermission(string $permission, $userid = null) {
     global $mysql;
-    $sqlp = "SELECT `$permission` FROM `engedelyek` WHERE `userId` = '";
     if ($userid === null) {
-        $sqlp .= $_SESSION["userId"];
-    } else {
-        $sqlp .= $userid;
+        $userid = $_SESSION["userId"];
     }
-    $sqlp .= "'";
+    $sqlp = "SELECT `id` FROM `permissions` WHERE `shortname` = '$permission'";
     $eredmenyp = mysqli_query($mysql, $sqlp) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-    while ($rowp = mysqli_fetch_array($eredmenyp)) {
-        return $rowp[$permission];
+    $rowp = mysqli_fetch_array($eredmenyp);
+    $sqlp = "SELECT `permissionId` FROM `userpermissions` WHERE `userId` = '$userid' AND `permissionId` = '".$rowp["id"]."'";
+    $eredmenyp = mysqli_query($mysql, $sqlp) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+    if (mysqli_num_rows($eredmenyp) == 1) {
+        return true;
+    } else {
+        return false;
     }
 }
 function getsetting (string $settingname) {

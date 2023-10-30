@@ -78,7 +78,7 @@ if (isset($_POST["stage"]))
 	if ($_POST["stage"] == 1)
 	{
 		$id = correct($_POST["user-id"]);
-		if ($id = "N/A") {
+		if ($id == "N/A") {
 			displaymessage("danger", "Nem választott ki felhasználót!");
 			displaymessage("info", "Kérem, lépjen vissza a felhasználó kiválasztásához!");
 			mysqli_close($mysql);
@@ -188,10 +188,16 @@ $felfuggesztes = $_POST["felfuggesztes"];
 if ($felfuggesztes == 0) {
 $sql = "UPDATE `author` SET `password`='törölt',`username`='törölt' WHERE `id` = '".$id."'";
 $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-$sql = "DELETE FROM `engedelyek` WHERE `userId` = '$id'";
+$sql = "DELETE FROM `userpermissions` WHERE `userId` = '$id'";
 }
 else if ($felfuggesztes == 1) {
-	$sql = "UPDATE `engedelyek` SET `bejelentkezes`='0' WHERE `userId` = '$id'";
+	$sql = "SELECT `id` FROM `permissions` WHERE `shortname` = 'bejelentkezes'";
+	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+	$permissionid = 0;
+	while ($row = mysqli_fetch_array($eredmeny)) {
+		$permissionid = $row["id"];
+	}
+	$sql = "DELETE FROM `userpermissions` WHERE `userId` = '$id' AND `permissionId` = '$permissionid'";
 }
 $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 if ($torles == 1 && $felfuggesztes == 0)
@@ -202,7 +208,7 @@ if ($torles == 1 && $felfuggesztes == 0)
 	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 	$sql = "DELETE FROM `author` WHERE `id` = '".$id."'";
 	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-	$sql = "DELETE FROM `engedelyek` WHERE `userId` = '$id'";
+	$sql = "DELETE FROM `userpermissions` WHERE `userId` = '$id'";
 	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 }
 if ($eredmeny == true)
