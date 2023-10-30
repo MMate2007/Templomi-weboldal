@@ -3,27 +3,26 @@
 <html>
 <head>
 <?php include("head.php"); ?>
-<title>Blog - <?php echo $sitename; ?></title>
+<title>Hírek - <?php echo $sitename; ?></title>
 <meta name="title" content="Blog - <?php echo $sitename; ?>">
 <meta name="description" content="A <?php echo $sitename; ?> blogján követheti, hogy mi történik a fília életében.">
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
 div.content div.tartalom div.blog img {max-width: 70%; margin-left: 15%;}
 div.fejlecparallax {
     background-image: url("DSC_0080.JPG");
 }
+hr:first-child {
+	display: none;
+}
 </style>
 </head>
 <body>
-<?php displayhead("Blog"); ?>
-<div class="content">
-<div class="tartalom">
+<?php displayhead("Hírek"); ?>
+<main class="container">
 <div class="blog">
 <?php
-	//FIXME mysql hiba
 	$sql = "SELECT * FROM `blog` ORDER BY id DESC;";
 	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 	while ($row = mysqli_fetch_array($eredmeny))
@@ -32,7 +31,6 @@ div.fejlecparallax {
 		$title = $row['title'];
 		$content = $row['content'];
 		$authorid = $row['authorId'];
-		$image = $row['image'];
 		$name = "Ismeretlen";
 		$date = $row['date'];
 		?>
@@ -52,26 +50,24 @@ div.fejlecparallax {
 		?>, Publikálás dátuma: <?php echo $date;?></p>
 		<div class="bejegyzes-content">
 		<?php echo $content;?>
-		<?php
-		if ($image != null && $image != "")
-		{
-			?>
-			<br>
-			<img src="<?php echo $image;?>">
-			<?php
-		}
-		?>
 		</div>
+		<?php
+		if (isset($_SESSION["userId"])) {
+		if ($_SESSION["userId"] == $authorid || checkpermission("removepost")) {
+		?>
+		<form action="delete.post.php" method="post">
+			<input type="hidden" name="id" value="<?php echo $id; ?>">
+			<button class="btn btn-danger text-white" type="submit"><i class="bi bi-trash3"></i> Törlés</button>
+		</form>
+		<?php
+		} }
+		?>
 		</div>
 		<?php
 	}
-	
 	?>
 </div>
-</div>
-</div>
-<div class="sidebar">
-</div>
+</main>
 <?php include("footer.php"); ?>
 </body>
 </html>
