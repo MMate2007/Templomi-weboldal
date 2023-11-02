@@ -112,6 +112,7 @@ if (isset($_POST["stage"])) {
 					}
 				}
 			}
+			displaymessage("success", "Sikeres létrehozás.");
 		}
 		} else {
 			$eredmeny = false;
