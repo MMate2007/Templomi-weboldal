@@ -46,7 +46,7 @@
 		  }
         });
 		<?php
-		$sql = "SELECT `id`, `date`, `nameID`, `name`, `templomID` FROM `szertartasok` WHERE `publikus` = '1'";
+		$sql = "SELECT `id`, `date`, `nameID`, `name`, `templomID` FROM `szertartasok` WHERE `publikus` = '1' AND `elmarad` = '0'";
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 		while ($row = mysqli_fetch_array($eredmeny)) {
 			$asql = "SELECT `name` FROM `sznev` WHERE `id` = '".$row["nameID"]."'";
@@ -224,18 +224,20 @@ if ($user == true) {
 	<th>Hely</th>
 	<?php
 	// TODO sticky table head
+	$thcounter = 3;
 	$showCel = getsetting("miserend.showCel");
 	$showKant = getsetting("miserend.showKant");
 	$showSzandSz = getsetting("miserend.showSzandekSzoveg");
 	$showSzM = getsetting("miserend.showSzandekMeglet");
 	$showT = getsetting("miserend.showTipus");
-		if ($showT == 1 || $user == true) { ?> <th>Típus</th> <?php }
-		if ($showCel == 1 || $user == true) { ?> <th>Pap</th> <?php }
-		if ($showKant == 1 || $user == true) { ?> <th>Kántor</th> <?php }
-		if ($showSzandSz == 1 || $showSzM == 1 || $user == true) { ?> <th>Szándék</th> <?php }
+		if ($showT == 1 || $user == true) { $thcounter++; ?> <th>Típus</th> <?php }
+		if ($showCel == 1 || $user == true) { $thcounter++; ?> <th>Pap</th> <?php }
+		if ($showKant == 1 || $user == true) { $thcounter++; ?> <th>Kántor</th> <?php }
+		if ($showSzandSz == 1 || $showSzM == 1 || $user == true) { $thcounter++; ?> <th>Szándék</th> <?php }
 		?>
 		<th>Megjegyzés</th>
 		<?php
+		$thcounter++;
 		if ($user == true)
 		{
 			?>
@@ -243,6 +245,7 @@ if ($user == true) {
 			<th>Publikus</th>
 			<th>Kezelés</th>
 			<?php
+			$thcounter += 3;
 		}
 	?>
 	</tr>
@@ -266,7 +269,7 @@ if ($user == true) {
 		if ($showKant == 1) { $sql .= "`kantorID`, "; }
 		if ($showT == 1) { $sql .= "`tipus`, "; }
 		if ($showSzandSz == 1 || $showSzM == 1) { $sql .= "`szandek`, "; }
-		$sql .= "`publikus`, `pubmegj` FROM `szertartasok`";
+		$sql .= "`publikus`, `pubmegj`, `elmarad` FROM `szertartasok`";
 		if ($temp != null)
 		{
 			$sql .= "WHERE `templomID` = '".$temp."'";
@@ -301,6 +304,7 @@ if ($user == true) {
 		$telepules = $row["telepulesID"];
 		$templom = $row["templomID"];
 		$style = $row["style"];
+		$elmarad = $row["elmarad"];
 		$place = $row["place"];
 		if ($showCel == 1 || $user == true) { $cel = $row["celebransID"]; }
 		if ($showKant == 1 || $user == true) { $kant = $row["kantorID"]; }
@@ -332,7 +336,7 @@ if ($user == true) {
 		if ($mehet == true)
 		{
 		?>
-		<tr id="<?php echo $id; ?>"<?php if ($style != null) { ?> style="<?php echo $style; ?>" <?php } ?>>
+		<tr id="<?php echo $id; ?>"<?php if ($style != null && $elmarad != 1) { ?> style="<?php echo $style; ?>" <?php } if ($elmarad == 1) { ?>style="background-color: #ffebc5; color: #999; text-decoration: line-through;"<?php }?>>
 		<td><?php echo $d;?></td>
 		<td><?php echo $name;?></td>
 		<td>
@@ -500,9 +504,20 @@ if ($user == true) {
 				<?php
 				if (checkpermission("editliturgia")) {
 					?>
-				<form action="edit.szertartas.php" method="post">
+					<form action="edit.szertartas.php" method="post">
+						<input type="hidden" name="id" value="<?php echo $id; ?>">
+						<button type="submit" class="btn btn-primary text-white"><i class="bi bi-pencil"></i> Módosítás</button>
+					</form>
+					<form action="edit.szertartas.php" method="post" id="elmarad">
 					<input type="hidden" name="id" value="<?php echo $id; ?>">
-					<button type="submit" class="btn btn-primary text-white"><i class="bi bi-pencil"></i> Módosítás</button>
+					<input type="hidden" name="stage" value="<?php if ($elmarad == 1) { echo "nem"; } ?>elmarad">
+					<button type="submit" class="btn btn-secondary text-white">
+						<?php if ($elmarad == 0) { ?>
+						<i class="bi bi-calendar-x"></i> Elmarad
+						<?php } else if ($elmarad == 1) { ?>
+							<i class="bi bi-calendar-check"></i> Nem marad el
+						<?php } ?>
+					</button>
 				</form>
 				<?php }
 				if (checkpermission("removeliturgia")) {
@@ -513,6 +528,7 @@ if ($user == true) {
 					<input type="hidden" name="miserend" value="true">
 					<button type="button" class="btn btn-danger" onclick="deleteliturgia(<?php echo $id; ?>)"><i class="bi bi-trash3"></i> Törlés</button>
 				</form>
+				
 				<?php
 				}
 				?>
@@ -521,6 +537,15 @@ if ($user == true) {
 		}
 		?>
 		</tr>
+		<?php
+		if ($elmarad == 1) {
+			?>
+			<tr>
+				<td colspan="<?php echo $thcounter; ?>" style="background-color: #ffebc5;"><i class="bi bi-exclamation-triangle" style="color: #ffa700;"></i> Figyelem! Ez a liturgia elmarad!</td>
+			</tr>
+			<?php
+		}
+		?>
 		<?php
 		}
 	}

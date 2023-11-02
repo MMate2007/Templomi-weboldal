@@ -285,6 +285,24 @@ if (!checkpermission("editliturgia")) {
 	</form>
 	<?php }
 	if (isset($_POST["stage"])) {
+		if ($_POST["stage"] == "elmarad") {
+			$sql = "UPDATE `szertartasok` SET `elmarad`='1' WHERE `id` = '".$_POST["id"]."'";
+			$eredmeny = mysqli_query($mysql, $sql);
+			if ($eredmeny == true) {
+				header("Location: miserend.php");
+			} else {
+				displaymessage("danger", "Valami nem sikerült.");
+			}
+		}
+		if ($_POST["stage"] == "nemelmarad") {
+			$sql = "UPDATE `szertartasok` SET `elmarad`='0' WHERE `id` = '".$_POST["id"]."'";
+			$eredmeny = mysqli_query($mysql, $sql);
+			if ($eredmeny == true) {
+				header("Location: miserend.php");
+			} else {
+				displaymessage("danger", "Valami nem sikerült.");
+			}
+		}
 		if ($_POST["stage"] == 2) {
 			// FIXME megnevezés módosítása nem működik
 $sztipus = null;
