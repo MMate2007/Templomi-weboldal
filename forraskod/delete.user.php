@@ -6,6 +6,16 @@
 <title>Felhasználó törlése - <?php echo $sitename; ?></title>
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+	function torles() {
+		document.querySelector("#igen").disabled = false;
+		document.querySelector("#nem").disabled = false;
+	}
+	function felfuggeszt() {
+		document.querySelector("#igen").disabled = true;
+		document.querySelector("#nem").disabled = true;
+	}
+</script>
 </head>
 <body>
 <?php
@@ -24,11 +34,11 @@ if (!isset($_POST["stage"])) { ?>
 		<label class="form-label col-sm">Törölni vagy csak ideiglenesen felfüggeszteni szeretnénk a felhasználót?</label>
 		<div class="col-sm">
 			<div class="form-check form-check-inline">
-				<input type="radio" name="felfuggesztes" value="0" required class="form-check-input" id="felfuggesztes0">
+				<input type="radio" name="felfuggesztes" value="0" required class="form-check-input" id="felfuggesztes0" onclick="torles()">
 				<label for="felfuggesztes0" class="form-check-label">Törölni</label>
 			</div>
 			<div class="form-check form-check-inline">
-				<input type="radio" name="felfuggesztes" value="1" class="form-check-input" id="felfuggesztes1">
+				<input type="radio" name="felfuggesztes" value="1" class="form-check-input" id="felfuggesztes1" onclick="felfuggeszt()">
 				<label for="felfuggesztes1" class="form-check-label">Felfüggeszteni</label>
 			</div>
 		</div>
@@ -84,8 +94,10 @@ if (isset($_POST["stage"]))
 			mysqli_close($mysql);
 			exit;
 		}
-		$torles = correct($_POST["tartalomtorlese"]);
 		$felfuggesztes = $_POST["felfuggesztes"];
+		if ($felfuggesztes == 0) {
+		$torles = correct($_POST["tartalomtorlese"]); 
+		}
 		$sql = "SELECT `name` FROM `author` WHERE `id` = '".correct($id)."'";
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 		$name = "Ismeretlen";
