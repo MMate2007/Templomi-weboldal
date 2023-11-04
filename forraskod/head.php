@@ -3,7 +3,6 @@
 // TODO lehessen engedélyezni, hogy a különböző dátumokat UTC-ben mentsük és mindig a kliens órájának megfelelően mutassuk
 include("config.php"); 
 include("functions.php");
-include("vendor/erusev/parsedown/Parsedown.php");
 if (isset($_COOKIE['enablecookie'])) { session_start(); }
 ?>
 <script>
