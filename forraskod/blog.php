@@ -10,9 +10,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 div.content div.tartalom div.blog img {max-width: 70%; margin-left: 15%;}
-div.fejlecparallax {
-    background-image: url("DSC_0080.JPG");
-}
 hr:first-child {
 	display: none;
 }
