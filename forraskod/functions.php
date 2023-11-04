@@ -453,6 +453,10 @@ function check($txt, string $tipus) {
             $filterkelle = true;
             $filterid = FILTER_VALIDATE_INT;
             break;
+        case "path":
+            $regexkelle = true;
+            $regex = "/^[a-z0-9 _\-\.:\/]*$/i";
+            break;
     }
     if ($regexkelle == true)
     {
