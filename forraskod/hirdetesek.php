@@ -124,8 +124,7 @@ if ($user == true) {
         }
 		global $rm;
 		global $edit;
-		$mdparser = new Parsedown();
-		$html = $mdparser->text(correct($row["content"]));
+		$html = $row["content"];
         ?>
         <div class="hirdetes" id="<?php echo $row["ID"]; ?>">
             <h2 <?php if ($user == true && $megjelenik == false) { ?>style="opacity: 0.5;"<?php } ?>><?php echo $row["title"]; ?></h2>
