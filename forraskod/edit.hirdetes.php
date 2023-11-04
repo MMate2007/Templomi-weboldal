@@ -5,13 +5,22 @@
 <?php include("head.php"); ?>
 <title>Hirdetés módosítása - <?php echo $sitename; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/vendor/tinymce/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: "#content",
+        language: "hu_HU",
+        plugins: "image",
+    });
+</script>
+
 </head>
 <body>
 <?php
 displayhead("Hirdetés módosítása");
 include("headforadmin.php");
 if (!checkpermission("edithirdetes")) {
-    displaymessage("danger", "Nincs jogosultsága hirdetés létrehozásához!");
+    displaymessage("danger", "Nincs jogosultsága hirdetés módosításához!");
     exit;
 }
 $hirdetes = null;
@@ -62,7 +71,7 @@ if (isset($_POST["title"])) {
     </div>
     <div class="row my-3">
         <label for="content" class="col-sm-2">Tartalom: </label>
-        <textarea class="col-sm form-control" name="content" id="content" required><?php
+        <textarea class="col-sm form-control" name="content" id="content"><?php
             echo $hirdetes["content"]; ?></textarea>
         <label class="col-sm form-text">Hosszú vagy rövid leírás, felhívás.</label>
     </div>
@@ -89,9 +98,8 @@ if (isset($_POST["title"])) {
         {
             $mehet = true;
             $title = correct($_POST["title"]);
-            $content = correct($_POST["content"]);
-            $mdparser = new Parsedown();
-            $htmlcontent = $mdparser->text($content);
+            $content = $_POST["content"];
+            $htmlcontent = $content;
             $s = date_create($_POST["starttime"]);
             if ($_POST["endtime"] != null) {
             $e = date_create($_POST["endtime"]); } else {
@@ -132,7 +140,7 @@ if (isset($_POST["title"])) {
             <table class="form">
             <input type="hidden" name="title" value="<?php echo $title; ?>">
             <input type="hidden" name="id" value="<?php echo correct($_POST["id"]); ?>">
-            <input type="hidden" name="content" value="<?php echo $content; ?>">
+            <input type="hidden" name="content" value='<?php echo $htmlcontent; ?>'>
             <input type="hidden" name="starttime" value="<?php echo date_format($s, "Y-m-d H:i:s"); ?>">
             <input type="hidden" name="endtime" value="<?php if ($e != null) { echo date_format($e, "Y-m-d H:i:s"); } ?>">
             <input type="hidden" name="templom" value="<?php echo $templom; ?>">
@@ -158,7 +166,7 @@ if (isset($_POST["title"])) {
             <form action="#" method="post">
                 <input type="hidden" name="templom" value="<?php echo $templom; ?>">
                 <input type="hidden" name="title" value="<?php echo $title; ?>">
-                <input type="hidden" name="content" value="<?php echo $content; ?>">
+                <input type="hidden" name="content" value='<?php echo $content; ?>'>
                 <input type="hidden" name="starttime" value="<?php echo date_format($s, "Y-m-d H:i"); ?>">
                 <input type="hidden" name="endtime" value="<?php if ($e != null) { echo date_format($e, "Y-m-d H:i"); } ?>">
                 <input type="hidden" name="id" value="<?php echo correct($_POST["id"]); ?>">
@@ -172,7 +180,7 @@ if (isset($_POST["title"])) {
         if (correct($_POST["stage"]) == 3)
         {
             $title = correct($_POST["title"]);
-            $content = correct($_POST["content"]);
+            $content = $_POST["content"];
             $starttime = $_POST["starttime"];
             $endtime = $_POST["endtime"];
             $templom = $_POST["templom"];
@@ -207,7 +215,7 @@ if (isset($_POST["title"])) {
                 <form action="#" method="post">
                 <input type="hidden" name="stage" value="3">
                 <input type="hidden" name="title" value="<?php echo $title; ?>">
-                <input type="hidden" name="content" value="<?php echo $content; ?>">
+                <input type="hidden" name="content" value='<?php echo $content; ?>'>
                 <input type="hidden" name="starttime" value="<?php echo $starttime; ?>">
                 <input type="submit" value="Újrapróbálkozás">
                 </form>
