@@ -36,7 +36,7 @@ if (!isset($_POST["stage"]))
 	</div>
 	<div class="row my-3">
 		<label class="form-label col-sm-2" for="content">Bejegyzés tartalma: </label>
-		<textarea name="content" required class="form-control col-sm" id="content"><?php if (isset($_POST["content"])): echo $_POST["content"]; endif ?></textarea>
+		<textarea name="content" class="form-control col-sm" id="content"><?php if (isset($_POST["content"])): echo $_POST["content"]; endif ?></textarea>
 	</div>
 	<button type="submit" class="btn btn-primary text-white"><i class="bi bi-arrow-right"></i> Tovább</button>
 	<input type="hidden" name="stage" value="2">
