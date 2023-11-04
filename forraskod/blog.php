@@ -20,7 +20,16 @@ hr:first-child {
 </head>
 <body>
 <?php displayhead("Hírek"); ?>
-<main class="container">
+<main class="container mx-auto" style="padding-top: 10px;">
+<?php
+if (checkpermission("addpost")) {
+	?>
+	<div>
+		<a href="create.post.php" role="button" class="btn btn-primary text-white float-end"><i class="bi bi-plus-lg"></i> Új bejegyzés hozzáadása</a>
+	</div>
+	<?php
+}
+?>
 <div class="blog">
 <?php
 	$sql = "SELECT * FROM `blog` ORDER BY id DESC;";
