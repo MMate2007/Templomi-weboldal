@@ -6,6 +6,14 @@
 <title>Blogbejegyzés létrehozása - <?php echo $sitename; ?></title>
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/vendor/tinymce/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: "#content",
+        language: "hu_HU",
+        plugins: "image",
+    });
+</script>
 </head>
 <body>
 <?php
@@ -62,14 +70,14 @@ if (!isset($_POST["stage"]))
 		<br>
 		<form name="create-post-2" class="inline" id="first" action="#" method="post" style="display: inline;">
 		<input type="hidden" name="title" value="<?php echo $title;?>">
-		<input type="hidden" name="content" value="<?php echo $content;?>">
+		<input type="hidden" name="content" value='<?php echo $content;?>'>
 		<input type="hidden" name="userid" value="<?php echo $uid;?>">
 		<input type="hidden" name="stage" value="3">
 		<button type="submit" class="btn btn-primary text-white"><i class="bi bi-arrow-bar-up"></i> Közzététel</button>
 		</form>
 		<form name="create-post-2-back" class="inline" action="#" method="post" style="display: inline;">
 		<input type="hidden" name="title" value="<?php echo $title;?>">
-		<input type="hidden" name="content" value="<?php echo $content;?>">
+		<input type="hidden" name="content" value='<?php echo $content;?>'>
 		<input type="hidden" name="userid" value="<?php echo $uid;?>">
 		<button type="submit" class="btn btn-secondary text-white" style="display: inline;"><i class="bi bi-arrow-left"></i> Vissza</button>
 		</form>
@@ -100,7 +108,7 @@ if (!isset($_POST["stage"]))
 			<p>Kérem, kattintson az alábbi gombra!</p>
 			<form action="#" method="post">
 			<input type="hidden" name="title" value="<?php echo $title;?>">
-			<input type="hidden" name="content" value="<?php echo $content;?>">
+			<input type="hidden" name="content" value='<?php echo $content;?>'>
 			<input type="hidden" name="userid" value="<?php echo $authorid;?>">
 			<input type="submit" value="Újrapróbálkozás">
 			</form>

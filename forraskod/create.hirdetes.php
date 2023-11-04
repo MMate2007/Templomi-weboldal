@@ -3,8 +3,16 @@
 <html>
 <head>
 <?php include("head.php"); ?>
+<script src="/vendor/tinymce/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 <title>Hirdetés létrehozása - <?php echo $sitename; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+    tinymce.init({
+        selector: "#content",
+        language: "hu_HU",
+        plugins: "image",
+    });
+</script>
 </head>
 <body>
 <?php
@@ -51,9 +59,10 @@ if (!checkpermission("addhirdetes")) {
         <label for="content" class="col-sm-2">Tartalom: </label>
         <textarea class="col-sm form-control" name="content" id="content"><?php
             if (isset($_POST["content"])) {
-                echo correct($_POST["content"]);
-            } ?></textarea>
-        <label class="col-sm form-text">Hosszú vagy rövid leírás, felhívás. Formázni a Markdown segítségével lehet. <a href="https://thegige.wordpress.com/2014/11/19/markdown-utmutato/">Itt</a> egy nagyszerű magyar útmutató, ami segítséget nyújthat.</label>
+                echo $_POST["content"];
+            }
+            ?></textarea>
+        <label class="col-sm form-text">Hosszú vagy rövid leírás, felhívás.</label>
     </div>
     <div class="row my-3">
         <label for="starttime" class="col-sm-2">Megjelenés időpontja:</label>
@@ -77,9 +86,10 @@ if (!checkpermission("addhirdetes")) {
         {
             $mehet = true;
             $title = correct($_POST["title"]);
-            $content = correct($_POST["content"]);
-            $mdparser = new Parsedown();
-            $htmlcontent = $mdparser->text($content);
+            $content = $_POST["content"];
+            // $mdparser = new Parsedown();
+            // $htmlcontent = $mdparser->text($content);
+            $htmlcontent = $content;
             $s = date_create($_POST["starttime"]);
             if ($_POST["endtime"] != null) {
             $e = date_create($_POST["endtime"]); } else {
@@ -119,7 +129,7 @@ if (!checkpermission("addhirdetes")) {
             <form name="create-hirdetes-elonezet" action="#" method="post">
             <table class="form">
             <input type="hidden" name="title" value="<?php echo $title; ?>">
-            <input type="hidden" name="content" value="<?php echo $content; ?>">
+            <input type="hidden" name="content" value='<?php echo $content; ?>'>
             <input type="hidden" name="starttime" value="<?php echo date_format($s, "Y-m-d H:i:s"); ?>">
             <input type="hidden" name="endtime" value="<?php if ($e != null) { echo date_format($e, "Y-m-d H:i:s"); } ?>">
             <input type="hidden" name="templom" value="<?php echo $templom; ?>">
@@ -142,7 +152,7 @@ if (!checkpermission("addhirdetes")) {
             }
             ?>
             </form><form action="#" method="post"><input type="hidden" name="templom" value="<?php echo $templom; ?>"><input type="hidden" name="title" value="<?php echo $title; ?>">
-            <input type="hidden" name="content" value="<?php echo $content; ?>"><input type="hidden" name="starttime" value="<?php echo date_format($s, "Y-m-d H:i"); ?>"><input type="hidden" name="endtime" value="<?php if ($e != null) { echo date_format($e, "Y-m-d H:i"); } ?>"><button type="submit" class="btn btn-info text-white" style="display: inline;"><i class="bi bi-arrow-left"></i> Vissza</button></form></td>
+            <input type="hidden" name="content" value='<?php echo $content; ?>'><input type="hidden" name="starttime" value="<?php echo date_format($s, "Y-m-d H:i"); ?>"><input type="hidden" name="endtime" value="<?php if ($e != null) { echo date_format($e, "Y-m-d H:i"); } ?>"><button type="submit" class="btn btn-info text-white" style="display: inline;"><i class="bi bi-arrow-left"></i> Vissza</button></form></td>
             <td><label></label></td>
             </tr>
             </table>
@@ -152,7 +162,7 @@ if (!checkpermission("addhirdetes")) {
         if (correct($_POST["stage"]) == 3)
         {
             $title = correct($_POST["title"]);
-            $content = correct($_POST["content"]);
+            $content = $_POST["content"];
             $starttime = $_POST["starttime"];
             $endtime = $_POST["endtime"];
             $templom = $_POST["templom"];
