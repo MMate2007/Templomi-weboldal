@@ -211,7 +211,7 @@ if ($_SESSION["egyhszint"] > 0)
 		$style = null;
 		} }
 		$id = $row["id"];
-		$orak = abs($date->getTimestamp() - time()) / (60*60)
+		$orak = abs($date->getTimestamp() - time()) / (60*60);
 		?>
 		<tr id="<?php echo $id; ?>" onclick="window.location.replace('miserend.php#<?php echo $id; ?>');"<?php if ($style != null && $elmarad != 1) { ?> style="<?php echo $style; ?>" <?php } if ($elmarad == 1) { ?>style="background-color: #ffebc5; color: #999; text-decoration: line-through;"<?php }?> <?php if ($orak < $warning2) { ?>class="table-danger"<?php } else if ($orak < $warning) { ?>class="table-warning"<?php } ?>>
 		<td><?php echo $d;?></td>
