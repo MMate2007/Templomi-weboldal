@@ -58,7 +58,7 @@ if (!isset($_SESSION["userId"]))
 		} else if ($_SESSION["egyhszint"] == 1) {
 			$sql .= "kantorID";
 		}
-		$sql .= "` = '".$_SESSION["userId"]."'";
+		$sql .= "` = '".$_SESSION["userId"]."' AND `elmarad` = 0";
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 		while ($row = mysqli_fetch_array($eredmeny)) {
 			$asql = "SELECT `name` FROM `sznev` WHERE `id` = '".$row["nameID"]."'";
@@ -203,6 +203,7 @@ if ($_SESSION["egyhszint"] > 0)
 		$pub = $row["publikus"];
 		$pubmegj = $row["pubmegj"];
 			$megj = $row["megjegyzes"];
+			$elmarad = $row["elmarad"];
 		$regex = "/^[^\<\>\{\}\']*$/";
 		if ($style != null) {
 		if (!preg_match($regex, $style))
@@ -212,7 +213,7 @@ if ($_SESSION["egyhszint"] > 0)
 		$id = $row["id"];
 		$orak = abs($date->getTimestamp() - time()) / (60*60)
 		?>
-		<tr id="<?php echo $id; ?>" onclick="window.location.replace('miserend.php#<?php echo $id; ?>');"<?php if ($style != null) { ?> style="<?php echo $style; ?>" <?php } if ($orak < $warning2) { ?>class="table-danger"<?php } else if ($orak < $warning) { ?>class="table-warning"<?php } ?>>
+		<tr id="<?php echo $id; ?>" onclick="window.location.replace('miserend.php#<?php echo $id; ?>');"<?php if ($style != null && $elmarad != 1) { ?> style="<?php echo $style; ?>" <?php } if ($elmarad == 1) { ?>style="background-color: #ffebc5; color: #999; text-decoration: line-through;"<?php }?> <?php if ($orak < $warning2) { ?>class="table-danger"<?php } else if ($orak < $warning) { ?>class="table-warning"<?php } ?>>
 		<td><?php echo $d;?></td>
 		<td><?php echo $name;?></td>
 		<td>
@@ -337,6 +338,15 @@ if ($_SESSION["egyhszint"] > 0)
 		<td id="utolso"><?php echo $megj; ?></td>
 		</tr>
 		<?php
+		if ($elmarad == 1) {
+			?>
+			<tr>
+				<td colspan="8" style="background-color: #ffebc5;"><i class="bi bi-exclamation-triangle" style="color: #ffa700;"></i> Figyelem! Ez a liturgia elmarad!</td>
+			</tr>
+			<?php
+		}
+		?>
+		<?php
 	}
 	?>
 	</tbody>
@@ -366,9 +376,9 @@ if ($_SESSION["egyhszint"] > 0)
 	<?php
 	if ($_SESSION["egyhszint"] == 2)
 	{
-		$sql = "SELECT * FROM `szertartasok` WHERE `celebransID` IS NULL ORDER BY `date`";
+		$sql = "SELECT * FROM `szertartasok` WHERE `celebransID` IS NULL AND `elmarad` = 0 ORDER BY `date`";
 	} else if ($_SESSION["egyhszint"] == 1) {
-		$sql = "SELECT * FROM `szertartasok` WHERE `kantorID` IS NULL ORDER BY `date`";
+		$sql = "SELECT * FROM `szertartasok` WHERE `kantorID` IS NULL AND `elmarad` = 0 ORDER BY `date`";
 	}
 	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 	while ($row = mysqli_fetch_array($eredmeny))
