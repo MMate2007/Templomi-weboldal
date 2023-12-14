@@ -408,6 +408,9 @@ function deletepastszertartas() {
 }
 function correct($txt) {
     // TODO a strip_tags funkció hozzáadása, ha HTML formázást szeretnénk alkamazni
+    if ($txt === null) {
+        return null;
+    }
     return htmlspecialchars(stripslashes(trim($txt)));
 }
 $htmlregexlist = ["name" => "^([a-zA-Z .-]|[öüóőúéáűí]|[ÖÜÓŐÚÉÁŰÍ])+$", "dateinput" => "^[0-9 T:-]{11,}$", "dateoutput" => "^[0-9 \.:-]{12,}$", "colorhex" => "^#[0-9A-F]{3,6}$", "styleexpression" => "^[a-z :;-]*$", "email" => "^[a-z0-9._+-]+[@][a-z.]+$"];
