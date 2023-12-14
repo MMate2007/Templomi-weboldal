@@ -2,13 +2,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Blogbejegyzés törlése - <?php echo $sitename; ?></title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/pnp" href="icon.png">
 <?php
 include("head.php");
 ?>
+<title>Blogbejegyzés törlése - <?php echo $sitename; ?></title>
 </head>
 <body>
 <?php
