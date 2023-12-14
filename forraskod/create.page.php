@@ -34,6 +34,17 @@ if (!isset($_POST["stage"]))
 		<label class="form-label col-sm-2" for="title">Oldal címe: </label>
 		<input type="text" name="title" <?php autofill("title"); ?> required class="form-control col-sm" id="title">
 	</div>
+	<div class="row my-3">
+		<label class="form-label col-sm-2">Hozzáadás a menühöz: </label>
+		<div class="form-check form-check-inline">
+			<input type="radio" name="addtonav" value="0" id="addtonav0" class="form-check-input" <?php autofillcheck("addtonav", "0"); ?>>
+			<label for="addtonav0" class="form-check-label">Nem</label>
+		</div>
+		<div class="form-check form-check-inline">
+			<input type="radio" name="addtonav" value="1" id="addtonav1" class="form-check-input" <?php if (isset($_POST["addtonav"])) { if ($_POST["addtonav"] != 0) { echo "checked"; } } else { echo "checked"; } ?>>
+			<label for="addtonav1" class="form-check-label">Igen</label>
+		</div>
+	</div>
     <div class="row my-3">
 		<label class="form-label col-sm-2" for="url">Oldal URL címe: </label>
 		<div class="input-group col-sm">
@@ -70,6 +81,10 @@ if (!isset($_POST["stage"]))
         if ($image == null || !check($image, "path")) {
             $image = null;
         }
+		$addtonav = correct($_POST["addtonav"]);
+		if ($addtonav == null) {
+			$addtonav = 0;
+		}
 		?>
 		<p>Íme az oldal tartalmának előnézete: </p>
 		<div class="oldal">
@@ -79,6 +94,7 @@ if (!isset($_POST["stage"]))
 		<form name="create-post-2" class="inline" id="first" action="#" method="post" style="display: inline;">
 		<input type="hidden" name="title" value="<?php echo $title;?>">
 		<input type="hidden" name="content" value='<?php echo $content;?>'>
+		<input type="hidden" name="addtonav" value="<?php echo $addtonav;?>">
 		<input type="hidden" name="url" value="<?php echo $url;?>">
         <?php
         if ($image != null) {
@@ -94,6 +110,7 @@ if (!isset($_POST["stage"]))
 		<input type="hidden" name="title" value="<?php echo $title;?>">
 		<input type="hidden" name="content" value='<?php echo $content;?>'>
 		<input type="hidden" name="url" value="<?php echo $url;?>">
+		<input type="hidden" name="addtonav" value="<?php echo $addtonav;?>">
         <?php
         if ($image != null) {
             ?>
@@ -115,10 +132,15 @@ if (!isset($_POST["stage"]))
             mysqli_close($mysql);
             exit;
         }
-		$image = $_POST["coverimgpath"];
+		if (isset($_POST["coverimgpath"])) {
+		$image = $_POST["coverimgpath"]; } else { $image=null; }
         if ($image == null || !check($image, "path")) {
             $image = null;
         }
+		$addtonav = correct($_POST["addtonav"]);
+		if ($addtonav == null) {
+			$addtonav = 0;
+		}
 		$sql = "INSERT INTO `oldalak`(`title`, `url`, `content`, `coverimgpath`) VALUES ('$title','$url','$content',";
         if ($image == null) {
             $sql .= "NULL)";
@@ -128,6 +150,18 @@ if (!isset($_POST["stage"]))
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 		if ($eredmeny == true)
 		{
+			if ($addtonav) {
+				$sql = "SELECT MAX(`id`), MAX(`sorszam`) FROM `nav` WHERE `navid` = 'desktop'";
+				$eredmeny = mysqli_query($mysql, $sql);
+                $row = mysqli_fetch_array($eredmeny);
+                $id = $row["MAX(`id`)"] + 1;
+				$sorszam = $row["MAX(`sorszam`)"] + 1;
+				$sql = "INSERT INTO `nav`(`id`, `navid`, `sorszam`, `parentid`, `url`, `name`, `newtab`, `tooltip`) VALUES ('$id','desktop','$sorszam',NULL,'page.php?page=$url','$title','0',NULL)";
+				$eredmeny = mysqli_query($mysql, $sql);
+				if ($eredmeny) {
+					displaymessage("success", "Sikeres hozzáadás a menühöz!");
+				}
+			}
 			displaymessage("success", "Sikeres publikáció!");
 		}else{
 			displaymessage("danger", "Valami hiba történt.");
