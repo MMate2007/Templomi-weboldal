@@ -11,7 +11,7 @@ displayhead("Oldal törlése");
 include("headforadmin.php");
 if (!checkpermission("deletepage"))
 {
-	displaymessage("danger", "Nincs jogosultsága olda törléséhez!");
+	displaymessage("danger", "Nincs jogosultsága oldal törléséhez!");
 	exit;
 }
 ?>
