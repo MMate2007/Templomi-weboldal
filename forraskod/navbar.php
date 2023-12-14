@@ -17,7 +17,7 @@
   <div class="collapse navbar-collapse" id="nav">
     <ul class="navbar-nav">
       <?php
-      $sql = "SELECT `id`, `url`, `name`, `tooltip` FROM `nav` WHERE `navid` = 'desktop' and `parentid` is null ORDER BY `sorszam`";
+      $sql = "SELECT `id`, `url`, `name`, `tooltip`, `newtab` FROM `nav` WHERE `navid` = 'desktop' and `parentid` is null ORDER BY `sorszam`";
       $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
       while ($row = mysqli_fetch_array($eredmeny))
       {
@@ -25,8 +25,9 @@
         $name = $row["name"];
         $tp = $row["tooltip"];
         $id = $row["id"];
+        $newtab = $row["newtab"];
         $haschildren = null;
-        $sqlp = "SELECT `url`, `name`, `tooltip` FROM `nav` WHERE `navid` = 'desktop' and `parentid` = '$id' ORDER BY `sorszam`";
+        $sqlp = "SELECT `url`, `name`, `tooltip`, `newtab` FROM `nav` WHERE `navid` = 'desktop' and `parentid` = '$id' ORDER BY `sorszam`";
         $eredmenyp = mysqli_query($mysql, $sqlp) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
         if (mysqli_num_rows($eredmenyp) > 0) {
           $haschildren = true;
@@ -34,7 +35,7 @@
         //TODO többszörös dropdown lehetővé tétele
         ?>
         <li class="nav-item <?php if ($haschildren == true) { echo 'dropdown'; } ?>">
-          <a href="<?php echo $url; ?>" class="nav-link <?php if ($haschildren == true) { echo 'dropdown-toggle'; } ?>" title="<?php echo $tp; ?>"  <?php if ($haschildren == true) { echo "id='navbarDropdown' role='button' data-bs-toggle='dropdown' aria-expanded='false'"; } ?>><?php echo $name; ?></a>
+          <a href="<?php echo $url; ?>" class="nav-link <?php if ($haschildren == true) { echo 'dropdown-toggle'; } ?>" title="<?php echo $tp; ?>"  <?php if ($haschildren == true) { echo "id='navbarDropdown' role='button' data-bs-toggle='dropdown' aria-expanded='false'"; } if ($newtab == 1) { echo "target='_blank'"; }?>><?php echo $name; ?></a>
           <?php
             if($haschildren == true) {
               ?>
@@ -47,7 +48,7 @@
                     <?php
                   } else {
                   ?>
-                  <li><a class="dropdown-item" href="<?php echo $rowp['url']; ?>" <?php if ($rowp['tooltip'] != null) { ?>title="<?php echo $rowp['tooltip']; ?>" <?php } ?>><?php echo $rowp["name"];; ?></a></li>
+                  <li><a class="dropdown-item" href="<?php echo $rowp['url']; ?>" <?php if ($rowp['tooltip'] != null) { ?>title="<?php echo $rowp['tooltip']; ?>" <?php } if ($rowp["newtab"] == 1) { echo "target='_blank'"; } ?>><?php echo $rowp["name"];; ?></a></li>
                   <?php
                   }
                 }
