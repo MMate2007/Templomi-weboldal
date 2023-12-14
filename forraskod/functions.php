@@ -460,6 +460,12 @@ function check($txt, string $tipus) {
             $regexkelle = true;
             $regex = "/^[a-z0-9 _\-\.:\/]*$/i";
             break;
+        case "url":
+            $regexkelle = false;
+            $filterkelle = true;
+            $filterid = FILTER_VALIDATE_URL;
+            break;
+
     }
     if ($regexkelle == true)
     {
