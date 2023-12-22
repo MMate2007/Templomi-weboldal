@@ -121,6 +121,7 @@ include("headforadmin.php");
 <?php if (checkpermission("addtemplom")) {echo'<li><a href="create.templom.php">Templom létrehozása</a></li>';}?>
 <?php if(checkpermission("adduser")) {echo'<li><a href="create.user.php">Felhasználó létrehozása</a></li>';}?>
 <?php if(checkpermission("removeuser")){echo'<li><a href="delete.user.php">Felhasználó törlése</a></li>';}?>
+<?php if(checkpermission("addpage")){echo'<li><a href="create.page.php">Oldal hozzáadása</a></li>';}?>
 <?php if(checkpermission("editsettings")){echo'<li><a href="settings.php">Beállítások</a></li>';}?>
 <li><a href="modify.password.php">Jelszó módosítása</a></li>
 <li><a href="logout.php">Kijelentkezés</a></li>
