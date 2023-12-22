@@ -19,12 +19,15 @@ hr:first-child {
 <?php displayhead("Hírek"); ?>
 <main class="container mx-auto" style="padding-top: 10px;">
 <?php
+if (isset($_SESSION["userId"])) {
+	include("headforadmin.php");
 if (checkpermission("addpost")) {
 	?>
 	<div>
 		<a href="create.post.php" role="button" class="btn btn-primary text-white float-end"><i class="bi bi-plus-lg"></i> Új bejegyzés hozzáadása</a>
 	</div>
 	<?php
+}
 }
 ?>
 <div class="blog">
