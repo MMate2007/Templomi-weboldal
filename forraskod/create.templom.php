@@ -72,7 +72,7 @@ if (isset($_POST["stage"]))
             formvalidation("#telepules", false, "Nem lett kiválasztva a település!");
             $validinput = false;
         }
-        if (!check($tel, "number") && $validinput == true) {
+        if (!check($tel, "number") && $tel != 0) {
             $validinput = false;
             formvalidation("#telepules", false, "Ennek a mezőnek az értéke csak szám lehet!");
         }
@@ -80,7 +80,7 @@ if (isset($_POST["stage"]))
             $validinput = false;
             formvalidation("#name", false, "Ez a mező csak kis- és nagybetűket, szóközt, pontot és kötőjelet tartalmazhat!");
         }
-        if (!check($szent, "name")) {
+        if (!check($szent, "name") && $szent != null) {
             $validinput = false;
             formvalidation("#szent", false, "Ez a mező csak kis- és nagybetűket, szóközt, pontot és kötőjelet tartalmazhat!");
         }
@@ -88,6 +88,9 @@ if (isset($_POST["stage"]))
             if ($szent == "") {$szent = null;}
             $sql = "SELECT * FROM `templomok`";
             $id = 0;
+            $n = null;
+            $t = null;
+            $sz = null;
             $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
             while ($row = mysqli_fetch_array($eredmeny))
             {
