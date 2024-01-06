@@ -2,7 +2,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<?php include("head.php"); ?>
+<?php include("head.php");
+$tel = null;
+$temp = null;
+if (isset($_POST["tel"])) 
+{
+	$tel = $_POST["tel"];
+	if ($tel == "mind")
+	{
+		$tel = null;
+	}
+}
+if (isset($_POST["temp"]))
+{
+	$temp = $_POST["temp"];
+	if ($temp == "mind")
+	{
+		$temp = null;
+	}
+}
+?>
 <title>Liturgiák rendje - <?php echo $sitename; ?></title>
 <meta name="title" content="Liturgiák rendje - <?php echo $sitename; ?>">
 <meta name="description" content="Ezen az oldalon megtalálhatja, hogy mikor tartanak szentmiséket borszörcsöki Szent Anna és Szent Joachim templomban és a Jézus Szíve és Szűz Mária Szíve kápolnában.">
@@ -47,6 +66,14 @@
         });
 		<?php
 		$sql = "SELECT `id`, `date`, `nameID`, `name`, `templomID` FROM `szertartasok` WHERE `publikus` = '1' AND `elmarad` = '0'";
+		if ($temp != null)
+		{
+			$sql .= "AND `templomID` = '".$temp."'";
+		}
+		else if ($tel != null)
+		{
+			$sql .= "AND `telepulesID` = '".$tel."'";
+		}
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 		while ($row = mysqli_fetch_array($eredmeny)) {
 			$asql = "SELECT `name` FROM `sznev` WHERE `id` = '".$row["nameID"]."'";
@@ -130,24 +157,7 @@
 <body>
 <?php 
 displayhead("Liturgiák rendje");
-$tel = null;
-$temp = null;
-if (isset($_POST["tel"])) 
-{
-	$tel = $_POST["tel"];
-	if ($tel == "mind")
-	{
-		$tel = null;
-	}
-}
-if (isset($_POST["temp"]))
-{
-	$temp = $_POST["temp"];
-	if ($temp == "mind")
-	{
-		$temp = null;
-	}
-}
+
 ?>
 <main class="content mx-auto text-center" style="padding: 30px 30px;">
 <?php
