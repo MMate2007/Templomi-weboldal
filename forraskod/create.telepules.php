@@ -42,6 +42,7 @@ if (isset($_POST["stage"]))
         // TODO AUTO_INCREMENT beállítása a MySQL táblában
         $id = 0;
         $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+        $n = null;
         while ($row = mysqli_fetch_array($eredmeny))
         {
             $_id = $row['id'];
