@@ -52,14 +52,19 @@
 			$asql = "SELECT `name` FROM `sznev` WHERE `id` = '".$row["nameID"]."'";
 			$eredmenya = mysqli_query($mysql, $asql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 			$rowa = mysqli_fetch_array($eredmenya);
+			$color = null;
+			if ($row["templomID"] === null) {
+				$color = null;
+			} else {
 			$asql = "SELECT `color` FROM `templomok` WHERE `id` = '".$row["templomID"]."'";
 			$eredmenya = mysqli_query($mysql, $asql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 			$rowb = mysqli_fetch_array($eredmenya);
+			$color = $rowb["color"]; }
 			?>
 			calendar.addEvent({
 				id: '<?php echo $row["id"]; ?>',
       			title: '<?php echo $rowa["name"]; ?><?php if ($row["name"] != null) { echo " - "; echo $row["name"]; } ?>',
-	  			color: '<?php if ($rowb["color"] != null) { echo $rowb["color"]; } else { echo "#e1b137"; } ?>',
+	  			color: '<?php if ($color != null) { echo $color; } else { echo "#e1b137"; } ?>',
 	  			allDay: false,
       			start: '<?php echo $row["date"]; ?>'
     		});
