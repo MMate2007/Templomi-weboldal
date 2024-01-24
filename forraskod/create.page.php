@@ -11,7 +11,7 @@
     tinymce.init({
         selector: "#content",
         language: "hu_HU",
-        plugins: "image",
+        plugins: "image, link",
     });
 </script>
 </head>
