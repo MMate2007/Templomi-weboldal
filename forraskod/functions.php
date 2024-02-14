@@ -221,6 +221,33 @@ class sessionException extends Exception {
     // 101: újra kell generálni a munkamenet azonosítót
     // 102: duplikált munkamenet azonosító
 }
+class StatsDB extends SQLite3 {
+    public function __construct()
+    {
+        $this->open("stats.db");
+        $eredmeny = $this->query("SELECT name FROM sqlite_master WHERE type='table' AND name='visits';");
+        if ($eredmeny->fetchArray() === false) {
+            $sql =<<<EOF
+            CREATE TABLE visits
+            (ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            URL TINYTEXT NOT NULL,
+            time TIMESTAMP NOT NULL);
+        EOF;
+            $this->exec($sql);
+        }
+    }
+    public function __destruct()
+    {
+        $this->close();
+    }
+}
+
+function newvisit(string $url): void {
+    $db = new StatsDB();
+    $db->exec("INSERT INTO visits (URL, time) VALUES ('$url', ".time().")");
+    unset($db);
+}
+
 function redirectback() {
     global $_POST;
     if (isset($_POST["urlfrom"])) {
