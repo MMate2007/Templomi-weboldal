@@ -28,7 +28,4 @@
 </footer>
 <?php
 mysqli_close($mysql);
-if ($penzugyidb != null) {
-    mysqli_close($penzugyidb);
-}
 ?>

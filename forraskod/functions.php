@@ -226,19 +226,6 @@ function redirectback() {
     if (isset($_POST["urlfrom"])) {
     header("Location: ".$_POST["urlfrom"]); }
 }
-$penzugyidb = null;
-function connectpenzugyidb() {
-    global $penzugyidb;
-    global $penzugyidbhost;
-    global $penzugyidbu;
-    global $penzugyidbp;
-    global $penzugyidbd;
-
-    if (isset($penzugyidbhost) && isset($penzugyidbu) && isset($penzugyidbp) && isset($penzugyidbd)) {
-        $penzugyidb = mysqli_connect($penzugyidbhost, $penzugyidbu, $penzugyidbp, $penzugyidbd) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($penzugyidb)."</p>");
-        mysqli_query($penzugyidb, "SET NAMES utf8");
-    }
-}
 /**
  * Kitölti az szövegbeviteli mezőket a $POST-ból
  *
