@@ -248,6 +248,65 @@ function newvisit(string $url): void {
     unset($db);
 }
 
+enum MessageType: string {
+    case success = "success";
+    case danger = "danger";
+    case warning = "warning";
+    case info = "info";
+    case primary = "primary";
+    case secondary = "secondary";
+}
+
+class Message {
+    private $content;
+    private $type;
+    private $dismissible;
+
+    public function __construct(string $content, MessageType $type, bool $dismissible = false) {
+        $this->content = $content;
+        $this->type = $type;
+        $this->dismissible = $dismissible;
+    }
+
+    public function displaymessage() {
+        echo "<div class='alert alert-", $this->type->value, " fade show";
+        if ($this->dismissible) {
+            echo " alert-dismissible";
+        }
+        echo "' role='alert'>", $this->content;
+        if ($this->dismissible) {
+            echo "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Bezárás'></button>";
+        }
+        echo "</div>";
+    }
+
+    public static function displayall() {
+        if (isset($_SESSION["messages"])) {
+        foreach($_SESSION["messages"] as $key => $message) {
+            $message->displaymessage();
+            unset($_SESSION["messages"][$key]);
+        } }
+    }
+
+    public function insertontop() {
+        ?>
+        <script>
+        var message = document.createElement("div");
+        message.innerHTML="<?php $this->displaymessage(); ?>";
+        document.querySelector("#messagesdiv").appendChild(message);
+        </script>
+        <?php
+    }
+
+    public static function flush() {
+        if (isset($_SESSION["messages"])) {
+        foreach($_SESSION["messages"] as $key => $message) {
+            $message->insertontop();
+            unset($_SESSION["messages"][$key]);
+        } }
+    }
+}
+
 function redirectback() {
     global $_POST;
     if (isset($_POST["urlfrom"])) {
