@@ -262,7 +262,7 @@ class Message {
     private $type;
     private $dismissible;
 
-    public function __construct(string $content, MessageType $type, bool $dismissible = false) {
+    public function __construct(string $content, MessageType $type, bool $dismissible = true) {
         $this->content = $content;
         $this->type = $type;
         $this->dismissible = $dismissible;
