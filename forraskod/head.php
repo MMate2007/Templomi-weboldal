@@ -36,5 +36,6 @@ mysqli_query($mysql, "SET NAMES utf8");
 //Webhelyadatok betöltése
 $sitename = getsetting("main.name");
 deletepastszertartas();
-newvisit(basename($_SERVER['REQUEST_URI']));
+if (getsetting("logvisits")) {
+newvisit(basename($_SERVER['REQUEST_URI'])); }
 ?>
