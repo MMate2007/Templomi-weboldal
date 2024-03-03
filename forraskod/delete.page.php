@@ -9,12 +9,17 @@
 <?php
 displayhead("Oldal törlése");
 include("headforadmin.php");
-if (!checkpermission("deletepage"))
-{
-	displaymessage("danger", "Nincs jogosultsága oldal törléséhez!");
-	exit;
-}
 ?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	if (!checkpermission("deletepage"))
+	{
+		displaymessage("danger", "Nincs jogosultsága oldal törléséhez!");
+		exit;
+	}
+	?>
+</div>
 <main class="content container d-flex justify-content-center">
 <div>
 	<?php
@@ -33,12 +38,12 @@ if (isset($_POST["id"])) {
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>"); }
 		$sql = "DELETE FROM `oldalak` WHERE `id` = '".$id."'";
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-		redirectback();
 		if ($eredmeny == true) {
-			displaymessage("success", "Sikeres törlés.");
+			$_SESSION["messages"][] = new Message("Oldal törlése sikeres.", MessageType::success);
 		} else if ($eredmeny == false) {
-			displaymessage("danger", "Valami hiba történt!");
+			$_SESSION["messages"][] = new Message("Valami hiba történt az oldal törlése során.", MessageType::danger);
 		}
+		redirectback();
 }
 ?>
 </div>

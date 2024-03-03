@@ -14,12 +14,17 @@
 <?php
 displayhead("Liturgia hozzámrendelése");
 include("headforadmin.php");
+?>
+<div id="messagesdiv">
+<?php
+Message::displayall();
 if (!checkpermission("editliturgia"))
 {
 	displaymessage("danger", "Nincs joga szerkeszteni a bejegyzett litrugiákat!");
 	exit;
 }
 ?>
+</div>
 <?php
 if ($_POST["userid"] == $_SESSION["userId"])
 {
@@ -39,6 +44,7 @@ $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő
 <?php
 if ($eredmeny == true)
 {
+	$_SESSION["messages"][] = new Message("Sikeres hozzáadás.", MessageType::success);
 	?>
 	<p class="succes">Sikeres módosítás!</p>
 	<script>

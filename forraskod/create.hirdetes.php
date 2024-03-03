@@ -18,11 +18,16 @@
 <?php
 displayhead("Hirdetés létrehozása");
 include("headforadmin.php");
-if (!checkpermission("addhirdetes")) {
-    displaymessage("danger", "Nincs jogosultsága hirdetés létrehozásához!");
-    exit;
-}
 ?>
+<div id="messagesdiv">
+    <?php
+    Message::displayall();
+    if (!checkpermission("addhirdetes")) {
+        displaymessage("danger", "Nincs jogosultsága hirdetés létrehozásához!");
+        exit;
+    }
+    ?>
+</div>
 <main class="content container d-flex justify-content-center">
 <div>
     <?php
@@ -102,7 +107,8 @@ if (!checkpermission("addhirdetes")) {
                 $templom = $_POST["templom"];
                 if ($templom == null) {
                     $mehet = false;
-                    displaymessage("danger", "Nem lett templom kiválasztva!");
+                    $message = new Message("Nem választott ki templomot!", MessageType::danger, false);
+                    $message->insertontop();
                 } else {
                 $templom = correct($_POST["templom"]);
                 if ($templom == "null") {
@@ -139,10 +145,13 @@ if (!checkpermission("addhirdetes")) {
             <td>
             <?php
             if ($s < date_create()) {
-                displaymessage("warning", "A megadott kezdőidőpont a múltban van!");
+                $message = new Message("A megadott kezdőidőpont a múltban van.", MessageType::warning, false);
+                $message->insertontop();
+
             }
             if ($e <= date_create() && $e != null) {
-                displaymessage("danger", "Az eltűnés időpontja a múltban van! Kérem orvosolja a problémát a létrehozáshoz!");
+                $message = new Message("Az eltűnés időpontja a múltban van. Kérem, orvosolja a problémát.", MessageType::danger, false);
+                $message->insertontop();
                 $mehet = false;
             } 
             if ($mehet == true) {
@@ -193,7 +202,9 @@ if (!checkpermission("addhirdetes")) {
             <?php
             if ($eredmeny == true)
             {
-                displaymessage("success", "Sikeres publikáció!");
+                $_SESSION["messages"][] = new Message("Hirdetés sikeresen létrehozva.", MessageType::success);
+                mysqli_close($mysql);
+                header("Location: hirdetesek.php");
             }else{
                 ?>
                 <p class="warning">Valami hiba történt!</p>

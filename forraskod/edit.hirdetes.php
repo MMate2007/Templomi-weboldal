@@ -19,12 +19,17 @@
 <?php
 displayhead("Hirdetés módosítása");
 include("headforadmin.php");
-if (!checkpermission("edithirdetes")) {
-    displaymessage("danger", "Nincs jogosultsága hirdetés módosításához!");
-    exit;
-}
-$hirdetes = null;
 ?>
+<div id="messagesdiv">
+    <?php
+    Message::displayall();
+    if (!checkpermission("edithirdetes")) {
+        displaymessage("danger", "Nincs jogosultsága hirdetés módosításához!");
+        exit;
+    }
+    $hirdetes = null;
+    ?>
+</div>
 <main class="content container d-flex justify-content-center">
 <div>
     <?php
@@ -112,7 +117,8 @@ if (isset($_POST["title"])) {
                 $templom = $_POST["templom"];
                 if ($templom == null) {
                     $mehet = false;
-                    displaymessage("danger", "Nem lett templom kiválasztva!");
+                    $message = new Message("Nem lett templom kiválasztva!", MessageType::danger, false);
+                    $message->insertontop();
                 } else {
                 $templom = correct($_POST["templom"]);
                 if ($templom == "null") {
@@ -150,10 +156,12 @@ if (isset($_POST["title"])) {
             <td>
             <?php
             if ($s < date_create()) {
-                displaymessage("warning", "A megadott kezdőidőpont a múltban van!");
+                $message = new Message("A megadott kezdőidópont a múltban van. (Ez azt jelenti, hogy a hirdetés azonnal meg fog jelenni.)", MessageType::warning);
+                $message->insertontop();
             }
             if ($e <= date_create() && $e != null) {
-                displaymessage("danger", "Az eltűnés időpontja a múltban van! Kérem orvosolja a problémát a létrehozáshoz!");
+                $message = new Message("Az eltűnés időpontja a múltban van! Kérem orvosolja a problémát a létrehozáshoz!", MessageType::danger, false);
+                $message->insertontop();
                 $mehet = false;
             } 
             if ($mehet == true) {
@@ -207,6 +215,8 @@ if (isset($_POST["title"])) {
             $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
             if ($eredmeny == true)
             {
+                $_SESSION["messages"][] = new Message("Hirdetés módosítása sikeres.", MessageType::success);
+                mysqli_close($mysql);
                 header("Location: hirdetesek.php");
             }else{
                 ?>

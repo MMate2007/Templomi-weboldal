@@ -15,6 +15,11 @@
 displayhead("Jelszó módosítása");
 include("headforadmin.php");
 ?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	?>
+</div>
 <main class="container d-flex justify-content-center">
 	<form name="modify-password form-horizontal" action="#" method="post">
 	<p class="text-center">Kérem írja be az új jelszavát!</p>
@@ -49,11 +54,14 @@ if (isset($_POST["stage"]))
 			$sql = "UPDATE `author` SET `password`= '".password_hash($pass1, $pwdhashalgo)."' WHERE `id` = '".$_SESSION["userId"]."'";
 			$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 			} else {
-				displaymessage("warning", "Az új jelszó megegyezik a jelenlegivel.");
+				$message = new Message("A jelenlegi jelszó megegyezik a megadottal!", MessageType::warning);
+				$message->insertontop();
 			}
 			if ($eredmeny == true)
 			{
-				displaymessage("success", "Sikeres módosítás.");
+				$_SESSION["messages"][] = new Message("Sikeres módosítás.", MessageType::success);
+				mysqli_close($mysql);
+				header("Location: admin.php");
 			}
 		}
 	}

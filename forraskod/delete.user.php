@@ -21,11 +21,16 @@
 <?php
 displayhead("Felhasználó törlése");
 include("headforadmin.php");
-if (!checkpermission("removeuser")){
-	displaymessage("danger", "Nincs jogosultsága felhasználó törléséhez!");
-	exit;
-}
 ?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	if (!checkpermission("removeuser")){
+		displaymessage("danger", "Nincs jogosultsága felhasználó törléséhez!");
+		exit;
+	}
+	?>
+</div>
 <main class="container">
 <?php
 if (!isset($_POST["stage"])) { ?>
@@ -89,8 +94,10 @@ if (isset($_POST["stage"]))
 	{
 		$id = correct($_POST["user-id"]);
 		if ($id == "N/A") {
-			displaymessage("danger", "Nem választott ki felhasználót!");
-			displaymessage("info", "Kérem, lépjen vissza a felhasználó kiválasztásához!");
+			$message = new Message("Nem választott ki felhasználót!", MessageType::danger, false);
+			$message->insertontop();
+			$message = new Message("Kérem, lépjen vissza felhasználó választásához!", MessageType::info, false);
+			$message->insertontop();
 			mysqli_close($mysql);
 			exit;
 		}
@@ -225,7 +232,9 @@ if ($torles == 1 && $felfuggesztes == 0)
 }
 if ($eredmeny == true)
 {
-	displaymessage("success", "Sikeres művelet!");
+	$_SESSION["messages"][] = new Message("Felhasználó sikeresen törölve!", MessageType::success);
+	mysqli_close($mysql);
+	header("Location: delete.user.php");
 } else {
 	?>
 	<p>Kérem, kattintson az alábbi gombra!</p>

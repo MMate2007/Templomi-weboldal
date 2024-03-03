@@ -6,20 +6,22 @@
 <title>Templom hozzáadása - <?php echo $sitename; ?></title>
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
-</style>
 </head>
 <body>
 <?php
 displayhead("Templom hozzáadása");
 include("headforadmin.php");
-if (!checkpermission("addtemplom")) {
-    displaymessage("danger", "Nincs jogosultsága templom hozzáadásához!");
-    exit;
-}
-// TODO regex html és php-ben
 ?>
+<div id="messagesdiv">
+    <?php
+    Message::displayall();
+    if (!checkpermission("addtemplom")) {
+        displaymessage("danger", "Nincs jogosultsága templom hozzáadásához!");
+        exit;
+    }
+    // TODO regex html és php-ben
+    ?>
+</div>
 <main class="container d-flex justify-content-center">
     <form name="create-templom" action="#" method="post">
     <p><span style="color: red;">* kötelezően kitöltendő mező.</span></p>
@@ -101,7 +103,8 @@ if (isset($_POST["stage"]))
                 $sz = $row["vedoszent"];
             }
             if ($name == $n && $tel == $t && $szent == $sz) {
-                displaymessage("warning", "Ez a templom már létezik!");
+                $message = new Message("Ez a templom már létezik!", MessageType::danger, false);
+                $message->insertontop();
             } else {
             $sql = "INSERT INTO `templomok`(`id`, `telepulesID`, `name`, `vedoszent`, `color`) VALUES ('".$id."','".$tel."','".$name."','".$szent."',";
             if ($color == null) {
@@ -114,9 +117,12 @@ if (isset($_POST["stage"]))
             // TODO a visszajelzések megjelenését javítani kell
             if ($eredmeny == true)
             {
-                displaymessage("success", "Sikeres hozzáadás!");
+                $message = new Message("Templom hozzáadása sikerült.", MessageType::success);
+                $message->insertontop();
             }else{
-                displaymessage("danger", "Valami hiba történt");
+                $message = new Message("Templom hozzáadása sikertelen.", MessageType::danger, false);
+                $message->insertontop();
+
             } 
         } }
     }

@@ -6,19 +6,21 @@
 <title>Litrugiatípus hozzáadása - <?php echo $sitename; ?></title>
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
-</style>
 </head>
 <body>
 <?php
 displayhead("Liturgiatípus hozzáadása");
 include("headforadmin.php");
-if (!checkpermission("addsznev")) {
-    displaymessage("danger", "Nincs jogosultsága új liturgiatípus hozzáadására!");
-    exit;
-}
 ?>
+<div id="messagesdiv">
+    <?php
+    Message::displayall();
+    if (!checkpermission("addsznev")) {
+        displaymessage("danger", "Nincs jogosultsága új liturgiatípus hozzáadására!");
+        exit;
+    }
+    ?>
+</div>
 <main class="container d-flex justify-content-center">
     <div>
         <form name="create-sznev" action="#" method="post">
@@ -53,9 +55,11 @@ if (!checkpermission("addsznev")) {
             $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
             if ($eredmeny == true)
             {
-                displaymessage("success", "Sikeres létrehozása!");
+                $message = new Message("Liturgiatípus hozzáadása sikeres.", MessageType::success);
+                $message->insertontop();
             }else{
-                displaymessage("danger", "Valami hiba történt!");
+                $message = new Message("Liturgiatípus hozzáadása sikertelen.", MessageType::danger);
+                $message->insertontop();
             } }
         }
         }

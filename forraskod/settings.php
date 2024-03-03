@@ -11,11 +11,16 @@
 <?php
 displayhead("Beállítások");
 include("headforadmin.php");
+?>
+<div id="messagesdiv">
+<?php
 if (!checkpermission("editsettings")) {
     displaymessage("danger", "Nincs jogosultsága beállítások módosításához!");
+    Message::displayall();
     exit;
 }
 ?>
+</div>
 <main class="container d-flex justify-content-center">
     <form action="#" method="post">
         <?php
@@ -90,7 +95,8 @@ if (!checkpermission("editsettings")) {
                 $sql .= " WHERE `name` = '$kulcs'";
                 mysqli_query($mysql, $sql);
             }
-            displaymessage("success", "Sikeres mentés");
+            $message = new Message("Sikeres mentés!", MessageType::success);
+            $message->insertontop();
         }
     ?>
 </main>

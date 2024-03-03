@@ -13,19 +13,21 @@
 include("condig.php");
 include("head.php");
 ?>
-<style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
-</style>
 </head>
 <body>
 <?php
 displayhead("Szertartás törlése");
 include("headforadmin.php");
-if (!checkpermission("removeliturgia")) {
-	displaymessage("danger", "Nincs jogosultsága liturgia törléséhez!");
-	exit;
-}
 ?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	if (!checkpermission("removeliturgia")) {
+		displaymessage("danger", "Nincs jogosultsága liturgia törléséhez!");
+		exit;
+	}
+	?>
+</div>
 <div class="content">
 <div class="tartalom">
 <?php
@@ -116,15 +118,17 @@ if (!isset($_POST["stage"])) {
 			if (correct($_POST["miserend"]) == "true")
 			{
 				if ($eredmeny == true) {
+					$_SESSION["messages"][] = new Message("Liturgia törlése sikerült.", MessageType::success);
+					mysqli_close($mysql);
 					header("Location: miserend.php");
 				}
 			}
 		} else {
 			if ($eredmeny == true)
 			{
-				?>
-				<p class="succes">Sikeres törlés!</p>
-				<?php
+				$_SESSION["messages"][] = new Message("Liturgia törlése sikerült.", MessageType::success);
+				mysqli_close($mysql);
+				header("Location: miserend.php");
 			} else if ($eredmeny == false) {
 				?>
 				<p class="warning">Valami hiba történt.</p>

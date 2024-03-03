@@ -11,11 +11,16 @@ include("head.php");
 <?php
 displayhead("Blogbejegyzés törlése");
 include("headforadmin.php");
-if (!checkpermission("removepost") && $_POST["id"] != $_SESSION["userId"]) {
-	displaymessage("danger", "Nincs jogosultsága a blogbejegyzés törléséhez!");
-	exit;
-}
 ?>
+<div id="messagesdiv">
+    <?php
+    Message::displayall();
+    if (!checkpermission("removepost") && $_POST["id"] != $_SESSION["userId"]) {
+        displaymessage("danger", "Nincs jogosultsága a blogbejegyzés törléséhez!");
+        exit;
+    }
+    ?>
+</div>
 <main class="container">
 <?php
 $id = correct($_POST["id"]);
@@ -26,12 +31,14 @@ if (!check($id, "number")) {
 $sql = "DELETE FROM `blog` WHERE id = '$id'";
 $eredmeny = mysqli_query($mysql, $sql);
 if ($eredmeny) {
-    displaymessage("success", "Sikeres törlés!");
+    $_SESSION["messages"][] = new Message("Bejegyzés törlése sikeres.", MessageType::success);
 } else {
-    displaymessage("danger", "Valami nem sikerült.");
+    $_SESSION["messages"][] = new Message("Valami hiba történt a bejegyzés törlése során.", MessageType::danger);
 }
 ?>
 </main>
-<?php include("footer.php"); ?>
+<?php include("footer.php"); 
+header("Location: blog.php");
+?>
 </body>
 </html>

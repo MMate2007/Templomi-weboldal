@@ -103,6 +103,11 @@ if (!isset($_SESSION["userId"]))
 <?php displayhead("Adminisztráció", null, null, "<h3 style='padding-top: 30px; font-variant: small-caps;'>Dicsértessék a Jézus Krisztus!</h3><h4>Üdvözlöm Önt, ".$_SESSION["name"].", itt az adminisztrációs felületen!</h4>");
 include("headforadmin.php");
 ?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	?>
+</div>
 <main class="content container">
 <div class="tartalom">
 <div class="welcome-admin">

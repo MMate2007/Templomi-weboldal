@@ -19,11 +19,16 @@
 <?php
 displayhead("Oldal módosítása");
 include("headforadmin.php");
+?>
+<div id="messagesdiv">
+<?php
+Message::displayall();
 if (!checkpermission("editpage")) {
     displaymessage("danger", "Nincs jogosultsága oldal módosításához!");
     exit;
 }
 ?>
+</div>
 <main class="container">
 <div>
     <?php
@@ -163,7 +168,9 @@ if (isset($_POST["title"])) {
             $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
             if ($eredmeny == true)
             {
-               displaymessage("success", "Sikeres publikálás!");
+               $_SESSION["messages"][] = new Message("Sikeres publikálás!", MessageType::success, true);
+               mysqli_close($mysql);
+               header("Location: page.php?page=".$url);
             }else{
                 ?>
                 <p class="warning">Valami hiba történt!</p>

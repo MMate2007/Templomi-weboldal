@@ -19,11 +19,16 @@
 <?php
 displayhead("Blogbejegyzés létrehozása");
 include("headforadmin.php");
-if (!checkpermission("addpost")) {
-	displaymessage("danger", "Nincs jogosultsága bejegyzés létrehozásához!");
-	exit;
-}
 ?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	if (!checkpermission("addpost")) {
+		displaymessage("danger", "Nincs jogosultsága bejegyzés létrehozásához!");
+		exit;
+	}
+	?>
+</div>
 <main class="container">
 <?php
 if (!isset($_POST["stage"]))
@@ -101,7 +106,9 @@ if (!isset($_POST["stage"]))
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 		if ($eredmeny == true)
 		{
-			displaymessage("success", "Sikeres publikáció!");
+			$_SESSION["messages"][] = new Message("Bejegyzés sikeresen létrehozva.", MessageType::success);
+			mysqli_close($mysql);
+			header("Location: blog.php");
 		}else{
 			displaymessage("danger", "Valami hiba történt.");
 			?>

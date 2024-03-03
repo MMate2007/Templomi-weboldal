@@ -11,12 +11,17 @@
 <?php
 displayhead("Felhasználó létrehozása");
 include("headforadmin.php");
-if (!checkpermission("adduser")) {
-	displaymessage("danger", "Nincs jogosultsága felhasználó létrehozásához!");
-	exit;
-}
-//TODO regex
 ?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	if (!checkpermission("adduser")) {
+		displaymessage("danger", "Nincs jogosultsága felhasználó létrehozásához!");
+		exit;
+	}
+	//TODO regex
+	?>
+</div>
 <main class="container">
 	<form name="create-user" action="#" method="post">
 	<div class="row my-3">
@@ -112,7 +117,8 @@ if (isset($_POST["stage"])) {
 					}
 				}
 			}
-			displaymessage("success", "Sikeres létrehozás.");
+			$message = new Message("Felhasználó létrehozása sikeres.", MessageType::success);
+			$message->insertontop();
 		}
 		} else {
 			$eredmeny = false;

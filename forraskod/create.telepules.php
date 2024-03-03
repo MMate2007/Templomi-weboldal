@@ -14,11 +14,16 @@ header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchar
 <?php
 displayhead("Település hozzáadása");
 include("headforadmin.php");
-if (!checkpermission("addtelepules")) {
-    displaymessage("danger", "Nincs jogosultsága település hozzáadásához!");
-    exit;
-}
 ?>
+<div id="messagesdiv">
+    <?php
+    Message::displayall();
+    if (!checkpermission("addtelepules")) {
+        displaymessage("danger", "Nincs jogosultsága település hozzáadásához!");
+        exit;
+    }
+    ?>
+</div>
 <main class="container d-flex justify-content-center">
     <form name="create-telepules" action="create.telepules.php" method="post">
     <p><span style="color: red;">* kötelezően kitöltendő mező.</span></p>
@@ -42,23 +47,29 @@ if (isset($_POST["stage"]))
         // TODO AUTO_INCREMENT beállítása a MySQL táblában
         $id = 0;
         $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-        $n = null;
+        $letezik = false;
         while ($row = mysqli_fetch_array($eredmeny))
         {
             $_id = $row['id'];
             $id = $_id + 1;
             $n = $row["name"];
+            if ($n == $name) {
+                $message = new Message("Ez a település már létezik!", MessageType::warning, true);
+                $message->insertontop();
+                $letezik = true;
+                break;
+            }
         }
-        if ($n == $name) {
-            displaymessage("warning", "Ez a település már létezik!");
-        } else {
+        if (!$letezik) {
         $sql = "INSERT INTO `telepulesek`(`id`, `name`) VALUES ('".$id."','".$name."')";
         $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
         if ($eredmeny == true)
         {
-            displaymessage("success", "Sikeres létrehozás!");
+            $message = new Message("Sikeres hozzáadás!", MessageType::success, true);
+            $message->insertontop();
         }else{
-            displaymessage("danger", "Valami nem sikerült!");
+            $message = new Message("Valami nem sikerült.", MessageType::danger, true);
+            $message->insertontop();
         } } }
     }
 }

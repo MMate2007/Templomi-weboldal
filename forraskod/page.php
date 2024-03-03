@@ -40,6 +40,11 @@ if ($row["coverimgpath"] == null) {
 $img = correct($row["coverimgpath"]); }
 displayhead(correct($row["title"]), $img);
 ?>
+<div id="messagesdiv">
+    <?php
+    Message::displayall();
+    ?>
+</div>
 <main class="container" style="padding: 30px 0px;">
 <?php
 if (isset($_SESSION["userId"])) {

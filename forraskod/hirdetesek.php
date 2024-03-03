@@ -20,6 +20,14 @@
 <?php 
 displayhead("Hirdetések");
 ?>
+<?php
+if (isset($_SESSION["userId"])) { ?>
+<div id="messagesdiv">
+	<?php
+		Message::displayall();
+	?>
+	<?php } ?>
+</div>
 <main class="content mx-auto text-center" style="padding: 30px 30px;">
 <?php
 $user = false;

@@ -11,12 +11,17 @@
 <?php
 displayhead("Liturgia hozzáadása");
 include("headforadmin.php");
-if (!checkpermission("addliturgia"))
-{
-	displaymessage("danger", "Nincs jogosultsága liturgia hozzáadásához!");
-	exit;
-}
 ?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	if (!checkpermission("addliturgia"))
+	{
+		displaymessage("danger", "Nincs jogosultsága liturgia hozzáadásához!");
+		exit;
+	}
+	?>
+</div>
 <main class="container">
 	<form name="create-szertartas" action="#" method="post">
 		<p><span style="color: red;">* kötelezően kitöltendő mező.</span></p>
@@ -365,7 +370,8 @@ if (!checkpermission("addliturgia"))
 			{
 				if ($row["date"] == date_format($date, "Y-m-d H:i:s") && $row["templomID"] == $templom)
 				{
-					displaymessage("warning", "Ebben az időpontban már van egy másik liturgia a megadott templomban.");
+					$message = new Message("Ebben az időpontban már van egy másik liturgia a megadott templomban.", MessageType::danger, false);
+					$message->insertontop();
 					formvalidation("#date", false, "<span class='text-warning'>Ebben az időpontban már van egy másik liturgia a megadott templomban.</span>");
 					$mehet = false;
 					break;
@@ -401,7 +407,8 @@ if (!checkpermission("addliturgia"))
 				$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 				while ($row = mysqli_fetch_array($eredmeny)) {
 					if (abs(strtotime($row["date"]) - $date->getTimestamp()) / 60 < $perc) {
-						displaymessage("warning", $perc." percen belül van máshol is a megadott celebránsnak liturgiája! A probléma figyelmen kívül hagyásához kattintson újra a hozzáadásra!");
+						$message = new Message($perc." percen belül van máshol is a megadott celebránsnak liturgiája! A probléma figyelmen kívül hagyásához kattintson újra a hozzáadásra!", MessageType::warning, false);
+						$message->insertontop();
 						formvalidation("#celebrans", false, $perc." percen belül van máshol is a megadott celebránsnak liturgiája! A probléma figyelmen kívül hagyásához kattintson újra a hozzáadásra!<input type='hidden' name='ignorecelandkant' value='1'>");
 						$mehet = false;
 					}
@@ -411,7 +418,8 @@ if (!checkpermission("addliturgia"))
 				$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 				while ($row = mysqli_fetch_array($eredmeny)) {
 					if (abs(strtotime($row["date"]) - $date->getTimestamp()) / 60 < $perc) {
-						displaymessage("warning", $perc." percen belül van máshol is a megadott kántornak liturgiája! A probléma figyelmen kívül hagyásához kattintson újra a hozzáadásra!");
+						$message = new Message($perc." percen belül van máshol is a megadott kántornak liturgiája! A probléma figyelmen kívül hagyásához kattintson újra a hozzáadásra!", MessageType::warning, false);
+						$message->insertontop();
 						formvalidation("#kantor", false, $perc." percen belül van máshol is a megadott kántornak liturgiája! A probléma figyelmen kívül hagyásához kattintson újra a hozzáadásra!<input type='hidden' name='ignorecelandkant' value='1'>");
 						$mehet = false;
 					}
@@ -448,13 +456,16 @@ if (!checkpermission("addliturgia"))
 			}*/
 			$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>"); }
 			else {
-				displaymessage("danger", "A liturgia hozzáadása nem sikerült! Kérem javítsa ki a jelzett hibákat, s próbálja újra!");
+				$message = new Message("A liturgia hozzáadása nem sikerült! Kérem javítsa ki a jelzett hibákat, s próbálja újra!", MessageType::danger, false);
+				$message->insertontop();
 			}
 			if ($eredmeny == true && $mehet == true)
 			{
-				displaymessage("success", "Sikeres publikáció!");
+				$message = new Message("Liturgia létrehozása sikeres.", MessageType::success);
+				$message->insertontop();
 			}else if ($eredmeny == false && $mehet == true) {
-				displaymessage("danger", "Valami hiba történt! Kérem nézze meg, hogy sikerült-e rögzíteni a liturgiát, s próbálja újra.");
+				$message = new Message("Valami hiba történt! Kérem nézze meg, hogy sikerült-e rögzíteni a liturgiát, s próbálja újra.", MessageType::danger);
+				$message->insertontop();
 			}
 		}
 	}

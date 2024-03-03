@@ -19,11 +19,16 @@
 <?php
 displayhead("Oldal létrehozása");
 include("headforadmin.php");
-if (!checkpermission("addpage")) {
-	displaymessage("danger", "Nincs jogosultsága oldal létrehozásához!");
-	exit;
-}
 ?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	if (!checkpermission("addpage")) {
+		displaymessage("danger", "Nincs jogosultsága oldal létrehozásához!");
+		exit;
+	}
+	?>
+</div>
 <main class="container">
 <?php
 if (!isset($_POST["stage"]))
@@ -159,12 +164,15 @@ if (!isset($_POST["stage"]))
 				$sql = "INSERT INTO `nav`(`id`, `navid`, `sorszam`, `parentid`, `url`, `name`, `newtab`, `tooltip`) VALUES ('$id','desktop','$sorszam',NULL,'page.php?page=$url','$title','0',NULL)";
 				$eredmeny = mysqli_query($mysql, $sql);
 				if ($eredmeny) {
-					displaymessage("success", "Sikeres hozzáadás a menühöz!");
+					$_SESSION["messages"][] = new Message("Oldal hozzáadva a  menühöz.", MessageType::success);
 				}
 			}
-			displaymessage("success", "Sikeres publikáció!");
+			$_SESSION["messages"][] = new Message("Oldal sikeresen publikálva.", MessageType::success);
+			mysqli_close($mysql);
+			header("Location: page.php?page=".$url);
 		}else{
-			displaymessage("danger", "Valami hiba történt.");
+			$message = new Message("Valami hiba történt.", MessageType::danger, false);
+			$message->insertontop();
 			?>
 			<p>Kérem, kattintson az alábbi gombra!</p>
 			<form action="#" method="post">

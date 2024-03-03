@@ -157,7 +157,17 @@ if (isset($_POST["temp"]))
 <body>
 <?php 
 displayhead("Liturgiák rendje");
-
+?>
+<?php
+if (isset($_SESSION["userId"])) {
+	?>
+	<div id="messagesdiv">
+		<?php
+		Message::displayall();
+		?>
+	</div>
+	<?php
+}
 ?>
 <main class="content mx-auto text-center" style="padding: 30px 30px;">
 <?php

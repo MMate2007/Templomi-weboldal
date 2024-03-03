@@ -9,12 +9,17 @@
 <?php
 displayhead("Hirdetés törlése");
 include("headforadmin.php");
-if (!checkpermission("removehirdetes"))
-{
-	displaymessage("danger", "Nincs jogosultsága hirdetés törléséhez!");
-	exit;
-}
 ?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	if (!checkpermission("removehirdetes"))
+	{
+		displaymessage("danger", "Nincs jogosultsága hirdetés törléséhez!");
+		exit;
+	}
+	?>
+</div>
 <main class="content container d-flex justify-content-center">
 <div>
 	<form name="delete1-hirdetes" action="#" method="post">
@@ -89,12 +94,13 @@ if (isset($_POST["stage"])) {
 		$id = correct($_POST["id"]);
 		$sql = "DELETE FROM `hirdetesek` WHERE `ID` = '".$id."'";
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-		redirectback();
 		if ($eredmeny == true) {
-			displaymessage("success", "Sikeres törlés.");
+			$_SESSION["messages"][] = new Message("Hirdetés törlése sikeres.", MessageType::success);
 		} else if ($eredmeny == false) {
-			displaymessage("danger", "Valami hiba történt!");
+			$_SESSION["messages"][] = new Message("Valami hiba történt a hirdetés törlése során.", MessageType::danger);
 		}
+		mysqli_close($mysql);
+		redirectback();
 	}
 }
 ?>

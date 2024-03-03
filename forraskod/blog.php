@@ -17,6 +17,13 @@ hr:first-child {
 </head>
 <body>
 <?php displayhead("Hírek"); ?>
+<div id="messagesdiv">
+	<?php
+	if (isset($_SESSION["userId"])) {
+		Message::displayall();
+	}
+	?>
+</div>
 <main class="container mx-auto" style="padding-top: 10px;">
 <?php
 if (isset($_SESSION["userId"])) {

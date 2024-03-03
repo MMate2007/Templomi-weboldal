@@ -11,11 +11,16 @@
 <?php
 displayhead("Liturgia szerkesztése");
 include("headforadmin.php");
+?>
+<div id="messagesdiv">
+<?php
+Message::displayall();
 if (!checkpermission("editliturgia")) {
 	displaymessage("danger", "Nincs jogosultsága liturgia szerkesztéséhez!");
 	exit;
 }
 ?>
+</div>
 <main class="container">
     <?php
 	if (!isset($_POST["stage"])) {
@@ -289,18 +294,26 @@ if (!checkpermission("editliturgia")) {
 			$sql = "UPDATE `szertartasok` SET `elmarad`='1' WHERE `id` = '".$_POST["id"]."'";
 			$eredmeny = mysqli_query($mysql, $sql);
 			if ($eredmeny == true) {
+				$_SESSION["messages"][] = new Message("Liturgia sikeresen átállítva elmaradtra!", MessageType::success, true);
+				mysqli_close($mysql);
 				header("Location: miserend.php");
 			} else {
-				displaymessage("danger", "Valami nem sikerült.");
+				$_SESSION["messages"][] = new Message("Liturgia elmaradtra állítása nem sikerült! Kérem, próbálja újra.", MessageType::danger, true);
+				mysqli_close($mysql);
+				header("Location: miserend.php");
 			}
 		}
 		if ($_POST["stage"] == "nemelmarad") {
 			$sql = "UPDATE `szertartasok` SET `elmarad`='0' WHERE `id` = '".$_POST["id"]."'";
 			$eredmeny = mysqli_query($mysql, $sql);
 			if ($eredmeny == true) {
+				$_SESSION["messages"][] = new Message("Liturgia sikeresen átállítva megtartottra!", MessageType::success, true);
+				mysqli_close($mysql);
 				header("Location: miserend.php");
 			} else {
-				displaymessage("danger", "Valami nem sikerült.");
+				$_SESSION["messages"][] = new Message("Liturgia átállítása megtartottra nem sikerült.", MessageType::danger, true);
+				mysqli_close($mysql);
+				header("Location: miserend.php");
 			}
 		}
 		if ($_POST["stage"] == 2) {
@@ -378,12 +391,9 @@ while ($row = mysqli_fetch_array($eredmeny))
 	// TODO ne így jelenítsük meg, hanem a form validationnal!
 	if ($ttel != $telepules)
 	{
-		?>
-		<script>
-			alert("A választott templom nem a megadott településen van!");
-			window.location.replace("edit.szertartas.php");
-		</script>
-		<?php
+		$_SESSION["messages"][] = new Message("A választott templom nem a megadott településen van!", MessageType::danger, false);
+		mysqli_close($mysql);
+		header("Location: edit.szertartas.php");
 	}
 }
 if ($date != null) {
@@ -402,12 +412,19 @@ if ($date != null) {
 
 $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 if ($eredmeny) {
-	displaymessage("success", "Sikeres módosítás");
+	$_SESSION["messages"][] = new Message("Liturgia sikeresen módosítva!", MessageType::success, true);
+	mysqli_close($mysql);
+	header("Location: miserend.php");
 } else {
-	displaymessage("danger", "Valami hiba történt!");
+	$_SESSION["messages"][] = new Message("Valami nem sikerült.", MessageType::danger, true);
+	mysqli_close($mysql);
+	header("Location: miserend.php");
 } }
 else {
-	displaymessage("danger", "Valami hiba történt!");
+	$_SESSION["messages"][] = new Message("Valami nem sikerült.", MessageType::danger, true);
+	mysqli_close($mysql);
+	header("Location: miserend.php");
+
 } } }
 ?>
 </main>

@@ -18,6 +18,17 @@ div.fejlecparallax {
 </style>
 </head>
 <body>
+<?php
+if (isset($_SESSION["userId"])) {
+	?>
+	<div id="messagesdiv">
+		<?php
+		Message::displayall();
+		?>
+	</div>
+	<?php
+}
+?>
 <header class="h-100">
 <div class="head h-100">
 <div class="fejlecparallax text-center bg-image h-100">
