@@ -467,17 +467,7 @@ function deletepastszertartas() {
     $datetorlendo = date("Y-m-d H:i:s", strtotime("+".$ido." minutes"));
     $sql = "DELETE FROM `szertartasok` WHERE `date` < '$datetorlendo'";
     $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-    // TODO szándékok megőrzésének lehetővé tétele
-    $sql = "SELECT `id` FROM `szandekok`";
-    $eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-    while($row = mysqli_fetch_array($eredmeny)) {
-        $sql = "SELECT `id` FROM `szertartasok` WHERE `szandek` = '".$row["id"]."'";
-        $eredmenya = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-        if (mysqli_num_rows($eredmenya) == 0) {
-            $sql = "DELETE FROM `szandekok` WHERE `id` = '".$row["id"]."'";
-            $eredmenyb = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-        }
-    } }
+    }
 }
 function correct($txt) {
     // TODO a strip_tags funkció hozzáadása, ha HTML formázást szeretnénk alkamazni
