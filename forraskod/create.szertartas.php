@@ -159,38 +159,14 @@ include("headforadmin.php");
 			<label class="col-sm-2">Szándék:</label>
 			<div class="col-sm-8">
 				<div class="form-check form-check-inline">
-					<input type="radio" name="szandekvan" value="2" id="szandekvan2" class="form-check-input"  <?php autofillcheck("szandekvan", "2"); ?>>
-					<label for="szandekvan2" class="form-check-label">Erre a liturgiára ne lehessen szándékot választani</label>
-				</div>
-				<div class="form-check form-check-inline">
 					<input type="radio" name="szandekvan" class="form-check-input" value="0" onclick="document.getElementsByName('szandek').disabled = false;" id="szandekvan0" <?php autofillcheck("szandekvan", "0"); ?>>
 					<label for="szandekvan0" class="form-check-label">Nincs</label>
 				</div>
 				<div class="form-check form-check-inline">
 					<input type="radio" name="szandekvan" class="form-check-input" value="1" onclick="document.getElementsByName('szandek').disabled = false;" id="szandekvan1" <?php autofillcheck("szandekvan", "1"); ?>>
 					<label for="szandekvan1" class="form-check-label">Van:</label>
-					<div style="display: inline-block;">
-						<select name="szandekbevitt" class="form-select" style="display: inline-block;">
-							<option value="0">--Kérem válasszon!--</option>
-							<option value="1" <?php autofillselect("szandekbevitt", "1"); ?>>újat adok meg:</option>
-							<?php
-								$sql = "SELECT `id`, `szandek`, `kikerte`, `mikorra` FROM `szandekok` WHERE `id` > 2";
-								$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-								while ($row = mysqli_fetch_array($eredmeny))
-								{
-									$szandekid = $row["id"];
-									$szandekname = $row["szandek"];
-									$szandekwho = $row["kikerte"];
-									$szandekmikorra = $row["mikorra"];
-									?>
-									<option value="<?php echo $szandekid; ?>" <?php autofillselect("szandekbevitt", $szandekid); ?>><?php echo $szandekname; ?> - <?php echo $szandekwho; ?> <?php if ($szandekmikorra != null) { ?>- <?php } echo $szandekmikorra; ?></option>
-									<?php
-								}
-							?>
-						</select>
-						<input type="text" class="form-control" name="szandek" <?php autofill("szandek"); ?> style="display: inline-block; max-width:fit-content;">
-					</div>
 				</div>
+				<input type="text" class="form-control" name="szandek" <?php autofill("szandek"); ?> style="display: inline-block; max-width:fit-content;">
 			</div>
 		</div>
 		<div class="row my-3">
@@ -273,13 +249,7 @@ include("headforadmin.php");
 			$kantor = correct($_POST["kantor"]); if ($kantor == "null") { $kantor = null; } if ($kantor == "semmi") { $kantor = null;}
 			if (isset($_POST["type"])) { $type = correct($_POST["type"]); }
 			if (isset($_POST["szandekvan"])) { $szandekvan = correct($_POST["szandekvan"]); }
-			$szandekbevitt = correct($_POST["szandekbevitt"]);
 			$szandek = correct($_POST["szandek"]);
-			// if ($szandek == "") { $szandek = null; }
-			// if ($szandekvan == 0) {$szandek = "0";}
-			// if ($szandekvan == 1 && $szandek == null) { $szandek = 1; }
-			// if ($szandekvan == null) { $szandek = null; }
-			// if ($szandekvan == 2) {$szandek = 2; }
 			$pub = correct($_POST["pub"]);
 			$megj = correct($_POST["megjegyzes"]); // if ($megj == "") {$megj = null;}
 			$pubmegj = correct($_POST["pubmegj"]); // if ($pubmegj == "") {$pubmegj = null;}
@@ -335,33 +305,13 @@ include("headforadmin.php");
 			{
 			$style = null;
 			}
-			$szandekid = $szandekvan;
-			if ($szandekbevitt != 0 && $szandekbevitt != 1) {
-				$szandekid = $szandekbevitt;
+			if ($szandekvan == 1 && $szandek == null) {
+				$szandek = $szandekvan;
+			} else if ($szandekvan == 0) {
+				$szandek = 0;
 			}
-			if ($szandekbevitt == 1 && $szandekvan == 1)
-			{
-				$sql = "SELECT `id` FROM `szandekok`";
-				$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-				while ($row = mysqli_fetch_array($eredmeny))
-				{
-					$_id = $row['id'];
-					$szandekid = $_id + 1;
-				}
-				if ($szandekid < 3)
-				{
-					$sql = "DELETE FROM `szandekok` WHERE  `id` < 3";
-					$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-					$sql = "INSERT INTO `szandekok`(`id`, `szandek`) VALUES ('0','0')";
-					$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-					$sql = "INSERT INTO `szandekok`(`id`, `szandek`) VALUES ('1','1')";
-					$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-					$sql = "INSERT INTO `szandekok`(`id`, `szandek`) VALUES ('2','2')";
-					$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-					$szandekid = 3;
-				}
-				$sql = "INSERT INTO `szandekok`(`id`, `szandek`, `kikerte`) VALUES ('".$szandekid."','".$szandek."','!automata')";
-				$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+			if ($szandekvan === null) {
+				$szandek = null;
 			}
 			$sql = "SELECT * FROM `szertartasok`";
 			$id = 0;
@@ -434,7 +384,7 @@ include("headforadmin.php");
 				if ($celebrans != null) { $sql .= "'".$celebrans."',"; } else { $sql .= "NULL,";}
 				if ($kantor != null) { $sql .= "'".$kantor."',"; } else { $sql .= "NULL,";}
 				if ($type != null) { $sql .= "'".$type."',"; } else { $sql .= "NULL,";}
-				if ($szandek != null) { $sql .= "'".$szandekid."',"; } else { $sql .= "NULL,";}
+				if ($szandek !== null) { $sql .= "'".$szandek."',"; } else { $sql .= "NULL,";}
 				$sql .= "'".$pub."',";
 				if ($megj != null) { $sql .= "'".$megj."',"; } else { $sql .= "NULL,";}
 				if ($pubmegj != null) { $sql .= "'".$pubmegj."'"; } else { $sql .= "NULL";}

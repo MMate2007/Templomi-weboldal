@@ -437,29 +437,17 @@ if ($user == true) {
 		if ($showSzandSz == 1 || $showSzM == 1 || $user == true) { ?> <td>
 			<?php
 				if ($showSzM == 1 && $showSzandSz != 1 && $user != true)
-				{
-					/*if ($szandek == null || $szandek == "")
+				{	
+					
+					if ($szandek == "0" || $szandek === null)
 					{
 						?>
 						<input type="checkbox" disabled></input>
 						<?php
-					}*/
-	
-					if ($szandek == "1" || $szandek > 2)
+					} else
 					{
 						?>
 						<input type="checkbox" disabled checked></input>
-						<?php
-					}
-					else if ($szandek == "0" || $szandek == "2")
-					{
-						?>
-						<input type="checkbox" disabled></input>
-						<?php
-					} else if ($user == true) {
-	
-						?>
-						<label>?</label>
 						<?php
 					}
 				}
@@ -474,21 +462,12 @@ if ($user == true) {
 					else if ($szandek === "1")
 					{
 						echo "Van";
-					} else if ($szandek === "0" || $szandek === "2")
+					} else if ($szandek === "0")
 					{
-						if ($user == true && $szandek === "2") {
-							echo "Ehhez a litrugiához nem lehet szándékot rendelni.";
-						} else {
-							echo "-";
-						}
+						echo "-";
 					}
 					else {
-						$sqla= "SELECT `szandek` FROM `szandekok` WHERE `id` = '".$szandek."'";
-						$eredmenya = mysqli_query($mysql, $sqla) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-						while ($rowa = mysqli_fetch_array($eredmenya))
-						{
-							echo $rowa["szandek"];
-						}
+						echo $szandek;
 					}
 				}
 			?>

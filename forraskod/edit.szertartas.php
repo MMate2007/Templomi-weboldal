@@ -58,15 +58,6 @@ if (!checkpermission("editliturgia")) {
 		$megj = $row["megjegyzes"];
 		$pubmegj = $row["pubmegj"];
 	}
-	$szandekname = null;
-	$szandekwho = null;
-	$sql = "SELECT `szandek`, `kikerte` FROM `szandekok` WHERE `id` = '".$szandek."'";
-	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-	while ($row = mysqli_fetch_array($eredmeny))
-	{
-		$szandekname = $row["szandek"];
-		$szandekwho = $row["kikerte"];
-	}
 	?>
 <form name="edit-szertartas" action="#" method="post">
 		<p><span style="color: red;">* kötelezően kitöltendő mező.</span></p>
@@ -204,40 +195,15 @@ if (!checkpermission("editliturgia")) {
 			<label class="col-sm-2">Szándék:</label>
 			<div class="col-sm-8">
 				<div class="form-check form-check-inline">
-					<input type="radio" name="szandekvan" value="2" id="szandekvan2" class="form-check-input" <?php if ($szandek == "2") { ?>checked <?php } ?>>
-					<label for="szandekvan2" class="form-check-label">Erre a liturgiára ne lehessen szándékot választani</label>
-				</div>
-				<div class="form-check form-check-inline">
-					<input type="radio" name="szandekvan" class="form-check-input" value="0" onclick="document.getElementsByName('szandek').disabled = false;" id="szandekvan0" <?php if ($szandek == "0") { ?>checked <?php } ?>>
+					<input type="radio" name="szandekvan" class="form-check-input" value="0" onclick="document.getElementsByName('szandek').disabled = false;" id="szandekvan0" <?php if ($szandek === "0") { ?>checked <?php } ?>>
 					<label for="szandekvan0" class="form-check-label">Nincs</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input type="radio" name="szandekvan" class="form-check-input" value="1" onclick="document.getElementsByName('szandek').disabled = false;" id="szandekvan1" <?php if ($szandek == 1 || $szandek > 2) { ?>checked <?php } ?>>
+					<input type="radio" name="szandekvan" class="form-check-input" value="1" onclick="document.getElementsByName('szandek').disabled = false;" id="szandekvan1" <?php if ($szandek !== "0" && $szandek !== null) { ?>checked <?php } ?>>
 					<label for="szandekvan1" class="form-check-label">Van:</label>
 				</div>
+				<input type="text" class="form-control" name="szandek" value="<?php if ($szandek != "0" && $szandek != "1" && $szandek != null) { echo $szandek; } ?>" style="display: inline-block; max-width:fit-content;">
 			</div>
-			<div class="col-sm-2">
-				<select name="szandekbevitt" class="form-select">
-					<option value="0">--Kérem válasszon!--</option>
-					<option value="1" <?php autofillselect("szandekbevitt", "1"); ?>>újat adok meg:</option>
-					<?php
-						$sql = "SELECT `id`, `szandek`, `kikerte`, `mikorra` FROM `szandekok` WHERE `id` > 2";
-						$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-						while ($row = mysqli_fetch_array($eredmeny))
-						{
-							$szandekid = $row["id"];
-							$szandekname = $row["szandek"];
-							$szandekwho = $row["kikerte"];
-							$szandekmikorra = $row["mikorra"];
-							?>
-							<option value="<?php echo $szandekid; ?>" <?php if ($szandek == $szandekid) { ?>selected <?php } ?>><?php echo $szandekname; ?> - <?php echo $szandekwho; ?> <?php if ($szandekmikorra != null) { ?>- <?php } echo $szandekmikorra; ?></option>
-							<?php
-						}
-					?>
-				</select>
-				<input type="text" class="form-control" name="szandek" value="<?php if ($szandekwho == "!automata") { echo $szandekname; } ?>">
-			</div>
-			<label class="col-sm form-text">Ha jelenik meg szöveg a szövegmezőben, akkor ott tudja módosítani a szándék szövegét. Egyéb esetben kérem, látogasson el a <a href="edit.szandek.php">szándék módosítása</a> oldalra.</label>
 		</div>
 		<div class="row my-3">
 			<label class="col-sm-2 required">Publikus:</label>
@@ -345,8 +311,8 @@ $celebrans = correct($_POST["celebrans"]); if ($celebrans == "null") { $celebran
 $kantor = correct($_POST["kantor"]); if ($kantor == "null") { $kantor = null; } if ($kantor == "semmi") { $kantor = null;}
 if (isset($_POST["type"])) { $type = correct($_POST["type"]); } else { $type = null; }
 //TODO új szándék rendszer feldolgozása
-if (isset($_POST["szandekvan"])) { $szandekvan = correct($_POST["szandekvan"]); } else { $szandekvan = 0; }
-$szandek = correct($_POST["szandek"]); if ($szandek == "") { $szandek = null; } if ($szandekvan == 0) {$szandek = "0";} if ($szandekvan == 1 && $szandek == null) { $szandek = 1; } if ($szandekvan == null) { $szandek = null; }
+if (isset($_POST["szandekvan"])) { $szandekvan = correct($_POST["szandekvan"]); } else { $szandekvan = null; }
+$szandek = correct($_POST["szandek"]); if ($szandek == "") { $szandek = null; } if ($szandekvan == 0) {$szandek = 0;} if ($szandekvan == null) { $szandek = null; } if ($szandekvan == 1 && $szandek === null) { $szandek = 1; }
 $pub = correct($_POST["pub"]);
 $megj = $_POST["megjegyzes"]; if ($megj == "") {$megj = null;}
 $pubmegj = $_POST["pubmegj"]; if ($pubmegj == "") {$pubmegj = null;}
@@ -404,7 +370,7 @@ if ($date != null) {
 	if ($celebrans != null) { $sql .= "`celebransID`='".$celebrans."',"; } else { $sql .= "`celebransID`=NULL,";}
 	if ($kantor != null) { $sql .= "`kantorID`='".$kantor."',"; } else { $sql .= "`kantorID`=NULL,";}
 	if ($type != null) { $sql .= "`tipus`='".$type."',"; } else { $sql .= "`tipus`=NULL,";}
-	if ($szandek != null) { $sql .= "`szandek`='".$szandek."',"; } else { $sql .= "`szandek`=NULL,";}
+	if ($szandek !== null) { $sql .= "`szandek`='".$szandek."',"; } else { $sql .= "`szandek`=NULL,";}
 	$sql .= "`publikus`='".$pub."',";
 	if ($megj != null) { $sql .= "`megjegyzes`='".$megj."',"; } else { $sql .= "`megjegyzes`=NULL,";}
 	if ($pubmegj != null) { $sql .= "`pubmegj`='".$pubmegj."'"; } else { $sql .= "`pubmegj`=NULL";}
