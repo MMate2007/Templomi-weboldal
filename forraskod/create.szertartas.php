@@ -6,6 +6,28 @@
 <title>Litrugia hozzáadása - <?php echo $sitename; ?></title>
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+	function toggleregular() {
+		const button = document.querySelector("#regulartoggler");
+		const datetime = document.querySelector("#datetime");
+		const date = document.querySelector("#dateintervall");
+		const time = document.querySelector("#time");
+		const regular = document.querySelector("#regular");
+		if (button.textContent == "Rendszeres szertartás megadása") {
+			button.textContent = "Egyszeri szertartás megadása";
+			datetime.setAttribute("style", "display: none;");
+			date.removeAttribute("style");
+			time.removeAttribute("style");
+			regular.value = "1";
+		} else if (button.textContent == "Egyszeri szertartás megadása") {
+			button.textContent = "Rendszeres szertartás megadása";
+			datetime.removeAttribute("style");
+			date.setAttribute("style", "display: none;");
+			time.setAttribute("style", "display: none;");
+			regular.value = "0";
+		}
+	}
+</script>
 </head>
 <body>
 <?php
@@ -25,9 +47,58 @@ include("headforadmin.php");
 <main class="container">
 	<form name="create-szertartas" action="#" method="post">
 		<p><span style="color: red;">* kötelezően kitöltendő mező.</span></p>
-	<div class="row my-3">
+		<button class="btn btn-outline-primary" onclick="toggleregular()" id="regulartoggler">Rendszeres szertartás megadása</button>
+		<input type="hidden" name="regular" value="0" id="regular">
+	<div class="row my-3" id="datetime">
 		<label for="date" class="col-sm-2 required">Időpontja:</label>
-		<input type="datetime-local" class="col-sm form-control" name="date" id="date" required autofocus <?php autofill("date"); ?>>
+		<input type="datetime-local" class="col-sm form-control" name="date" id="date" <?php autofill("date"); ?>>
+	</div>
+	<div id="dateintervall" style="display:none;">
+		<div class="row my-3">
+			<label for="start" class="required col-sm-2">Intervallum kezdete:</label>
+			<input type="date" name="start" id="start" class="form-control col-sm">
+		</div>
+		<div class="row my-3">
+			<label for="end" class="required col-sm-2">Intervallum vége:</label>
+			<input type="date" name="end" id="end" class="form-control col-sm">
+		</div>
+		<div class="row my-3">
+			<label class="required col-sm-2" for="checkdiv">Napok:</label>
+			<div id="checkdiv" class="col-sm" style="display: inline;">
+				<div class="form-check form-check-inline">
+					<input type="checkbox" name="days[]" id="monday" value="1" class="form-check-input">
+					<label for="monday" class="form-check-label">Hétfő</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input type="checkbox" name="days[]" id="tuesday" value="2" class="form-check-input">
+					<label for="tuesday" class="form-check-label">Kedd</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input type="checkbox" name="days[]" id="wednesday" value="3" class="form-check-input">
+					<label for="wednesday" class="form-check-label">Szerda</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input type="checkbox" name="days[]" id="thursday" value="4" class="form-check-input">
+					<label for="thursday" class="form-check-label">Csütörtök</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input type="checkbox" name="days[]" id="friday" value="5" class="form-check-input">
+					<label for="friday" class="form-check-label">Péntek</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input type="checkbox" name="days[]" id="saturday" value="6" class="form-check-input">
+					<label for="saturday" class="form-check-label">Szombat</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input type="checkbox" name="days[]" id="sunday" value="0" class="form-check-input">
+					<label for="sunday" class="form-check-label">Vasárnap</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row my-3" id="time" style="display:none;">
+		<label for="time" class="col-sm-2 required">Idő:</label>
+		<input type="time" name="time" id="time" class="form-control col-sm">
 	</div>
 		<div class="row my-3">
 			<label for="sztipus" class="col-sm-2 required">Szertartás típusa:</label>
@@ -244,24 +315,26 @@ include("headforadmin.php");
 			$sztipus = correct($_POST["sztipus"]);
 			$telepules = correct($_POST["telepules"]);
 			$templom = correct($_POST["templom"]); if ($templom == "egyeb") { $templom = null;}
-			//TODO külön érték megadása a nem adom megnek, celebráns és kántor számára és MySQL foreign key ügy megoldása ekapcsán
 			$celebrans = correct($_POST["celebrans"]); if ($celebrans == "null") { $celebrans = null; } if ($celebrans == "semmi") { $celebrans = null;}
 			$kantor = correct($_POST["kantor"]); if ($kantor == "null") { $kantor = null; } if ($kantor == "semmi") { $kantor = null;}
 			if (isset($_POST["type"])) { $type = correct($_POST["type"]); }
 			if (isset($_POST["szandekvan"])) { $szandekvan = correct($_POST["szandekvan"]); }
 			$szandek = correct($_POST["szandek"]);
 			$pub = correct($_POST["pub"]);
-			$megj = correct($_POST["megjegyzes"]); // if ($megj == "") {$megj = null;}
-			$pubmegj = correct($_POST["pubmegj"]); // if ($pubmegj == "") {$pubmegj = null;}
-			// $datum = $_POST["date"].":00";
-			// $date = str_replace("T", " ", $datum);
+			$megj = correct($_POST["megjegyzes"]);
+			$pubmegj = correct($_POST["pubmegj"]);
+			if ($_POST["regular"] == "0") {
 			$date = date_create($_POST["date"]);
 			if ($date < date_create()) {
 				formvalidation("#date", false, "A megadott időpont a múltban van!");
 				$mehet = false;
+			} } else {
+			$start = date_create($_POST["start"]);
+			$end = date_create($_POST["end"]);
+			$time = correct($_POST["time"]);
 			}
-			$name = correct($_POST["name"]); //if ($name = "") {$name = null;}
-			$place = correct($_POST["egyebtemplom"]); //if ($place == "") { $place = null;}
+			$name = correct($_POST["name"]);
+			$place = correct($_POST["egyebtemplom"]);
 			$postcolor = $_POST["color"];
 			if (!check($postcolor, "colorhex"))
 			{
@@ -318,6 +391,7 @@ include("headforadmin.php");
 			$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 			while ($row = mysqli_fetch_array($eredmeny))
 			{
+				if (!isset($start)) {
 				if ($row["date"] == date_format($date, "Y-m-d H:i:s") && $row["templomID"] == $templom)
 				{
 					$message = new Message("Ebben az időpontban már van egy másik liturgia a megadott templomban.", MessageType::danger, false);
@@ -325,7 +399,7 @@ include("headforadmin.php");
 					formvalidation("#date", false, "<span class='text-warning'>Ebben az időpontban már van egy másik liturgia a megadott templomban.</span>");
 					$mehet = false;
 					break;
-				}
+				} }
 				$_id = $row['id'];
 				$id = $_id + 1;
 			}
@@ -376,7 +450,7 @@ include("headforadmin.php");
 				} }
 			}
 			if ($mehet != false) {
-				//$sql = "INSERT INTO `szertartasok`(`id`, `date`, `nameID`, `name`, `telepulesID`, `templomID`, `place`, `celebransID`, `kantorID`, `tipus`, `szandek`, `publikus`, `megjegyzes`, `pubmegj`) VALUES ('".$id."','".$date."','".$sztipus."','".$name."','".$telepules."','".$templom."','".$place."','".$celebrans."','".$kantor."','".$type."','".$szandek."','".$pub."','".$megj."','".$pubmegj."')";
+				if (!isset($start)) {
 				$sql = "INSERT INTO `szertartasok`(`id`, `date`, `nameID`, `name`, `telepulesID`, `templomID`, `place`, `style`, `celebransID`, `kantorID`, `tipus`, `szandek`, `publikus`, `megjegyzes`, `pubmegj`) VALUES ('".$id."','".date_format($date, "Y-m-d H:i:s")."','".$sztipus."','".$name."','".$telepules."',";
 				if ($templom != null) { $sql .= "'".$templom."',"; } else { $sql .= "NULL,";}
 				if ($place != null) { $sql .= "'".$place."',"; } else { $sql .= "NULL,";}
@@ -389,22 +463,27 @@ include("headforadmin.php");
 				if ($megj != null) { $sql .= "'".$megj."',"; } else { $sql .= "NULL,";}
 				if ($pubmegj != null) { $sql .= "'".$pubmegj."'"; } else { $sql .= "NULL";}
 				$sql .= ")";
-			/*if ($style != null && $style != "")
-			{
-				$sql = "INSERT INTO `szertartasok`(`id`, `date`, `nameID`, `name`, `telepulesID`, `templomID`, `place`, `style`, `celebransID`, `kantorID`, `tipus`, `szandek`, `publikus`, `megjegyzes`, `pubmegj`) VALUES ('".$id."','".$date."','".$sztipus."','".$name."','".$telepules."',";
-				if ($templom != null) { $sql .= "'".$templom."',"; } else { $sql .= "NULL,";}
-				if ($place != null) { $sql .= "'".$place."',"; } else { $sql .= "NULL,";}
-				if ($style != null && $style != "") { $sql .= "'".$style."',"; } else { $sql .= "NULL,";}
-				if ($celebrans != null) { $sql .= "'".$celebrans."',"; } else { $sql .= "NULL,";}
-				if ($kantor != null) { $sql .= "'".$kantor."',"; } else { $sql .= "NULL,";}
-				if ($type != null) { $sql .= "'".$type."',"; } else { $sql .= "NULL,";}
-				if ($szandek != null) { $sql .= "'".$szandek."',"; } else { $sql .= "NULL,";}
-				$sql .= "'".$pub."',";
-				if ($megj != null) { $sql .= "'".$megj."',"; } else { $sql .= "NULL,";}
-				if ($pubmegj != null) { $sql .= "'".$pubmegj."'"; } else { $sql .= "NULL,";}
-				$sql .= ")";
-			}*/
-			$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>"); }
+				$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>"); }
+				else {
+					for ($date = $start; $date <= $end; $date->modify("+1 day")) {
+						if (in_array($date->format("w"), $_POST["days"])) {
+							$sql = "INSERT INTO `szertartasok`(`date`, `nameID`, `name`, `telepulesID`, `templomID`, `place`, `style`, `celebransID`, `kantorID`, `tipus`, `szandek`, `publikus`, `megjegyzes`, `pubmegj`) VALUES ('".date_format($date, "Y-m-d")." $time','".$sztipus."','".$name."','".$telepules."',";
+							if ($templom != null) { $sql .= "'".$templom."',"; } else { $sql .= "NULL,";}
+							if ($place != null) { $sql .= "'".$place."',"; } else { $sql .= "NULL,";}
+							if ($style != null && $style != "") { $sql .= "'".$style."',"; } else { $sql .= "NULL,";}
+							if ($celebrans != null) { $sql .= "'".$celebrans."',"; } else { $sql .= "NULL,";}
+							if ($kantor != null) { $sql .= "'".$kantor."',"; } else { $sql .= "NULL,";}
+							if ($type != null) { $sql .= "'".$type."',"; } else { $sql .= "NULL,";}
+							if ($szandek !== null) { $sql .= "'".$szandek."',"; } else { $sql .= "NULL,";}
+							$sql .= "'".$pub."',";
+							if ($megj != null) { $sql .= "'".$megj."',"; } else { $sql .= "NULL,";}
+							if ($pubmegj != null) { $sql .= "'".$pubmegj."'"; } else { $sql .= "NULL";}
+							$sql .= ")";
+							$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+						}
+					}
+				}
+			}
 			else {
 				$message = new Message("A liturgia hozzáadása nem sikerült! Kérem javítsa ki a jelzett hibákat, s próbálja újra!", MessageType::danger, false);
 				$message->insertontop();
