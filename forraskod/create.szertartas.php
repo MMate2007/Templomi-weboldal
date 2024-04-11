@@ -288,6 +288,16 @@ include("headforadmin.php");
 	<input type="hidden" name="stage" value="2">
 	<button type="submit" class="btn btn-primary text-white"><i class="bi bi-plus-lg"></i> Hozzáadás</button>
 	</form>
+	<script>
+		<?php
+		if (isset($_POST["regular"])) {
+		if ($_POST["regular"] == 1) {
+			?>
+			toggleregular();
+			<?php
+		} }
+		?>
+	</script>
 	<?php
 	if (isset($_POST["stage"])) {
 		if ($_POST["stage"] == 2) {
