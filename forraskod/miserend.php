@@ -201,7 +201,7 @@ if ($user == true) {
 		<button class="btn btn-primary text-white active" onclick="togglecalendar()" id="calendargomb"><i class="bi bi-calendar-week"></i> Naptár nézet</button>
 </div>
 <div class="row">
-	<div class="miserend col-sm-8" id="list">
+	<div class="miserend col" id="list">
 	<form name="szuro" action="miserend.php" method="post">
 	<p>Település: <select name="tel" class="form-select">
 		<option value="mind">Az összes</option>
