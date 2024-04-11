@@ -319,7 +319,7 @@ $pubmegj = $_POST["pubmegj"]; if ($pubmegj == "") {$pubmegj = null;}
 // TODO más dátum kezelés ld. create.szertartas.php
 $datum = $_POST["date"].":00";
 $date = str_replace("T", " ", $datum);
-$name = correct($_POST["name"]); if ($name = "") {$name = null;}
+$name = correct($_POST["name"]); if ($name == "") {$name = null;}
 $place = correct($_POST["egyebtemplom"]); if ($place == "") { $place = null;}
 // TODO regex
 $color = "color: " . $_POST["color"] . "; ";
