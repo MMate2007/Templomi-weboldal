@@ -102,15 +102,6 @@ if (!isset($_POST["stage"])) {
 	} else if (correct($_POST["stage"]) == "3")
 	{
 		$id = correct($_POST["id"]);
-		$sql = "SELECT `szandek` FROM `szertartasok` WHERE `ID` = '".$id."'";
-		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-		$szandekid = null;
-		while ($row = mysqli_fetch_array($eredmeny))
-		{
-			$szandekid = $row['szandek'];
-		}
-		$sql = "DELETE FROM `szandekok` WHERE `id` = '".$szandekid."'";
-		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 		$sql = "DELETE FROM `szertartasok` WHERE `ID` = '".$id."'";
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 		if (isset($_POST["miserend"]))
