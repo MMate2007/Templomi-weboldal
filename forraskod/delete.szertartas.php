@@ -10,7 +10,7 @@
 //FIXME nem minden oldalon írjuk ki a $sitename változót, s ez baj
 //FIXME head átnézése, mert még a régi rendszer szerint van
 //FIXME MySQL hiba kijavítása
-include("condig.php");
+include("config.php");
 include("head.php");
 ?>
 </head>
