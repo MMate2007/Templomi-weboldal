@@ -236,7 +236,6 @@ if ($user == true) {
 		}
 		?>
 	 </select>
-	 <!-- TODO ha be van jelentkezve a felhasználó, akkor lehessen szűrni pap és kántor szerint is -->
 	 <button type="submit" class="btn btn-primary text-white"><i class="bi bi-funnel"></i> Szűrés</button>
 	</p>
 	</form>
