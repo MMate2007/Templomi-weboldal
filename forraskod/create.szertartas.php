@@ -13,14 +13,14 @@
 		const date = document.querySelector("#dateintervall");
 		const time = document.querySelector("#time");
 		const regular = document.querySelector("#regular");
-		if (button.textContent == "Rendszeres szertartás megadása") {
-			button.textContent = "Egyszeri szertartás megadása";
+		if (button.textContent == "Váltás rendszeres szertartás megadására") {
+			button.textContent = "Váltás egyszeri szertartás megadására";
 			datetime.setAttribute("style", "display: none;");
 			date.removeAttribute("style");
 			time.removeAttribute("style");
 			regular.value = "1";
-		} else if (button.textContent == "Egyszeri szertartás megadása") {
-			button.textContent = "Rendszeres szertartás megadása";
+		} else if (button.textContent == "Váltás egyszeri szertartás megadására") {
+			button.textContent = "Váltás rendszeres szertartás megadására";
 			datetime.removeAttribute("style");
 			date.setAttribute("style", "display: none;");
 			time.setAttribute("style", "display: none;");
@@ -47,7 +47,7 @@ include("headforadmin.php");
 <main class="container">
 	<form name="create-szertartas" action="#" method="post">
 		<p><span style="color: red;">* kötelezően kitöltendő mező.</span></p>
-		<button class="btn btn-outline-primary" onclick="toggleregular()" id="regulartoggler">Rendszeres szertartás megadása</button>
+		<button class="btn btn-outline-primary" onclick="toggleregular()" id="regulartoggler" type="button">Váltás rendszeres szertartás megadására</button>
 		<input type="hidden" name="regular" value="0" id="regular">
 	<div class="row my-3" id="datetime">
 		<label for="date" class="col-sm-2 required">Időpontja:</label>
@@ -56,49 +56,49 @@ include("headforadmin.php");
 	<div id="dateintervall" style="display:none;">
 		<div class="row my-3">
 			<label for="start" class="required col-sm-2">Intervallum kezdete:</label>
-			<input type="date" name="start" id="start" class="form-control col-sm">
+			<input type="date" name="start" id="start" class="form-control col-sm" <?php autofill("start"); ?>>
 		</div>
 		<div class="row my-3">
 			<label for="end" class="required col-sm-2">Intervallum vége:</label>
-			<input type="date" name="end" id="end" class="form-control col-sm">
+			<input type="date" name="end" id="end" class="form-control col-sm" <?php autofill("end"); ?>>
 		</div>
 		<div class="row my-3">
 			<label class="required col-sm-2" for="checkdiv">Napok:</label>
 			<div id="checkdiv" class="col-sm" style="display: inline;">
 				<div class="form-check form-check-inline">
-					<input type="checkbox" name="days[]" id="monday" value="1" class="form-check-input">
+					<input type="checkbox" name="days[]" id="monday" value="1" class="form-check-input" <?php autofillcheck("days", "1"); ?>>
 					<label for="monday" class="form-check-label">Hétfő</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input type="checkbox" name="days[]" id="tuesday" value="2" class="form-check-input">
+					<input type="checkbox" name="days[]" id="tuesday" value="2" class="form-check-input" <?php autofillcheck("days", "2"); ?>>
 					<label for="tuesday" class="form-check-label">Kedd</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input type="checkbox" name="days[]" id="wednesday" value="3" class="form-check-input">
+					<input type="checkbox" name="days[]" id="wednesday" value="3" class="form-check-input" <?php autofillcheck("days", "3"); ?>>
 					<label for="wednesday" class="form-check-label">Szerda</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input type="checkbox" name="days[]" id="thursday" value="4" class="form-check-input">
+					<input type="checkbox" name="days[]" id="thursday" value="4" class="form-check-input" <?php autofillcheck("days", "4"); ?>>
 					<label for="thursday" class="form-check-label">Csütörtök</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input type="checkbox" name="days[]" id="friday" value="5" class="form-check-input">
+					<input type="checkbox" name="days[]" id="friday" value="5" class="form-check-input" <?php autofillcheck("days", "5"); ?>>
 					<label for="friday" class="form-check-label">Péntek</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input type="checkbox" name="days[]" id="saturday" value="6" class="form-check-input">
+					<input type="checkbox" name="days[]" id="saturday" value="6" class="form-check-input" <?php autofillcheck("days", "6"); ?>>
 					<label for="saturday" class="form-check-label">Szombat</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input type="checkbox" name="days[]" id="sunday" value="0" class="form-check-input">
+					<input type="checkbox" name="days[]" id="sunday" value="0" class="form-check-input" <?php autofillcheck("days", "0"); ?>>
 					<label for="sunday" class="form-check-label">Vasárnap</label>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="row my-3" id="time" style="display:none;">
-		<label for="time" class="col-sm-2 required">Idő:</label>
-		<input type="time" name="time" id="time" class="form-control col-sm">
+		<label for="timeinput" class="col-sm-2 required">Idő:</label>
+		<input type="time" name="time" id="timeinput" class="form-control col-sm" <?php autofill("time"); ?>>
 	</div>
 		<div class="row my-3">
 			<label for="sztipus" class="col-sm-2 required">Szertartás típusa:</label>
@@ -324,6 +324,10 @@ include("headforadmin.php");
 			$megj = correct($_POST["megjegyzes"]);
 			$pubmegj = correct($_POST["pubmegj"]);
 			if ($_POST["regular"] == "0") {
+			if ($_POST["date"] == null) {
+				formvalidation("#date", false, "A mező üres!");
+				$mehet = false;
+			}
 			$date = date_create($_POST["date"]);
 			if ($date < date_create()) {
 				formvalidation("#date", false, "A megadott időpont a múltban van!");
@@ -331,6 +335,50 @@ include("headforadmin.php");
 			} } else {
 			$start = date_create($_POST["start"]);
 			$end = date_create($_POST["end"]);
+			if ($_POST["start"] == null) {
+				$message = new Message("Az intervallum kezdete mező üres!", MessageType::danger);
+				$message->insertontop();
+				formvalidation("#start", false, "Az intervallum vége mező üres!");
+				$mehet = false;
+			} else {
+				if ($start < date_create()) {
+					$message = new Message("Az intervallum kezdete a múltban van!", MessageType::danger);
+					$message->insertontop();
+					formvalidation("#start", false, "Az intervallum kezdete a múltban van!");
+					$mehet = false;
+				}
+			}
+			if ($_POST["end"] == null) {
+				$message = new Message("Az intervallum vége mező üres!", MessageType::danger);
+				$message->insertontop();
+				formvalidation("#end", false, "Az intervallum vége mező üres!");
+				$mehet = false;
+			} else {
+				if ($end < date_create()) {
+					$message = new Message("Az intervallum vége a múltban van!", MessageType::danger);
+					$message->insertontop();
+					formvalidation("#end", false, "Az intervallum vége a múltban van!");
+					$mehet = false;
+				}
+			}
+			if ($_POST["time"] == null) {
+				$message = new Message("Az idő mező üres!", MessageType::danger);
+				$message->insertontop();
+				formvalidation("#timeinput", false, "Az idő mező üres!");
+				$mehet = false;
+			}
+			if (!isset($_POST["days"])) {
+				$message = new Message("Nem lett kiválasztva egy nap sem!", MessageType::danger);
+				$message->insertontop();
+				$mehet = false;
+			}
+			if ($mehet == true) {
+			if ($end < $start) {
+				$message = new Message("Az intervallum vége korábbra van állítva, mint a kezdete!", MessageType::danger);
+				$message->insertontop();
+				formvalidation("#end", false, "Az intervallum vége korábbra van állítva, mint a kezdete!");
+				$mehet = false;
+			} }
 			$time = correct($_POST["time"]);
 			}
 			$name = correct($_POST["name"]);
@@ -465,8 +513,22 @@ include("headforadmin.php");
 				$sql .= ")";
 				$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>"); }
 				else {
+					$sql = "SELECT * FROM `szertartasok`";
+					$szertartasok = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+					$rows = mysqli_fetch_all($szertartasok, MYSQLI_ASSOC);
 					for ($date = $start; $date <= $end; $date->modify("+1 day")) {
 						if (in_array($date->format("w"), $_POST["days"])) {
+							foreach ($rows as $row)
+							{
+								if ($row["date"] == date_format($date, "Y-m-d ").$time.":00" && $row["templomID"] == $templom)
+								{
+									if (!isset($ismetlodes)) {
+										$ismetlodes = new Message("Néhány szertartás nem került hozzáadásra, hiszen a megadott templomban, a megadott időben már van szertartás bejegyezve!", MessageType::warning);
+										$ismetlodes->insertontop();
+									}
+									continue 2;
+								}
+							}
 							$sql = "INSERT INTO `szertartasok`(`date`, `nameID`, `name`, `telepulesID`, `templomID`, `place`, `style`, `celebransID`, `kantorID`, `tipus`, `szandek`, `publikus`, `megjegyzes`, `pubmegj`) VALUES ('".date_format($date, "Y-m-d")." $time','".$sztipus."','".$name."','".$telepules."',";
 							if ($templom != null) { $sql .= "'".$templom."',"; } else { $sql .= "NULL,";}
 							if ($place != null) { $sql .= "'".$place."',"; } else { $sql .= "NULL,";}
