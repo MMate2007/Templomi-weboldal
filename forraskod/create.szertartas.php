@@ -13,14 +13,14 @@
 		const date = document.querySelector("#dateintervall");
 		const time = document.querySelector("#time");
 		const regular = document.querySelector("#regular");
-		if (button.textContent == "Váltás rendszeres szertartás megadására") {
+		if (button.textContent == "Váltás több szertartás megadására") {
 			button.textContent = "Váltás egyszeri szertartás megadására";
 			datetime.setAttribute("style", "display: none;");
 			date.removeAttribute("style");
 			time.removeAttribute("style");
 			regular.value = "1";
 		} else if (button.textContent == "Váltás egyszeri szertartás megadására") {
-			button.textContent = "Váltás rendszeres szertartás megadására";
+			button.textContent = "Váltás több szertartás megadására";
 			datetime.removeAttribute("style");
 			date.setAttribute("style", "display: none;");
 			time.setAttribute("style", "display: none;");
@@ -47,7 +47,7 @@ include("headforadmin.php");
 <main class="container">
 	<form name="create-szertartas" action="#" method="post">
 		<p><span style="color: red;">* kötelezően kitöltendő mező.</span></p>
-		<button class="btn btn-outline-primary" onclick="toggleregular()" id="regulartoggler" type="button">Váltás rendszeres szertartás megadására</button>
+		<button class="btn btn-outline-primary" onclick="toggleregular()" id="regulartoggler" type="button">Váltás több szertartás megadására</button>
 		<input type="hidden" name="regular" value="0" id="regular">
 	<div class="row my-3" id="datetime">
 		<label for="date" class="col-sm-2 required">Időpontja:</label>
