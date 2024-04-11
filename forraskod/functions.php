@@ -344,7 +344,15 @@ function autofillselect(string $post, $value) {
  * @return void
  */
 function autofillcheck(string $post, $value) {
-    if (isset($_POST[$post])) { if ($_POST[$post] == $value) { echo "checked"; } }
+    if (isset($_POST[$post])) {
+        if (!is_array($_POST[$post])) {
+            if ($_POST[$post] == $value) { echo "checked"; }
+        } else {
+            if (in_array($value, $_POST[$post])) {
+                echo "checked";
+            }
+        }
+    }
 }
 /**
  * Visszadja, hogy a **bejelentkezett** felhasználónak van-e jogosultsága a $premission-ban leírt jogra
