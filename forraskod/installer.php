@@ -8,8 +8,7 @@
 </head>
 <body>
     <h1>Telepítés</h1>
-    <!-- TODO meg kell adni a maximum értéket! -->
-    <progress value="<?php if (isset($_POST["stage"])) { echo $_POST["stage"]; } else { echo "0"; } ?>" max="10"></progress>
+    <progress value="<?php if (isset($_POST["stage"])) { echo $_POST["stage"]; } else { echo "0"; } ?>" max="3"></progress>
     <p>*: kötelezően kitöltendő</p>
     <?php
     $regex = ["mysql" => "^[a-zA-Z0-9 .\-]+$", "name" => "^[a-zA-Z .-]+$"];
@@ -153,141 +152,35 @@
                 include("config.php");
                 $mysql = mysqli_connect($mysqlhost, $mysqlu, $mysqlp, $mysqld) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
                 mysqli_query($mysql, "SET NAMES utf8");
-                //! FIXME új jelszó titkosítási módszer kitalálása
                 $sql = "INSERT INTO `author`(`id`, `name`, `password`, `username`, `egyhaziszint`) VALUES ('0','$fullname','".password_hash($pass, $pwdhashalgo)."','$uname','$egyhazi')";
-                if (mysqli_query($mysql, $sql))
-                {
-                    $sqla = "INSERT INTO `engedelyek` VALUES ('0','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1')";
-                    if (mysqli_query($mysql, $sql))
-                    {
-                        ?>
-                        <p class="success">Admin felhasználó sikeresen létrehozva.</p>
-                        <form action="#" method="POST">
-                            <input type="submit" value="Tovább a következő lépésre">
-                            <input type="hidden" name="stage" value="4">
-                        </form>
-                        <?php
-                    } else {
-                        ?>
-                        <p class="warning">Nem sikerült beállítani az engedélyeket! Kérem próbálja újra!</p>
-                        <form action="#" method="POST">
-                            <table>
-                                <tr>
-                                    <td><label>Felhasználónév: </label></td>
-                                    <td><input type="text" name="username" value="<?php echo $_POST["username"]; ?>" required auto-focus pattern="<?php echo $regex["mysql"]; ?>"></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><label>Jelszó: </label></td>
-                                    <td><input type="password" name="password" required></td>
-                                    <td><span style="color:red;">A két jelszó nem egyezik!</span></td>
-                                </tr>
-                                <tr>
-                                    <td><label>Jelszó újra: </label></td>
-                                    <td><input type="password" name="password2" required></td>
-                                    <td><span style="color:red;">A két jelszó nem egyezik!</span></td>
-                                </tr>
-                                <tr>
-                                    <td><label>Teljes/megjelenítendő név: </label></td>
-                                    <td><input type="text" name="name" value="<?php echo $_POST["name"]; ?>" required pattern="<?php echo $regex["name"]; ?>"></td>
-                                    <td>Ez a név fog megjelenni pl. bejegyzéseknél.</td>
-                                </tr>
-                                <tr>
-                                    <td><label>Egyházi titulus: </label></td>
-                                    <td><select name="egyhazi" required><option value="0">Egyéb egyházi személy</option><option value="1">Kántor</option><option value="2">Pap</option></select></td>
-                                    <td>Ez azért kell, hogy releváns tartalom jelenhessen meg a bejelentkezési oldalon, pl. a pap magához rendelheti a misét, vagy a kántornak a hozzá rendelt miséknél nem írja ki a kántort (hiszen az maga), hanem a celebránst.</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td><input type="submit" value="Felhasználó létrehozása"></td>
-                                    <td></td>
-                                </tr>
-                                <input type="hidden" name="stage" value="3">
-                            </table>
-                        </form>
-                        <?php
-                    }
-                }
-                else {
+                $result = mysqli_query($mysql, $sql);
+                if ($result) {
                     ?>
-                    <p class="warning">Nem sikerült létrehozni a felhasználót! Kérem próbálja újra!</p>
-                    <form action="#" method="POST">
-                    <table>
-                        <tr>
-                            <td><label>Felhasználónév: </label></td>
-                            <td><input type="text" name="username" value="<?php echo $_POST["username"]; ?>" required auto-focus pattern="<?php echo $regex["mysql"]; ?>"></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><label>Jelszó: </label></td>
-                            <td><input type="password" name="password" required></td>
-                            <td><span style="color:red;">A két jelszó nem egyezik!</span></td>
-                        </tr>
-                        <tr>
-                            <td><label>Jelszó újra: </label></td>
-                            <td><input type="password" name="password2" required></td>
-                            <td><span style="color:red;">A két jelszó nem egyezik!</span></td>
-                        </tr>
-                        <tr>
-                            <td><label>Teljes/megjelenítendő név: </label></td>
-                            <td><input type="text" name="name" value="<?php echo $_POST["name"]; ?>" required pattern="<?php echo $regex["name"]; ?>"></td>
-                            <td>Ez a név fog megjelenni pl. bejegyzéseknél.</td>
-                        </tr>
-                        <tr>
-                            <td><label>Egyházi titulus: </label></td>
-                            <td><select name="egyhazi" required><option value="0">Egyéb egyházi személy</option><option value="1">Kántor</option><option value="2">Pap</option></select></td>
-                            <td>Ez azért kell, hogy releváns tartalom jelenhessen meg a bejelentkezési oldalon, pl. a pap magához rendelheti a misét, vagy a kántornak a hozzá rendelt miséknél nem írja ki a kántort (hiszen az maga), hanem a celebránst.</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input type="submit" value="Felhasználó létrehozása"></td>
-                            <td></td>
-                        </tr>
-                        <input type="hidden" name="stage" value="3">
-                    </table>
-                    </form>
+                    <p>Felhasználó sikeres létrehozása!</p>
                     <?php
+                } else {
+                    ?>
+                    <p>Felhasználó létrehozása sikertelen!</p>
+                    <?php
+                    echo mysqli_error($mysql);
+                    mysqli_close($mysql);
+                    die();
                 }
-            } else {
-                ?>
-                <h2>Admin felhasználó létrehozása</h2>
-                <p>A következőkben, kérem, válaszoljon az adminisztrátori felhasználói fiókra vonatkozó kérdésekre!</p>
-                <form action="#" method="POST">
-                    <table>
-                        <tr>
-                            <td><label>Felhasználónév: </label></td>
-                            <td><input type="text" name="username" value="<?php echo $_POST["username"]; ?>" required auto-focus pattern="<?php echo $regex["mysql"]; ?>"></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><label>Jelszó: </label></td>
-                            <td><input type="password" name="password" required></td>
-                            <td><span style="color:red;">A két jelszó nem egyezik!</span></td>
-                        </tr>
-                        <tr>
-                            <td><label>Jelszó újra: </label></td>
-                            <td><input type="password" name="password2" required></td>
-                            <td><span style="color:red;">A két jelszó nem egyezik!</span></td>
-                        </tr>
-                        <tr>
-                            <td><label>Teljes/megjelenítendő név: </label></td>
-                            <td><input type="text" name="name" value="<?php echo $_POST["name"]; ?>" required pattern="<?php echo $regex["name"]; ?>"></td>
-                            <td>Ez a név fog megjelenni pl. bejegyzéseknél.</td>
-                        </tr>
-                        <tr>
-                            <td><label>Egyházi titulus: </label></td>
-                            <td><select name="egyhazi" required><option value="0">Egyéb egyházi személy</option><option value="1">Kántor</option><option value="2">Pap</option></select></td>
-                            <td>Ez azért kell, hogy releváns tartalom jelenhessen meg a bejelentkezési oldalon, pl. a pap magához rendelheti a misét, vagy a kántornak a hozzá rendelt miséknél nem írja ki a kántort (hiszen az maga), hanem a celebránst.</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input type="submit" value="Felhasználó létrehozása"></td>
-                            <td></td>
-                        </tr>
-                        <input type="hidden" name="stage" value="3">
-                    </table>
-                </form>
-                <?php
+                $sql = "INSERT INTO `userpermissions`(`userId`, `permissionId`) SELECT 0, id FROM permissions";
+                $result = mysqli_query($mysql,$sql);
+                if ($result) {
+                    ?>
+                    <p>Jogosultságok felhasználóhoz rendelése sikeres!</p>
+                    <?php
+                } else {
+                    ?>
+                    <p>Jogosultságok felhasználóhoz rendelése sikertelen!</p>
+                    <?php
+                    echo mysqli_error($mysql);
+                    mysqli_close($mysql);
+                    die();
+                }
+
             }
         }
     }
