@@ -15,9 +15,8 @@ Ha számítógépünkön telepítve van a Docker, akkor érdemes azzal telepíte
 2. Indítsuk el a Docker Desktopot!
 3. - Linux/MacOS esetén:
       1. A terminálban nyissuk meg ezen projektnek a mappáját!
-      2. Futtassuk a következőt: `sh dockersetup.sh`. Ezzel létrehozzuk a szükséges mappákat, bemásolunk egy fájlt.
-      3. Ez után a konténerek indításához futtassuk a `docker-compose up` parancsot a projekt mappájában!
-      4. Készen is vagyunk!
+      2. Ez után a konténerek indításához futtassuk a `docker-compose up` parancsot a projekt mappájában!
+      3. Készen is vagyunk!
    - Windowson:
      1. Nyissuk meg ezt a mappát a Parancssorban és futtassuk a következő parancsot: `docker-compose up`
      2. Készen is vagyunk!
