@@ -79,7 +79,12 @@
                 $eredmeny = mysqli_multi_query($mysqlconn, $sql);
                 if ($eredmeny == true)
                 { ?>
-                    <p class="success">Táblák sikeresen létrehozva.</p> <?php
+                    <p class="success">Táblák sikeresen létrehozva.</p>
+                    <form action="#" method="post">
+                    <input type="hidden" name="stage" value="2">
+                    <input type="submit" value="Tovább">
+                    </form>
+                    <?php
                     mysqli_close($mysqlconn);
                 } else {
                         mysqli_close($mysqlconn);
@@ -180,8 +185,15 @@
                     mysqli_close($mysql);
                     die();
                 }
-
+            } else {
+                ?>
+                <p>A két jelszó nem egyezik! Lépjünk vissza és próbáljuk meg újra!</p>
+                <?php
+                die();
             }
+            ?>
+            <p>Készen is vagyunk! Töröljük az installer.php fájlt!</p>
+            <?php
         }
     }
     ?>
