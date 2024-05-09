@@ -1,120 +1,73 @@
+<?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Módosítás...</title>
+<?php include("head.php"); ?>
+<title>Jelszó módosítása - <?php echo $sitename; ?></title>
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/pnp" href="icon.png">
-<!--<meta name="theme-color" content="#ffea00">-->
-
 <style>
-	header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
-@media only screen and (max-width: 800px) {
-div.head-text {
-	position: absolute;
-	top: 10px;
-	left: 30px;
-}
-div.head-text h1 {font-size: 20pt;}
-}
-@media only screen and (min-width: 600px) {
-div.head-text {
-	position: absolute;
-	top: 10px;
-	left: 50px;
-}
-div.head-text h1 {font-size: 72pt;}
-}
-@media only screen and (min-width: 1349px) {
-div.head-text {
-	position: absolute;
-	top: 25px;
-	left: 100px;
-}
-}
+	header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
 </style>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1>Példa plébánia honlapja - Jelszó módosítása...</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
 <?php
-session_start();
-if (!isset($_SESSION["userId"]))
+displayhead("Jelszó módosítása");
+include("headforadmin.php");
+?>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	?>
+</div>
+<main class="container d-flex justify-content-center">
+	<form name="modify-password form-horizontal" action="#" method="post">
+	<p class="text-center">Kérem írja be az új jelszavát!</p>
+	<div class="row mb-1">
+		<label for="pass1" class="col-form-label col">Új jelszó:</label>
+		<div class="col"><input type="password" class="form-control" name="pass1" id="pass1"></div>
+	</div>
+	<div class="row mb-1">
+		<label for="pass2" class="col-form-label col">Új jelszó ismét:</label>
+		<div class="col"><input type="password" class="form-control" id="pass2" name="pass2"></div>
+	</div>
+	<div class="text-center mt-2 mb-2"><input type="submit" class="btn btn-primary text-white" value="Módosítás"></div>
+	<input type="hidden" name="stage" value="2">
+	</form>
+	<?php
+if (isset($_POST["stage"]))
 {
-	header("Location: hozzaferes.php");
-}
-$mysql = mysqli_connect("localhost", "mysqlfelhasznalo", "mysqljelszo", "adatbazisnev") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_query($mysql, "SET NAMES utf8");
-$sql = "SELECT `name` FROM `author` WHERE `id` = '".$_SESSION["userId"]."'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$name = $row["name"];
-	if ($name != $_SESSION["name"])
+	if (correct($_POST["stage"]))
 	{
-		mysqli_close($mysql);
-		header("Location: hozzaferes.php");
+		$pass1 = $_POST["pass1"];
+		$pass2 = $_POST["pass2"];
+		if ($pass1 != $pass2)
+		{
+			$eredmeny = false;
+			formvalidation("#pass2", false, "A két jelszó nem egyezik meg!");
+		}else{
+			$sql = "SELECT `password` FROM `author` WHERE `id` = '".$_SESSION["userId"]."'";
+			$eredmeny = mysqli_query($mysql, $sql);
+			$row = mysqli_fetch_array($eredmeny);
+			$eredmeny = false;
+			if (!password_verify($pass2, $row["password"])) {
+			$sql = "UPDATE `author` SET `password`= '".password_hash($pass1, $pwdhashalgo)."' WHERE `id` = '".$_SESSION["userId"]."'";
+			$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+			} else {
+				$message = new Message("A jelenlegi jelszó megegyezik a megadottal!", MessageType::warning);
+				$message->insertontop();
+			}
+			if ($eredmeny == true)
+			{
+				$_SESSION["messages"][] = new Message("Sikeres módosítás.", MessageType::success);
+				mysqli_close($mysql);
+				header("Location: admin.php");
+			}
+		}
 	}
 }
-mysqli_close($mysql);
 ?>
-<a href="logout.php" class="right">Kijelentkezés</a>
-<a href="form.create.hirdetes.php" class="right">Hirdetés létrehozása</a>
-<a href="form.create.szertartas.php" class="right">Liturgia hozzáadása</a>
-<a href="admin.php" class="right" id="right-elso">Adminisztráció</a>
-</nav>
-<hr>
-</header>
-<?php
-$pass1 = sha1(md5($_POST["pass1"]));
-$pass2 = sha1(md5($_POST["pass2"]));
-$sqlpass = "mysqljelszo";
-if ($pass1 != $pass2)
-{
-	$sqlpass = "";
-	?>
-	<script>
-	alert("A két jelszó nem egyezik! Kérem próbálja újra!");
-	window.location.replace("form.modify.password.php");
-	</script>
-	<?php
-}else{
-$mysql = mysqli_connect("localhost", "mysqlfelhasznalo", $sqlpass, "adatbazisnev");
-mysqli_query($mysql, "SET NAMES utf8");
-$sql = "UPDATE `author` SET `password`= '".$pass1."' WHERE `id` = '".$_SESSION["userId"]."'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_close($mysql);}
-?>
-<div class="content">
-<div class="tartalom">
-<?php
-if ($eredmeny == true)
-{
-	?>
-	<p class="succes">Sikeres jelszó módosítás!</p>
-	<?php
-	header("Location: logout.php");
-}else{
-	?>
-	<p class="warning">Valami hiba történt!</p>
-	<p>Kérem, próbálja újra!</p>
-	<?php
-}
-?>
-</div>
-</div>
+</main>
 <div class="sidebar">
 </div>
 <?php include("footer.php"); ?>

@@ -1,0 +1,7 @@
+{
+    "require": {
+        "twbs/bootstrap": "^5.2",
+        "pragmarx/google2fa": "^8.0",
+        "tinymce/tinymce": "^6.7"
+    }
+}

@@ -1,113 +1,111 @@
+<?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Törlés...</title>
-<meta name="language" content="hu-HU">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/pnp" href="icon.png">
-<!--<meta name="theme-color" content="#ffea00">-->
-
-<style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
-@media only screen and (max-width: 800px) {
-div.head-text {
-	position: absolute;
-	top: 10px;
-	left: 30px;
-}
-div.head-text h1 {font-size: 20pt;}
-}
-@media only screen and (min-width: 600px) {
-div.head-text {
-	position: absolute;
-	top: 100px;
-	left: 50px;
-}
-div.head-text h1 {font-size: 72pt;}
-}
-@media only screen and (min-width: 1349px) {
-div.head-text {
-	position: absolute;
-	top: 25px;
-	left: 100px;
-}
-}
-</style>
+<?php include("head.php"); ?>
+<title>Hirdetés törlése - <?php echo $sitename; ?></title>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1>Példa plébánia honlapja - Hirdetés törlése...</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
 <?php
-session_start();
-if (!isset($_SESSION["userId"]))
-{
-	header("Location: hozzaferes.php");
-}
-$mysql = mysqli_connect("localhost", "mysqlfelhasznalo", "mysqljelszo", "adatbazisnev") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_query($mysql, "SET NAMES utf8");
-$sql = "SELECT `name` FROM `author` WHERE `id` = '".$_SESSION["userId"]."'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$name = $row["name"];
-	if ($name != $_SESSION["name"])
-	{
-		mysqli_close($mysql);
-		header("Location: hozzaferes.php");
-	}
-}
-mysqli_close($mysql);
+displayhead("Hirdetés törlése");
+include("headforadmin.php");
 ?>
-<a href="logout.php" class="right">Kijelentkezés</a>
-<a href="form.create.hirdetes.php" class="right">Hirdetés létrehozása</a>
-<a href="form.create.szertartas.php" class="right">Liturgia hozzáadása</a>
-<a href="admin.php" class="right" id="right-elso">Adminisztráció</a>
-</nav>
-<hr>
-</header>
-<?php
-$id = $_POST["id"];
-$mysql = mysqli_connect("localhost", "mysqlfelhasznalo", "mysqljelszo", "adatbazisnev") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_query($mysql, "SET NAMES utf8");
-$sql = "DELETE FROM `hirdetesek` WHERE `ID` = '".$id."'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_close($mysql);
-?>
-<div class="content">
-<div class="tartalom">
-<?php
-if ($eredmeny == true)
-{
-	?>
-	<p class="succes">Sikeres törlés!</p>
+<div id="messagesdiv">
 	<?php
-}else{
+	Message::displayall();
+	if (!checkpermission("removehirdetes"))
+	{
+		displaymessage("danger", "Nincs jogosultsága hirdetés törléséhez!");
+		exit;
+	}
 	?>
-	<p class="warning">Valami hiba történt!</p>
-	<p>Kérem, kattintson az alábbi gombra!</p>
-	<form action="delete.hirdetes.php" method="post">
-	<input type="hidden" name="id" value="<?php echo $id;?>">
-	<input type="submit" value="Újrapróbálkozás">
+</div>
+<main class="content container d-flex justify-content-center">
+<div>
+	<form name="delete1-hirdetes" action="#" method="post">
+	<div class="row my-3">
+		<label for="hirdetes-id" class="col-sm-4">Törölni kívánt hirdetés címe:</label>
+		<select class="col-sm form-select" name="hirdetes-id" id="hirdetes-id" required>
+		<option value="N/A">--Kérem válasszon!--</option>
+		<?php
+		$sql = "SELECT `ID`, `title` FROM `hirdetesek`";
+		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+		while ($row = mysqli_fetch_array($eredmeny))
+		{
+			$id = $row["ID"];
+			$title = $row["title"];
+			?>
+			<option value="<?php echo $id; ?>" <?php if (isset($_POST["hirdetes-id"])) { if ($_POST["hirdetes-id"] == $row["ID"]) { echo "selected"; } } ?>><?php echo $title; ?></option>
+			<?php
+		}
+		?>
+		</select>
+		<label class="col form-text">Kérem válassza ki a törölni kívánt hirdetés címét a listából!</label>
+	</div>
+	<button type="submit" class="btn btn-primary text-white"><i class="bi bi-arrow-right"></i> Tovább</button>
+	<input type="hidden" name="stage" value="2">
 	</form>
 	<?php
+if (isset($_POST["stage"])) {
+	if (correct($_POST["stage"]) == "2") {
+		?>
+		<form name="delete1-hirdetes" action="#" method="post">
+		<?php
+		$id = correct($_POST["hirdetes-id"]);
+		if ($id == "N/A")
+		{
+			formvalidation("#hirdetes-id", false, "Nem lett kiválasztva hirdetés!");
+		} else {
+			$sql = "SELECT `title`, `content` FROM `hirdetesek` WHERE `ID` = '".correct($id)."'";
+			$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+			$title = "Ismeretlen";
+			$content = "";
+			while ($row = mysqli_fetch_array($eredmeny))
+			{
+				$title = $row["title"];
+				$content = $row["content"];
+			}
+			?>
+			<p>Biztosan szeretné törölni ezt a hirdetést?</p>
+			<table class="form">
+			<tr>
+			<td><label>A kiválasztott hirdetés címe: </label></td>
+			<td><label><?php echo $title; ?></label></td>
+			</tr>
+			<tr>
+			<td><label>A kiválasztott hirdetés leírása: </label></td>
+			<td><label><?php echo $content; ?></label></td>
+			</tr>
+			<input type="hidden" name="id" value="<?php echo $id; ?>">
+			<input type="hidden" name="stage" value="3">
+			<tr>
+			<td><label></label></td>
+			<td><button type="submit" class="btn btn-danger text-white">Törlés</button></td>
+			<td><label></label></td>
+			</tr>
+			</table>
+			<?php
+		}
+		?>
+		</form>
+		<?php
+	} else if (correct($_POST["stage"]) == "3")
+	{
+		$id = correct($_POST["id"]);
+		$sql = "DELETE FROM `hirdetesek` WHERE `ID` = '".$id."'";
+		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+		if ($eredmeny == true) {
+			$_SESSION["messages"][] = new Message("Hirdetés törlése sikeres.", MessageType::success);
+		} else if ($eredmeny == false) {
+			$_SESSION["messages"][] = new Message("Valami hiba történt a hirdetés törlése során.", MessageType::danger);
+		}
+		mysqli_close($mysql);
+		redirectback();
+	}
 }
 ?>
 </div>
-</div>
-<div class="sidebar">
-</div>
+</main>
 <?php include("footer.php"); ?>
 </body>
 </html>

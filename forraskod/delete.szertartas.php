@@ -1,114 +1,165 @@
+<?php ob_start(); ?>
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Törlés...</title>
-<meta name="language" content="hu-HU">
+<title>Szertartás törlése - <?php echo $sitename; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/pnp" href="icon.png">
-<!--<meta name="theme-color" content="#ffea00">-->
-
-<style>
-header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo $_SERVER['PHP_SELF'];?>"] {font-weight: bold;}
-@media only screen and (max-width: 800px) {
-div.head-text {
-	position: absolute;
-	top: 10px;
-	left: 30px;
-}
-div.head-text h1 {font-size: 20pt;}
-}
-@media only screen and (min-width: 600px) {
-div.head-text {
-	position: absolute;
-	top: 100px;
-	left: 50px;
-}
-div.head-text h1 {font-size: 72pt;}
-}
-@media only screen and (min-width: 1349px) {
-div.head-text {
-	position: absolute;
-	top: 25px;
-	left: 100px;
-}
-}
-</style>
+<?php
+//FIXME nem minden oldalon írjuk ki a $sitename változót, s ez baj
+//FIXME head átnézése, mert még a régi rendszer szerint van
+//FIXME MySQL hiba kijavítása
+include("config.php");
+include("head.php");
+?>
 </head>
 <body>
-<header>
-<div class="head">
-<!--<img class="head" src="fejlec.jpg" style="width: 100%;">-->
-<!--<img class="head" src="fejlecvekony.jpg" style="width: 100%;">-->
-<div class="fejlecparallax">
-<div class="head-text">
-<h1>Példa plébánia honlapja - Szertartás törlése...</h1>
-</div>
-</div>
-</div>
-<hr>
-<nav>
-<?php include("navbar.php"); ?>
 <?php
-session_start();
-if (!isset($_SESSION["userId"]))
-{
-	header("Location: hozzaferes.php");
-}
-$mysql = mysqli_connect("localhost", "mysqlfelhasznalo", "mysqljelszo", "adatbazisnev") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_query($mysql, "SET NAMES utf8");
-$sql = "SELECT `name` FROM `author` WHERE `id` = '".$_SESSION["userId"]."'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-while ($row = mysqli_fetch_array($eredmeny))
-{
-	$name = $row["name"];
-	if ($name != $_SESSION["name"])
-	{
-		mysqli_close($mysql);
-		header("Location: hozzaferes.php");
-	}
-}
-mysqli_close($mysql);
+displayhead("Szertartás törlése");
+include("headforadmin.php");
 ?>
-<a href="logout.php" class="right">Kijelentkezés</a>
-<a href="form.create.hirdetes.php" class="right">Hirdetés létrehozása</a>
-<a href="form.create.szertartas.php" class="right">Liturgia hozzáadása</a>
-<a href="admin.php" class="right" id="right-elso">Adminisztráció</a>
-</nav>
-<hr>
-</header>
+<div id="messagesdiv">
+	<?php
+	Message::displayall();
+	if (!checkpermission("removeliturgia")) {
+		displaymessage("danger", "Nincs jogosultsága liturgia törléséhez!");
+		exit;
+	}
+	?>
+</div>
 <div class="content">
 <div class="tartalom">
-<div id="lathato">
-<p class="warning">Valami hiba történt!</p>
-	<p>Kérem, kattintson az alábbi gombra!</p>
-	<p>A törlés után kérem ellenőrizze, hogy a rendszer valóban törölte-e a szertartást!</p>
-	<form action="delete.szertartas.php" method="post">
-	<input type="hidden" name="id" value="<?php echo $id;?>">
-	<input type="submit" value="Újrapróbálkozás">
-	</form>
-	</div>
 <?php
-$id = $_POST["id"];
-$mysql = mysqli_connect("localhost", "mysqlfelhasznalo", "mysqljelszo", "adatbazisnev") or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_query($mysql, "SET NAMES utf8");
-$sql = "DELETE FROM `szertartasok` WHERE `ID` = '".$id."'";
-$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_close($mysql);
-if ($eredmeny == true)
-{
+//FIXME új szertartás rendszer feldolgozása
+if (!isset($_POST["stage"])) {
 	?>
-	<p class="succes">Sikeres törlés!</p>
-	<script>
-	document.getElementById("lathato").style.display = "none";
-	</script>
+	<!--<form name="delete1-user" action="form2.delete.szertartas.php" method="post">-->
+	<form name="delete1-user" action="#" method="post">
+	<table class="form">
+	<tr>
+	<td><label>Törölni kívánt szertartás ideje és megnevezése: </label></td>
+	<td>
+	<select name="szertartas-id" required>
+	<option value="N/A">---Kérem válasszon!---</option>
 	<?php
-}else{
+	$sql = "SELECT `id`, `date`, `name` FROM `szertartasok`";
+	$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+	while ($row = mysqli_fetch_array($eredmeny))
+	{
+		$id = $row["id"];
+		$name = $row["name"];
+		$date = $row["date"];
+		?>
+		<option value="<?php echo $id; ?>"><?php echo $date; ?> - <?php echo $name; ?></option>
+		<?php
+	}
+	mysqli_close($mysql);
 	?>
-	<script>
-	document.getElementById("lathato").style.display = "block";
-	</script>
+	</select>
+	</td>
+	<td><label>Kérem válassza ki a törölni kívánt szertartást a listából!</label></td>
+	</tr>
+	<tr>
+	<td><label></label></td>
+	<input type="hidden" name="stage" value="2">
+	<td><input type="submit" value="Tovább"></td>
+	<td><label></label></td>
+	</tr>
+	</table>
+	</form>
 	<?php
+} else if (isset($_POST["stage"])) {
+	if (correct($_POST["stage"]) == "2")
+	{
+		?>
+		<p>Biztosan törölni szeretné az alábbi szertartást?</p>
+		<form name="delete2-szertartas" action="#" method="post">
+		<table class="form">
+		<tr>
+		<td rowspan="3"><label>Törölni kívánt szertartás</label></td>
+		<td><label>ideje: </label></td>
+		<td><label><?php echo $date; ?></td>
+		</tr>
+		<tr>
+		<td><label>megnevezése: </label></td>
+		<td><label><?php echo $name; ?></td>
+		</tr>
+		<tr>
+		<td><label>helye: </label></td>
+		<td><label><?php echo $place; ?></td>
+		</tr>
+		<input type="hidden" name="id" value="<?php echo $id; ?>">
+		<tr>
+		<td><label></label></td>
+		<td><input type="submit" value="Törlés"><input type="button" value="Vissza" onclick="window.location.replace('form.delete.szertartas.php');"></td>
+		<td><label></label></td>
+		</tr>
+		<input type="hidden" name="stage" value="3">
+		</table>
+		</form>
+		<?php
+	} else if (correct($_POST["stage"]) == "3")
+	{
+		$id = correct($_POST["id"]);
+		$sql = "DELETE FROM `szertartasok` WHERE `ID` = '".$id."'";
+		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+		if (isset($_POST["miserend"]))
+		{
+			if (correct($_POST["miserend"]) == "true")
+			{
+				if ($eredmeny == true) {
+					$_SESSION["messages"][] = new Message("Liturgia törlése sikerült.", MessageType::success);
+					mysqli_close($mysql);
+					header("Location: miserend.php");
+				}
+			}
+		} else {
+			if ($eredmeny == true)
+			{
+				$_SESSION["messages"][] = new Message("Liturgia törlése sikerült.", MessageType::success);
+				mysqli_close($mysql);
+				header("Location: miserend.php");
+			} else if ($eredmeny == false) {
+				?>
+				<p class="warning">Valami hiba történt.</p>
+				<form name="delete1-user" action="#" method="post">
+				<table class="form">
+				<tr>
+				<td><label>Törölni kívánt szertartás ideje és megnevezése: </label></td>
+				<td>
+				<select name="szertartas-id">
+				<option value="N/A">---Kérem válasszon!---</option>
+				<?php
+				$sql = "SELECT `id`, `date`, `name` FROM `szertartasok`";
+				$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+				while ($row = mysqli_fetch_array($eredmeny))
+				{
+					$id = $row["id"];
+					$name = $row["name"];
+					$date = $row["date"];
+					?>
+					<option value="<?php echo $id; ?>"><?php echo $date; ?> - <?php echo $name; ?></option>
+					<?php
+				}
+				mysqli_close($mysql);
+				?>
+				</select>
+				</td>
+				<td><label>Kérem válassza ki a törölni kívánt szertartást a listából!</label></td>
+				</tr>
+				<tr>
+				<td><label></label></td>
+				<input type="hidden" name="stage" value="2">
+				<td><input type="submit" value="Tovább"></td>
+				<td><label></label></td>
+				</tr>
+				</table>
+				</form>
+				<?php
+			}
+		}
+	}
 }
 ?>
 </div>

@@ -1,0 +1,104 @@
+/* DEBUG */
+/* * {
+    outline: 1px solid red;
+} */
+html {
+--primary: rgb(225, 177, 55); }
+html, body {
+    width: 100%; height: 100%;
+    margin: 0; padding: 0;
+    scroll-behavior: smooth;
+    scroll-padding: 10%;
+}
+:root {
+    /* --primary: rgb(173, 136, 46); */
+    --primary: hsl(43, 74%, 55%);
+}
+::selection {
+    background-color: var(--primary);
+}
+a::selection {
+    color: hsl(43, 74%, 85%);
+    /*! Ezt frissíteni kell, ha frissítjük a --primary változót! */
+}
+div.input-group {
+    padding: 5px;
+}
+           
+a.navbar-brand {
+    font-variant: small-caps;
+}
+
+div.fejlecparallax {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+           
+.mask {
+    background-color: rgba(0, 0, 0, 0.25);
+    /* background-color: rgba(0, 0, 0, 0.4); */
+}
+a.nav-link {
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+a.nav-link:hover {
+    border-bottom: 3px solid var(--primary);
+    transition: all 0.3s;
+}
+a.active {
+    border-bottom: 3px solid var(--primary);
+}
+.arrowdown #arrowdown {
+    color: white;
+}
+/* nav#desktop.bg-black {
+    box-shadow: 0px 5px 20px black;
+} */
+a#nyilacska {
+    color: white;
+    transition: color 0.3s;
+}
+a#nyilacska:hover {
+    color: var(--primary);
+}
+a#facebooklinkinhead {
+    transition: color 0.3s;
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-size: larger;
+}
+a#facebooklinkinhead:hover {
+    color: hsl(240, 100%, 64%);
+}
+main.textcontent {
+    max-width: 900px;
+    padding: 50px 0px;
+}
+select.form-select {
+    max-width: fit-content;
+    display: inline;
+}
+.required:after {
+    content: '*';
+    color: red;
+}
+tr.highlighted {
+    background-color: rgba(0, 0, 0, 0.13) !important;
+}
+.glass {
+    background-color: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(3px);
+    border-radius: 10px;
+    box-shadow: 10px 10px 50px;
+}
+div.invalid-feedback {
+    padding: 5px;
+    padding-left: 10px;
+}
+div.valid-feedback {
+    padding: 5px;
+    padding-left: 10px;
+}
