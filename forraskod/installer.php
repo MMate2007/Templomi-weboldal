@@ -61,9 +61,8 @@
                 ?>
                 <p class="succes">Sikeres kapcsolódás az adatbázishoz!</p>
                 <?php
-                $towrite = file_get_contents("default.config.php");
                 $configfile = fopen("config.php", "w");
-                $towrite .= "<?php\n\$mysqlhost = '";
+                $towrite = "<?php\n\$mysqlhost = '";
                 $towrite .= $host;
                 $towrite .= "';\n\$mysqlu = '";
                 $towrite .= $uname;
