@@ -24,7 +24,9 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"xdebug.php-debug"
+				"xdebug.php-debug",
+				"SanderRonde.phpstan-vscode",
+				"DEVSENSE.phptools-vscode"
 			],
 			"settings": {
 				"php.validate.executablePath": "/usr/local/bin/php",
