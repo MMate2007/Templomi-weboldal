@@ -25,7 +25,11 @@
 		"vscode": {
 			"extensions": [
 				"xdebug.php-debug"
-			]
+			],
+			"settings": {
+				"php.validate.executablePath": "/usr/local/bin/php",
+				"php.debug.executablePath": "/usr/local/bin/php"
+			}
 		}
 	}
 
