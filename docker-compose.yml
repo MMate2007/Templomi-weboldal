@@ -3,9 +3,9 @@ services:
   php-apache:
     build: .
     container_name: templomi-php-apache
-    command: composer install
     volumes:
       - ./forraskod/:/var/www/html/
+      - /var/www/html/vendor/
     ports:
       - 80:80
     links:
