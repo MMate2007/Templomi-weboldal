@@ -126,7 +126,8 @@ INSERT INTO `settings` (`name`, `value`, `type`, `friendlyname`, `description`) 
 ('session.multiplelogins.logout', '0', 0, 'Több eszközön aktív munkamenet esetén kijelentkeztetés', NULL),
 ('session.deleteifoutdated', '0', 0, 'Munkamenet törlése ha lejárt', NULL),
 ('session.logintime', NULL, 1, 'Bejelentkezés kifutási ideje', NULL),
-('logvisits', '0', 0, 'Oldallátogatások naplózása', 'Statisztika készítése az oldallátogatásokról.');
+('logvisits', '0', 0, 'Oldallátogatások naplózása', 'Statisztika készítése az oldallátogatásokról.'),
+('favicon', NULL, 2, 'Kis kép (favicon)', 'A böngészőlapon megjelenő kis kép.');
 CREATE TABLE `szertartasok` (
   `id` int NOT NULL,
   `date` datetime NOT NULL,
