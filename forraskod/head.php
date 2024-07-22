@@ -23,16 +23,21 @@ if (isset($_COOKIE['enablecookie'])) { session_start(); }
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="css/customstyle.css">
-<link rel="icon" type="image/pnp" href="icon.png">
 <?php 
+$mysql = mysqli_connect($mysqlhost, $mysqlu, $mysqlp, $mysqld) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
+mysqli_query($mysql, "SET NAMES utf8");
+$favicon = getsetting("favicon");
+if ($favicon) {
+    ?>
+    <link rel="icon" href="<?php echo $favicon; ?>">
+    <?php
+}
 if ($themecolor != null)
 {
     ?>
     <meta name="theme-color" content="<?php echo $themecolor; ?>">
     <?php
 }
-$mysql = mysqli_connect($mysqlhost, $mysqlu, $mysqlp, $mysqld) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
-mysqli_query($mysql, "SET NAMES utf8");
 //Webhelyadatok betöltése
 $sitename = getsetting("main.name");
 deletepastszertartas();
