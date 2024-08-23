@@ -154,7 +154,7 @@ if (isset($_POST["temp"]))
 	  }
     </script>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 <?php 
 displayhead("Liturgiák rendje");
 ?>
@@ -169,7 +169,7 @@ if (isset($_SESSION["userId"])) {
 	<?php
 }
 ?>
-<main class="content mx-auto text-center" style="padding: 30px 30px;">
+<main class="content mx-auto text-center flex-shrink-0" style="padding: 30px 30px;">
 <?php
 $user = false;
 if (!isset($_SESSION["userId"]))

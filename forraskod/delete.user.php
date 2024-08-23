@@ -17,7 +17,7 @@
 	}
 </script>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 <?php
 displayhead("Felhasználó törlése");
 include("headforadmin.php");

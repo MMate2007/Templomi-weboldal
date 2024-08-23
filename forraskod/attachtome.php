@@ -10,7 +10,7 @@
 	header nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"], nav a[href="http://<?php echo $_SERVER['HTTP_HOST']; echo htmlspecialchars($_SERVER['PHP_SELF']);?>"] {font-weight: bold;}
 </style>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 <?php
 displayhead("Liturgia hozzámrendelése");
 include("headforadmin.php");

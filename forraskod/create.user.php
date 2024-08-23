@@ -7,7 +7,7 @@
 <meta name="language" content="hu-HU">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 <?php
 displayhead("Felhasználó létrehozása");
 include("headforadmin.php");

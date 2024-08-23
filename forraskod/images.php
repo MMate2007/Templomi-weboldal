@@ -20,7 +20,7 @@ nav#desktop {
 }
 </style>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 <header>
 <?php include("navbar.php"); ?>
 </header>

@@ -448,7 +448,7 @@ function displayhead($title = null, $bgimg = null, $height = '35%', $tartalom = 
         $bgimg = getheadimage();
     }
     ?>
-    <header style="height: <?php echo $height; ?>;">
+    <header style="height: <?php echo $height; ?>;" class="flex-shrink-0">
     <div class="head h-100">
     <div class="fejlecparallax text-center bg-image h-100" style="background-image: url('<?php echo $bgimg; ?>');">
     <?php

@@ -15,7 +15,7 @@
     });
 </script>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 <?php
 displayhead("Blogbejegyzés létrehozása");
 include("headforadmin.php");

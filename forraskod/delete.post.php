@@ -7,7 +7,7 @@ include("head.php");
 ?>
 <title>Blogbejegyzés törlése - <?php echo $sitename; ?></title>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 <?php
 displayhead("Blogbejegyzés törlése");
 include("headforadmin.php");

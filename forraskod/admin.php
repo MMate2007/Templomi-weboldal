@@ -99,7 +99,7 @@ if (!isset($_SESSION["userId"]))
 	//   }
     </script>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 <?php displayhead("Adminisztráció", null, null, "<h3 style='padding-top: 30px; font-variant: small-caps;'>Dicsértessék a Jézus Krisztus!</h3><h4>Üdvözlöm Önt, ".$_SESSION["name"].", itt az adminisztrációs felületen!</h4>");
 include("headforadmin.php");
 ?>

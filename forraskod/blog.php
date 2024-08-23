@@ -15,7 +15,7 @@ hr:first-child {
 }
 </style>
 </head>
-<body>
+<body class="d-flex flex-column h-100">
 <?php displayhead("Hírek"); ?>
 <div id="messagesdiv">
 	<?php
