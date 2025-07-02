@@ -38,6 +38,11 @@ if (isset($_POST["temp"]))
 	margin-left: 0.5em;
 	background-color: #e1b137;
 }
+td.sticky, th.sticky {
+	position: sticky;
+	right: 0px;
+	background-image: linear-gradient(to right, rgba(255, 255, 255, 0),rgba(255,255,255,0.8),rgba(255,255,255,0.9),rgb(255, 255, 255));
+}
 </style>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.4/locales-all.global.min.js'></script>
@@ -267,7 +272,7 @@ if ($user == true) {
 			?>
 			<th>Privát megjegyzés</th>
 			<th>Publikus</th>
-			<th>Kezelés</th>
+			<th class="sticky">Kezelés</th>
 			<?php
 			$thcounter += 3;
 		}
@@ -503,7 +508,7 @@ if ($user == true) {
 				<?php
 			}
 			?>></td>
-			<td>
+			<td class="sticky">
 				<?php
 				if (checkpermission("editliturgia")) {
 					?>
