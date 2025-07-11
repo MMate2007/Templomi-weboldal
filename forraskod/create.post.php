@@ -12,6 +12,8 @@
         selector: "#content",
         language: "hu_HU",
         plugins: "image, link",
+		images_upload_url: 'api.upload.image.php',
+        images_reuse_filename: true
     });
 </script>
 </head>

@@ -86,7 +86,8 @@ INSERT INTO `permissions` (`id`, `shortname`, `name`) VALUES
 (25, 'removesznev', 'Liturgia típus törlése'),
 (26, 'removetelepules', 'Település törlése'),
 (27, 'removetemplom', 'Templom törlése'),
-(28, 'removeuser', 'Felhasználó törlése');
+(28, 'removeuser', 'Felhasználó törlése'),
+(29, 'uploadfile', 'Fénykép feltöltése');
 CREATE TABLE `sessions` (
   `primaryid` int NOT NULL,
   `id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -127,7 +128,8 @@ INSERT INTO `settings` (`name`, `value`, `type`, `friendlyname`, `description`) 
 ('session.deleteifoutdated', '0', 0, 'Munkamenet törlése ha lejárt', NULL),
 ('session.logintime', NULL, 1, 'Bejelentkezés kifutási ideje', NULL),
 ('logvisits', '0', 0, 'Oldallátogatások naplózása', 'Statisztika készítése az oldallátogatásokról.'),
-('favicon', NULL, 2, 'Kis kép (favicon)', 'A böngészőlapon megjelenő kis kép.');
+('favicon', NULL, 2, 'Kis kép (favicon)', 'A böngészőlapon megjelenő kis kép.'),
+('uploaddirectory', NULL, 2, 'Feltöltések könyvtára', 'Már létező mappa a feltöltött fotók tárolásához.');
 CREATE TABLE `szertartasok` (
   `id` int NOT NULL,
   `date` datetime NOT NULL,
