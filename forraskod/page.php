@@ -32,7 +32,7 @@ $row = mysqli_fetch_array($eredmeny);
 </script>
 
 </head>
-<body class="d-flex flex-column h-100">
+<body>
 <?php
 if ($row["coverimgpath"] == null) {
     $img = null;

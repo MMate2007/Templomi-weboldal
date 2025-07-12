@@ -17,7 +17,7 @@ div.fejlecparallax {
 }
 </style>
 </head>
-<body class="d-flex flex-column h-100">
+<body>
 <?php
 if (isset($_SESSION["userId"])) {
 	?>
@@ -29,7 +29,7 @@ if (isset($_SESSION["userId"])) {
 	<?php
 }
 ?>
-<header class="h-100 flex-shrink-0">
+<header class="h-100">
 <div class="head h-100">
 <div class="fejlecparallax text-center bg-image h-100">
 <?php
@@ -66,7 +66,7 @@ include("navbar.php");
 </div>
 </div>
 </header>
-<main class="content flex-shrink-0" id="content" style="margin-right: 0px;">
+<main class="content" id="content" style="margin-right: 0px;">
 <!-- TODO egy ötlet: lehetne 3-as felosztásban megjeleníteni a közelgő szentmiséket (csak azokat), a hirdetéseket és a legfrissebb bejegyzéseket -->
 </main>
 <?php include("footer.php"); ?>

@@ -1,5 +1,6 @@
-<footer class="footer mt-auto py-3 bg-black">
+<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 border-top bg-black text-white" style="margin-bottom: 0px;">
     <div>
+        <!-- TODO jól megcsinálni a láblécet -->
         <?php
         $copyright = getcontent("copyright");
         if ($copyright != null) {
@@ -20,6 +21,9 @@
             <?php
         }
         ?>
+    </div>
+    <div>
+        <!-- TODO ide jön a fő navigáció -->
     </div>
 </footer>
 <?php

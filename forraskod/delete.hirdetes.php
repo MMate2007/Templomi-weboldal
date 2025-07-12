@@ -5,7 +5,7 @@
 <?php include("head.php"); ?>
 <title>Hirdetés törlése - <?php echo $sitename; ?></title>
 </head>
-<body class="d-flex flex-column h-100">
+<body>
 <?php
 displayhead("Hirdetés törlése");
 include("headforadmin.php");

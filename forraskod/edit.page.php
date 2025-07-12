@@ -17,7 +17,7 @@
     });
 </script>
 </head>
-<body class="d-flex flex-column h-100">
+<body>
 <?php
 displayhead("Oldal módosítása");
 include("headforadmin.php");

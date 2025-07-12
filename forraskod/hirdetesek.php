@@ -16,7 +16,7 @@
 	}
 </script>
 </head>
-<body class="flex-column d-flex h-100">
+<body>
 <?php 
 displayhead("Hirdetések");
 ?>
@@ -28,7 +28,7 @@ if (isset($_SESSION["userId"])) { ?>
 	?>
 	<?php } ?>
 </div>
-<main class="content mx-auto text-center flex-shrink-0" style="padding: 30px 30px;">
+<main class="content mx-auto text-center" style="padding: 30px 30px;">
 <?php
 $user = false;
 if (!isset($_SESSION["userId"]))

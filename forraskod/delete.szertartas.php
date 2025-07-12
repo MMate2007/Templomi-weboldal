@@ -14,7 +14,7 @@ include("config.php");
 include("head.php");
 ?>
 </head>
-<body class="d-flex flex-column h-100">
+<body>
 <?php
 displayhead("Szertartás törlése");
 include("headforadmin.php");
