@@ -87,7 +87,8 @@ INSERT INTO `permissions` (`id`, `shortname`, `name`) VALUES
 (26, 'removetelepules', 'Település törlése'),
 (27, 'removetemplom', 'Templom törlése'),
 (28, 'removeuser', 'Felhasználó törlése'),
-(29, 'uploadfile', 'Fénykép feltöltése');
+(29, 'uploadfile', 'Fénykép feltöltése'),
+(30, 'removefile', 'Fényképek listázása és törlése');
 CREATE TABLE `sessions` (
   `primaryid` int NOT NULL,
   `id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
