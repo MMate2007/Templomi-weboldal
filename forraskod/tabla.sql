@@ -1,14 +1,14 @@
 CREATE TABLE `author` (
   `id` int NOT NULL,
-  `name` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `name` tinytext CHARACTER SET utf8mb4 NOT NULL,
   `password` text NOT NULL,
-  `username` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `username` tinytext CHARACTER SET utf8mb4 NOT NULL,
   `egyhaziszint` tinyint NOT NULL,
   `2fasecret` tinytext
 );
 CREATE TABLE `blog` (
   `id` int NOT NULL,
-  `title` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `title` tinytext CHARACTER SET utf8mb4 NOT NULL,
   `content` text NOT NULL,
   `authorId` smallint NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -19,7 +19,7 @@ CREATE TABLE `content` (
 );
 CREATE TABLE `hirdetesek` (
   `ID` int NOT NULL,
-  `title` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `title` tinytext CHARACTER SET utf8mb4 NOT NULL,
   `content` text,
   `authorid` smallint NOT NULL,
   `starttime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -27,17 +27,17 @@ CREATE TABLE `hirdetesek` (
   `templomID` tinyint DEFAULT NULL
 );
 CREATE TABLE `kepek` (
-  `src` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `description` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci
+  `src` tinytext CHARACTER SET utf8mb4 NOT NULL,
+  `description` tinytext CHARACTER SET utf8mb4
 );
 CREATE TABLE `nav` (
   `id` tinyint NOT NULL,
-  `navid` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL COMMENT 'Itt lehet megadni, hogy melyik menüben jelenjen meg az adott link.',
+  `navid` varchar(100) CHARACTER SET utf8mb3 NOT NULL COMMENT 'Itt lehet megadni, hogy melyik menüben jelenjen meg az adott link.',
   `sorszam` tinyint NOT NULL,
   `parentid` tinyint DEFAULT NULL,
-  `url` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL,
-  `name` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL,
-  `tooltip` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci,
+  `url` tinytext CHARACTER SET utf8mb3 NOT NULL,
+  `name` tinytext CHARACTER SET utf8mb3 NOT NULL,
+  `tooltip` tinytext CHARACTER SET utf8mb3,
   `newtab` tinyint(1) NOT NULL DEFAULT '0'
 );
 INSERT INTO `nav` (`id`, `navid`, `sorszam`, `parentid`, `url`, `name`, `tooltip`, `newtab`) VALUES
@@ -47,10 +47,10 @@ INSERT INTO `nav` (`id`, `navid`, `sorszam`, `parentid`, `url`, `name`, `tooltip
 (3, 'desktop', 3, NULL, 'blog.php', 'Hírek', 'Itt megtekintheti a plébánia híreit.', 0);
 CREATE TABLE `oldalak` (
   `id` tinyint NOT NULL,
-  `title` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL,
-  `url` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL,
-  `content` mediumtext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL,
-  `coverimgpath` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci,
+  `title` tinytext CHARACTER SET utf8mb3 NOT NULL,
+  `url` tinytext CHARACTER SET utf8mb3 NOT NULL,
+  `content` mediumtext CHARACTER SET utf8mb3 NOT NULL,
+  `coverimgpath` tinytext CHARACTER SET utf8mb3,
   `lastupdated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 INSERT INTO `oldalak` (`id`, `title`, `url`, `content`) VALUES (1, 'Főoldal', 'index', '');
@@ -92,18 +92,18 @@ INSERT INTO `permissions` (`id`, `shortname`, `name`) VALUES
 (30, 'removefile', 'Fényképek listázása és törlése');
 CREATE TABLE `sessions` (
   `primaryid` int NOT NULL,
-  `id` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `id` varchar(40) CHARACTER SET utf8mb4 NOT NULL,
   `userid` int NOT NULL,
   `started` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `lastactivity` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE `settings` (
-  `name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL,
-  `value` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci,
+  `name` varchar(100) CHARACTER SET utf8mb3 NOT NULL,
+  `value` tinytext CHARACTER SET utf8mb3,
   `type` int NOT NULL,
-  `friendlyname` tinytext COLLATE utf8mb3_hungarian_ci NOT NULL,
-  `description` tinytext COLLATE utf8mb3_hungarian_ci
+  `friendlyname` tinytext NOT NULL,
+  `description` tinytext
 );
 INSERT INTO `settings` (`name`, `value`, `type`, `friendlyname`, `description`) VALUES
 ('miserend.showCel', '1', 0, 'Celebráns megjelenítése', 'A szertartás celebránsának megjelenítése a nyilvánosságnak.'),
@@ -116,7 +116,7 @@ INSERT INTO `settings` (`name`, `value`, `type`, `friendlyname`, `description`) 
 ('meta.keywords', NULL, 2, 'Metaadat - kulcsszavak', 'Internetes keresők számára írt kulcsszavak, amelyek alapján megtalálható az oldalunk.'),
 ('main.email', 'example@mailto.com', 2, 'Ímél cím', 'Láblécben megjelenített kapcsolattartási ímél cím.'),
 ('picture.default', 'img/defaultparallax.jpg', 2, 'Alap fejléc kép', NULL),
-('facebook.username', 'bszfilia', 2, 'Facebook felhasználónév', 'Ha van az egyházközségnek Facebook oldala, akkor annak felhasználónevét @ nélkül adjuk meg.'),
+('facebook.username', '', 2, 'Facebook felhasználónév', 'Ha van az egyházközségnek Facebook oldala, akkor annak felhasználónevét @ nélkül adjuk meg.'),
 ('picture.miserend.php', 'img/icon.png', 2, '', NULL),
 ('mise.warning', NULL, 1, '', 'Ennyi órával a szertartás előtt a rendszer sárga színnel jelöli.'),
 ('mise.warning2', NULL, 1, '', 'Ennyi órával a szertartás előtt a rendszer piros színnel jelöli.'),
@@ -136,23 +136,23 @@ CREATE TABLE `szertartasok` (
   `id` int NOT NULL,
   `date` datetime NOT NULL,
   `nameID` int NOT NULL,
-  `name` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `name` tinytext CHARACTER SET utf8mb4,
   `telepulesID` int NOT NULL,
   `templomID` int DEFAULT NULL,
-  `place` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `place` tinytext CHARACTER SET utf8mb4,
   `style` varchar(100) DEFAULT NULL,
   `celebransID` int DEFAULT NULL,
   `kantorID` int DEFAULT NULL,
   `tipus` tinyint DEFAULT NULL,
   `elmarad` tinyint(1) DEFAULT '0',
-  `szandek` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `szandek` tinytext CHARACTER SET utf8mb4,
   `publikus` tinyint(1) NOT NULL DEFAULT '1',
   `megjegyzes` text,
   `pubmegj` text
 );
 CREATE TABLE `sznev` (
   `id` int NOT NULL,
-  `name` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL
+  `name` tinytext CHARACTER SET utf8mb3 NOT NULL
 );
 INSERT INTO `sznev` (`id`, `name`) VALUES
 (0, 'Szentmise'),
@@ -161,14 +161,14 @@ INSERT INTO `sznev` (`id`, `name`) VALUES
 (3, 'Litánia');
 CREATE TABLE `telepulesek` (
   `id` int NOT NULL,
-  `name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL
+  `name` varchar(100) CHARACTER SET utf8mb3 NOT NULL
 );
 CREATE TABLE `templomok` (
   `id` int NOT NULL,
   `telepulesID` int DEFAULT NULL,
-  `name` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci NOT NULL,
-  `vedoszent` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci,
-  `color` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci
+  `name` varchar(200) CHARACTER SET utf8mb3 NOT NULL,
+  `vedoszent` tinytext CHARACTER SET utf8mb3,
+  `color` tinytext CHARACTER SET utf8mb3
 );
 CREATE TABLE `userpermissions` (
   `userId` int NOT NULL,
