@@ -11,7 +11,7 @@
     <progress value="<?php if (isset($_POST["stage"])) { echo $_POST["stage"]; } else { echo "0"; } ?>" max="3"></progress>
     <p>*: kötelezően kitöltendő</p>
     <?php
-    $regex = ["mysql" => "^[a-zA-Z0-9 .\-]+$", "name" => "^[a-zA-Z .-]+$"];
+    $regex = ["mysql" => "^[a-zA-Z0-9 .\-_]+$", "name" => "^[a-zA-Z .-]+$"];
     if (!isset($_POST["stage"]))
     {
         ?>
