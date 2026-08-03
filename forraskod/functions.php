@@ -404,6 +404,15 @@ function displaymessage(string $type, string $msg) {
 function getheadimage() {
     global $mysql;
     $picture = basename(htmlspecialchars($_SERVER['PHP_SELF']));
+    $picture = preg_replace('/\.php$/', '', $picture);
+    $sql = "SELECT `coverimgpath` FROM `oldalak` WHERE `url` = '$picture'";
+    $eredmeny = mysqli_query($mysql, $sql);
+    $row = mysqli_fetch_array($eredmeny);
+    if ($row != null) {
+        if ($row["coverimgpath"] != null) {
+            return $row["coverimgpath"];
+        }
+    }
     $image = getsetting('picture.'.$picture.'');
 	if ($image == null or $image == "")
 	{
