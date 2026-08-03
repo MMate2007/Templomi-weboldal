@@ -89,7 +89,7 @@
                 } else {
                         mysqli_close($mysqlconn);
                         ?>
-                <p class="warning">Sikertelen kapcsolódás az adatbázishoz!</p>
+                <p class="warning">Nem sikerült létrehozni a táblákat! Kérem, ellenőrizze, hogy van-e megfelelő jogosultsága a megadott felhasználónak!</p>
                 <form action="#" method="post">
                     <input type="submit" value="Újrapróbálás">
                 </form> <?php
@@ -97,7 +97,7 @@
                 } else {
                     mysqli_close($mysqlconn);
                     ?>
-                    <p class="warning">Nem sikerült létrehozni a táblákat! Kérem, ellenőrizze, hogy van-e megfelelő jogosultsága a megadott felhasználónak!</p>
+                    <p class="warning">Sikertelen kapcsolódás az adatbázishoz!</p>
                     <form action="#" method="post">
                     <input type="submit" value="Újrapróbálás">
                 </form>
