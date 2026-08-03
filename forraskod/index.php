@@ -66,8 +66,29 @@ include("navbar.php");
 </div>
 </div>
 </header>
-<main class="content" id="content" style="margin-right: 0px;">
+<main class="content" id="content" style="margin: 10px 30px;">
 <!-- TODO egy ötlet: lehetne 3-as felosztásban megjeleníteni a közelgő szentmiséket (csak azokat), a hirdetéseket és a legfrissebb bejegyzéseket -->
+<?php
+$sql = "SELECT `content`";
+if (isset($_SESSION["userId"])) {
+    $sql .= ", `id`";
+}
+$sql .= " FROM `oldalak` WHERE `url` = 'index'";
+$eredmeny = mysqli_query($mysql, $sql);
+$row = mysqli_fetch_array($eredmeny);
+if (isset($_SESSION["userId"])) {
+if (checkpermission("editpage")) {
+		?>
+		<div>
+            <form action="edit.page.php" method="post">
+                <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
+            <button class="btn btn-primary text-white float-end" type="submit"><i class="bi bi-pencil"></i> Szerkesztés</button>
+            </form>
+        </div>
+		<?php
+	} }
+echo $row["content"];
+?>
 </main>
 <?php include("footer.php"); ?>
 </body>

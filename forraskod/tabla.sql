@@ -53,6 +53,7 @@ CREATE TABLE `oldalak` (
   `coverimgpath` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_hungarian_ci,
   `lastupdated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+INSERT INTO `oldalak` (`id`, `title`, `url`, `content`) VALUES (1, 'Főoldal', 'index', '');
 CREATE TABLE `permissions` (
   `id` tinyint NOT NULL,
   `shortname` varchar(50) NOT NULL,
