@@ -121,13 +121,6 @@ if (!checkpermission("editnavbar")) {
                             ?>
                         </td>
                         <td>
-                            <form action="#" method="post" id="edit<?php echo correct($row["id"]); ?>" style="display: inline;">
-                            <input type="hidden" name="query" value="edit">
-                            <input type="hidden" name="id" value="<?php echo correct($row["id"]); ?>">
-                            <input type="hidden" name="navid" value="<?php echo $navid; ?>">
-                            <input type="hidden" name="">
-                            <button type="submit" class="btn btn-primary text-white" disabled style="display: inline;"><i class="bi bi-floppy"></i> Mentés</button>
-                            </form>
                             <form action="#" method="post" id="delete<?php echo correct($row["id"]); ?>" style="display: inline;">
                             <input type="hidden" name="query" value="delete">
                             <input type="hidden" name="id" value="<?php echo correct($row["id"]); ?>">
@@ -154,7 +147,7 @@ if (!checkpermission("editnavbar")) {
                     exit;
                 }
                 $url = $_POST["url"];
-                if (!check($url, "url")) {
+                if (!check($url, "path")) {
                     mysqli_close($mysql);
                     exit;
                 }
@@ -166,10 +159,6 @@ if (!checkpermission("editnavbar")) {
                     exit;
                 }
                 $newtab = correct($_POST["newtab"]);
-                if (!check($newtab, "number")) {
-                    mysqli_close($mysql);
-                    exit;
-                }
                 $sql = "SELECT MAX(`id`),  MAX(`sorszam`) FROM `nav` WHERE `navid` = '$navid'";
                 $eredmeny = mysqli_query($mysql, $sql);
                 $row = mysqli_fetch_array($eredmeny);
