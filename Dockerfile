@@ -1,4 +1,4 @@
-FROM php:8.1.12-apache
+FROM php:8.3.33-apache
 COPY phpconf/ /usr/local/etc/php/conf.d
 COPY forraskod/ /var/www/html
 WORKDIR /var/www/html
