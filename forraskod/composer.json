@@ -2,7 +2,8 @@
     "require": {
         "twbs/bootstrap": "^5.2",
         "pragmarx/google2fa": "^8.0",
-        "tinymce/tinymce": "^6.7"
+        "tinymce/tinymce": "^6.7",
+        "rumenx/php-sitemap": "^1.0"
     },
     "require-dev": {
         "scssphp/scssphp": "^1.12"

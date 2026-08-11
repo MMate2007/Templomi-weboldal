@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e57209435e3e56978d0e296b188a4701",
+    "content-hash": "52ca204042da4237954e4d22c6b43668",
     "packages": [
         {
             "name": "paragonie/constant_time_encoding",
@@ -124,6 +124,74 @@
                 "source": "https://github.com/antonioribeiro/google2fa/tree/v8.0.1"
             },
             "time": "2022-06-13T21:57:56+00:00"
+        },
+        {
+            "name": "rumenx/php-sitemap",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RumenDamyanov/php-sitemap.git",
+                "reference": "5e1733cd08ec298aaaa8d68181a366094653f594"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RumenDamyanov/php-sitemap/zipball/5e1733cd08ec298aaaa8d68181a366094653f594",
+                "reference": "5e1733cd08ec298aaaa8d68181a366094653f594",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "orchestra/testbench-core": "^10.4",
+                "pestphp/pest": "^2.0",
+                "php-coveralls/php-coveralls": "^2.2",
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^10.0",
+                "squizlabs/php_codesniffer": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Rumenx\\Sitemap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rumen Damyanov",
+                    "email": "contact@rumenx.com",
+                    "homepage": "https://rumenx.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Framework-agnostic Sitemap generator for PHP, Laravel, and Symfony.",
+            "homepage": "https://github.com/RumenDamyanov/php-sitemap",
+            "keywords": [
+                "Sitemap",
+                "generator",
+                "google-news",
+                "html",
+                "laravel",
+                "php",
+                "symfony",
+                "xml"
+            ],
+            "support": {
+                "issues": "https://github.com/RumenDamyanov/php-sitemap/issues",
+                "source": "https://github.com/RumenDamyanov/php-sitemap",
+                "wiki": "https://github.com/RumenDamyanov/php-sitemap/wiki"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/RumenDamyanov",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-12-13T14:28:07+00:00"
         },
         {
             "name": "tinymce/tinymce",
@@ -319,10 +387,10 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
