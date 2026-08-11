@@ -20,7 +20,7 @@ Ha számítógépünkön telepítve van a Docker, akkor érdemes azzal telepíte
 5. Nyissuk meg böngészőben a localhostot! Máris működik a dolog! A PHPMyAdmin a localhost:8080 alatt érhető el; felhasználónév: root, jelszó: root. A PHP fájlokat a konténerek futása közben is módosíthatjuk, valós időben fogjuk látni a változásokat.
 ### Telepítés fejlesztéshez Docker használata nélkül
 Rendszerkövetelmények:
-- PHP 7.2+
+- PHP 8.2+
 - MySQL
 - PHP mysqli extension
 Lépések:
