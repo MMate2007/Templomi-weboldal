@@ -40,6 +40,8 @@ if (isset($_POST["id"])) {
 		$eredmeny = mysqli_query($mysql, $sql) or die ("<p class='warning'>A következő hiba lépett fel a MySQL-ben: ".mysqli_error($mysql)."</p>");
 		if ($eredmeny == true) {
 			$_SESSION["messages"][] = new Message("Oldal törlése sikeres.", MessageType::success);
+			include("generatesitemap.php");
+			generatesitemap();
 		} else if ($eredmeny == false) {
 			$_SESSION["messages"][] = new Message("Valami hiba történt az oldal törlése során.", MessageType::danger);
 		}

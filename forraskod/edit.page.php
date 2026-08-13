@@ -171,6 +171,8 @@ if (isset($_POST["title"])) {
             if ($eredmeny == true)
             {
                $_SESSION["messages"][] = new Message("Sikeres publikálás!", MessageType::success, true);
+               include("generatesitemap.php");
+			   generatesitemap();
                mysqli_close($mysql);
                header("Location: page.php?page=".$url);
             }else{

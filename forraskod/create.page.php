@@ -170,6 +170,8 @@ if (!isset($_POST["stage"]))
 				}
 			}
 			$_SESSION["messages"][] = new Message("Oldal sikeresen publikálva.", MessageType::success);
+			include("generatesitemap.php");
+			generatesitemap();
 			mysqli_close($mysql);
 			header("Location: page.php?page=".$url);
 		}else{

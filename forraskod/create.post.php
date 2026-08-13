@@ -109,6 +109,8 @@ if (!isset($_POST["stage"]))
 		if ($eredmeny == true)
 		{
 			$_SESSION["messages"][] = new Message("Bejegyzés sikeresen létrehozva.", MessageType::success);
+			include("generatesitemap.php");
+			generatesitemap();
 			mysqli_close($mysql);
 			header("Location: blog.php");
 		}else{

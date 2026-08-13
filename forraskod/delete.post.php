@@ -32,6 +32,8 @@ $sql = "DELETE FROM `blog` WHERE id = '$id'";
 $eredmeny = mysqli_query($mysql, $sql);
 if ($eredmeny) {
     $_SESSION["messages"][] = new Message("Bejegyzés törlése sikeres.", MessageType::success);
+    include("generatesitemap.php");
+	generatesitemap();
 } else {
     $_SESSION["messages"][] = new Message("Valami hiba történt a bejegyzés törlése során.", MessageType::danger);
 }
