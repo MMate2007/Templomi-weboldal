@@ -158,4 +158,10 @@ var header = document.querySelector('.fejlecparallax');
   query += "']";
   // document.querySelector(query).classList.add("active");
   document.querySelectorAll(query).forEach((a) => { a.classList.add("active"); });
+  var pathname = window.location.href;
+  var query = "[href='";
+  query += pathname;
+  query += "']";
+  // document.querySelector(query).classList.add("active");
+  document.querySelectorAll(query).forEach((a) => { a.classList.add("active"); });
 </script>
