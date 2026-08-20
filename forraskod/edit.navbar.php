@@ -48,6 +48,8 @@ if (!checkpermission("editnavbar")) {
                 mysqli_close($mysql);
                 exit;
             }
+            $sql = "SELECT `title`, `url` FROM `oldalak`";
+            $eredmeny = mysqli_query($mysql, $sql);
             ?>
             <form action="#" method="post" id="addnew" style="padding-bottom: 10px;">
                 <div class="row my-3">
@@ -56,7 +58,15 @@ if (!checkpermission("editnavbar")) {
                 </div>
                 <div class="row my-3">
                     <label for="url" class="col-sm-2 required">URL:</label>
-                    <input type="text" name="url" id="url" class="col-sm form-control" required placeholder="valami.php">
+                    <input type="text" name="url" id="url" class="col-sm form-control" required placeholder="valami.php"> vagy 
+                    <select name="pageurl" id="pageurl" onchange="seturl()" class="form-select">
+                        <option value="">--válasszon oldalcímet--</option>
+                        <?php
+                        while ($row = mysqli_fetch_array($eredmeny)) {
+                            ?><option value="page.php?page=<?php echo $row["url"]; ?>"><?php echo $row["title"]; ?></option><?php
+                        }
+                        ?>
+                    </select>
                 </div>
                 <div class="row my-3">
                     <label for="tooltip" class="col-sm-2">Segítő szöveg:</label>
@@ -147,7 +157,11 @@ if (!checkpermission("editnavbar")) {
                     exit;
                 }
                 $url = $_POST["url"];
-                if (!check($url, "path")) {
+                if (!str_starts_with($url, "http://") && !str_starts_with($url, "https://")) {
+                    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? "https://" : "http://";
+                    $url = $protocol . $_SERVER["HTTP_HOST"] . "/" . $url;
+                }
+                if (!check($url, "url")) {
                     mysqli_close($mysql);
                     exit;
                 }
@@ -199,5 +213,14 @@ if (!checkpermission("editnavbar")) {
     ?>
 </main>
 <?php include("footer.php"); ?>
+<script>
+function seturl() {
+    document.getElementById("url").value = document.getElementById("pageurl").value;
+    document.getElementById("name").value = document.getElementById("pageurl").options[document.getElementById("pageurl").selectedIndex].text;
+    if (document.getElementById("pageurl").selectedIndex == 0) {
+        document.getElementById("name").value = "";
+    }
+}
+</script>
 </body>
 </html>
